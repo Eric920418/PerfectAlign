@@ -19,10 +19,12 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
   const gridPattern = useMemo(() => {
     // 計算網格線
     const lines: ReactElement[] = [];
+    // 每 10 格顯示粗線
+    const majorInterval = gridSize * 10;
 
     // 垂直線
     for (let x = 0; x <= width; x += gridSize) {
-      const isMajor = x % 50 === 0;
+      const isMajor = x % majorInterval === 0;
       lines.push(
         <line
           key={`v-${x}`}
@@ -37,7 +39,7 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
 
     // 水平線
     for (let y = 0; y <= height; y += gridSize) {
-      const isMajor = y % 50 === 0;
+      const isMajor = y % majorInterval === 0;
       lines.push(
         <line
           key={`h-${y}`}

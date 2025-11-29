@@ -25,12 +25,12 @@ export function calculateError(pieces: PieceState[]): number {
 }
 
 // ===== 獲取勝利評級 =====
-// 更嚴格的判定：必須非常精確
+// 零誤差判定：必須完全精確
 export function getWinRating(totalError: number): WinRating {
-  if (totalError < 0.5) return 'Perfect';  // 幾乎完美
-  if (totalError < 2) return 'Great';      // 非常好
-  if (totalError < 5) return 'Good';       // 可以過關
-  return null;
+  if (totalError === 0) return 'Perfect';  // 完全精確
+  if (totalError < 0.01) return 'Great';   // 幾乎完美（浮點數誤差容許）
+  if (totalError < 0.1) return 'Good';     // 非常接近
+  return null;  // 不過關
 }
 
 // ===== 微調區域判定 =====

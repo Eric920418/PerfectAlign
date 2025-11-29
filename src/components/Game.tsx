@@ -143,11 +143,11 @@ export function Game() {
           transformOrigin: 'center center',
         }}
       >
-        {/* 像素網格 */}
+        {/* 像素網格 - 間距跟著 snap 步長 */}
         <PixelGrid
           width={levelConfig.canvas.width}
           height={levelConfig.canvas.height}
-          gridSize={10}
+          gridSize={snapSize}
           visible={showGrid && gameReady}
           targetPositions={levelConfig.pieces.map(p => ({
             x: p.target_transform.x,

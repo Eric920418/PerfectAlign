@@ -44,10 +44,9 @@ export class GameEngine {
   private onDoubleTap: (pieceId: string) => void;
   private onRotate: (pieceId: string, rotation: number) => void;
   private onScale: (pieceId: string, scaleX: number, scaleY: number) => void;
-  private snapToGrid: (value: number) => number;
-  private getSnapEnabled: () => boolean;
+  private getSnapState: () => { enabled: boolean; size: number };
 
-  constructor(options: GameEngineOptions) {
+  constructor(options: GameEngineOptions & { getSnapState: () => { enabled: boolean; size: number } }) {
     this.container = options.container;
     this.levelConfig = options.levelConfig;
     this.onPieceSelect = options.onPieceSelect;
@@ -55,8 +54,7 @@ export class GameEngine {
     this.onDoubleTap = options.onDoubleTap;
     this.onRotate = options.onRotate;
     this.onScale = options.onScale;
-    this.snapToGrid = options.snapToGrid;
-    this.getSnapEnabled = options.getSnapEnabled;
+    this.getSnapState = options.getSnapState;
 
     // 建立 Pixi 應用
     this.app = new PIXI.Application({
@@ -348,24 +346,38 @@ export class GameEngine {
       if (this.activeTouches.size > 1) return; // 雙指手勢時不拖曳
 
       const globalPos = e.global;
-      // 拖動過程中就 snap 到格線，產生段落感
-      this.targetPosition = {
-        x: this.snapToGrid(globalPos.x + this.dragOffset.x),
-        y: this.snapToGrid(globalPos.y + this.dragOffset.y),
-      };
+      const { enabled: snapEnabled, size: snapSize } = this.getSnapState();
+
+      let targetX = globalPos.x + this.dragOffset.x;
+      let targetY = globalPos.y + this.dragOffset.y;
+
+      if (snapEnabled && snapSize > 0) {
+        targetX = Math.round(targetX / snapSize) * snapSize;
+        targetY = Math.round(targetY / snapSize) * snapSize;
+      }
+
+      this.targetPosition = { x: targetX, y: targetY };
     });
 
     sprite.on('pointerup', () => {
       if (this.isDragging && this.draggingPieceId === pieceId) {
         this.isDragging = false;
         this.draggingPieceId = null;
-        // Snap 到格線
-        const snappedX = this.snapToGrid(sprite.x);
-        const snappedY = this.snapToGrid(sprite.y);
-        sprite.x = snappedX;
-        sprite.y = snappedY;
+        
+        // 確保最後位置也對齊
+        const { enabled: snapEnabled, size: snapSize } = this.getSnapState();
+        let finalX = sprite.x;
+        let finalY = sprite.y;
+
+        if (snapEnabled && snapSize > 0) {
+          finalX = Math.round(finalX / snapSize) * snapSize;
+          finalY = Math.round(finalY / snapSize) * snapSize;
+        }
+
+        sprite.x = finalX;
+        sprite.y = finalY;
         this.updateSelectionBox(pieceId);
-        this.onPieceTransformEnd(pieceId, snappedX, snappedY);
+        this.onPieceTransformEnd(pieceId, finalX, finalY);
       }
     });
 
@@ -373,13 +385,20 @@ export class GameEngine {
       if (this.isDragging && this.draggingPieceId === pieceId) {
         this.isDragging = false;
         this.draggingPieceId = null;
-        // Snap 到格線
-        const snappedX = this.snapToGrid(sprite.x);
-        const snappedY = this.snapToGrid(sprite.y);
-        sprite.x = snappedX;
-        sprite.y = snappedY;
+        
+        const { enabled: snapEnabled, size: snapSize } = this.getSnapState();
+        let finalX = sprite.x;
+        let finalY = sprite.y;
+
+        if (snapEnabled && snapSize > 0) {
+          finalX = Math.round(finalX / snapSize) * snapSize;
+          finalY = Math.round(finalY / snapSize) * snapSize;
+        }
+
+        sprite.x = finalX;
+        sprite.y = finalY;
         this.updateSelectionBox(pieceId);
-        this.onPieceTransformEnd(pieceId, snappedX, snappedY);
+        this.onPieceTransformEnd(pieceId, finalX, finalY);
       }
     });
   }
@@ -455,15 +474,10 @@ export class GameEngine {
       if (this.isDragging && this.draggingPieceId) {
         const sprite = this.pieceSprites.get(this.draggingPieceId);
         if (sprite) {
-          if (this.getSnapEnabled()) {
-            // Snap 開啟時：直接跳到目標位置，產生段落感
-            sprite.x = this.targetPosition.x;
-            sprite.y = this.targetPosition.y;
-          } else {
-            // Snap 關閉時：Lerp 平滑移動
-            sprite.x = lerp(sprite.x, this.targetPosition.x);
-            sprite.y = lerp(sprite.y, this.targetPosition.y);
-          }
+          // 直接移動到計算好的位置 (無論是否 Snap，目標位置已經在 pointermove 中計算好)
+          // 移除 lerp 以確保 "無 Snap" 時是真正的原始跟隨，而 "有 Snap" 時是明確的跳動
+          sprite.x = this.targetPosition.x;
+          sprite.y = this.targetPosition.y;
 
           // 更新選取框
           const graphics = this.pieceGraphics.get(this.draggingPieceId);

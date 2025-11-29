@@ -49,14 +49,16 @@ export function WinScreen({ onReplay, onNextLevel, onWatchReplay }: WinScreenPro
         </div>
 
         <div className="win-buttons">
-          <button className="btn btn-secondary" onClick={handleReplay}>
-            重玩
-          </button>
-          {actionLogs.length > 0 && (
-            <button className="btn btn-outline" onClick={onWatchReplay}>
-              觀看回放
+          <div className="win-actions-secondary">
+            <button className="btn btn-secondary" onClick={handleReplay}>
+              重玩
             </button>
-          )}
+            {actionLogs.length > 0 && (
+              <button className="btn btn-outline" onClick={onWatchReplay}>
+                觀看回放
+              </button>
+            )}
+          </div>
           <button className="btn btn-primary" onClick={onNextLevel}>
             下一關
           </button>

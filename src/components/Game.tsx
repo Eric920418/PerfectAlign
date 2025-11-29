@@ -3,7 +3,6 @@ import { GameCanvas } from './GameCanvas';
 import { FineTuneOverlay } from './FineTuneOverlay';
 import { PreviewButton } from './PreviewButton';
 import { WinScreen } from './WinScreen';
-import { DebugPanel } from './DebugPanel';
 import { ReplayPlayer } from './ReplayPlayer';
 import { TargetPreview } from './TargetPreview';
 import { PixelGrid } from './PixelGrid';
@@ -26,13 +25,12 @@ const levels: LevelConfig[] = [
 export function Game() {
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [levelConfig, setLevelConfig] = useState<LevelConfig | null>(null);
-  const [showDebug, setShowDebug] = useState(false);
   const [showReplay, setShowReplay] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { gameState, snapEnabled, snapSize, setSnapEnabled, setSnapSize, resetLevel, canvasZoom, setCanvasZoom } = useGameStore();
+  const { gameState, snapSize, setSnapSize, resetLevel, canvasZoom, setCanvasZoom } = useGameStore();
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -211,28 +209,17 @@ export function Game() {
             <path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18" />
           </svg>
         </button>
-        <button
-          className={`toolbar-btn ${snapEnabled ? 'active' : ''}`}
-          onClick={() => setSnapEnabled(!snapEnabled)}
-          title="切換對齊格線"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 14h-5v5h5v-5zM16 19l-5-5 5-5M8 5h5v5H8V5zM13 5l-5 5 5 5" />
-          </svg>
-        </button>
-        {snapEnabled && (
-          <div className="snap-size-selector">
-            {([1, 5, 10] as SnapSize[]).map((size) => (
-              <button
-                key={size}
-                className={`snap-size-btn ${snapSize === size ? 'active' : ''}`}
-                onClick={() => setSnapSize(size)}
-              >
-                {size}px
-              </button>
-            ))}
-          </div>
-        )}
+        <div className="snap-size-selector">
+          {([1, 5, 10] as SnapSize[]).map((size) => (
+            <button
+              key={size}
+              className={`snap-size-btn ${snapSize === size ? 'active' : ''}`}
+              onClick={() => setSnapSize(size)}
+            >
+              {size}px
+            </button>
+          ))}
+        </div>
         <div className="zoom-selector">
           <span className="zoom-label">🔍</span>
           {([1, 1.5, 2, 3] as ZoomLevel[]).map((zoom) => (
@@ -245,25 +232,9 @@ export function Game() {
             </button>
           ))}
         </div>
-        <button
-          className={`toolbar-btn ${showDebug ? 'active' : ''}`}
-          onClick={() => setShowDebug(!showDebug)}
-          title="除錯面板"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
-        </button>
       </div>
 
-      {/* 操作提示 */}
-      <div className="game-hints">
-        <div className="hint-item">拖曳移動 | 雙擊微調</div>
-        <div className="hint-item">Shift+滾輪旋轉 | Ctrl+滾輪縮放</div>
-      </div>
-
-      {/* Debug 面板 */}
-      {showDebug && <DebugPanel />}
+     
 
       {/* 回放播放器 */}
       {showReplay && <ReplayPlayer onClose={handleCloseReplay} />}

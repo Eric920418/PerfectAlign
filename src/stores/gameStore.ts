@@ -22,8 +22,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   isPreviewActive: false,
   winRating: null,
   totalError: 0,
-  snapEnabled: true,  // 預設開啟 snap
-  snapSize: 5,        // 預設 5px 為一格
+  snapSize: 1,        // 預設 1px 為一格
   canvasZoom: 1,      // 預設 1x 縮放
 
   // 載入關卡
@@ -132,18 +131,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   },
 
   // Snap 設定
-  setSnapEnabled: (enabled: boolean) => {
-    set({ snapEnabled: enabled });
-  },
-
   setSnapSize: (size: SnapSize) => {
     set({ snapSize: size });
   },
 
   // 將數值對齊到格線
   snapToGrid: (value: number): number => {
-    const { snapEnabled, snapSize } = get();
-    if (!snapEnabled) return value;
+    const { snapSize } = get();
     return Math.round(value / snapSize) * snapSize;
   },
 

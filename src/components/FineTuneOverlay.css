@@ -12,171 +12,141 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0.0;
+  transition: all 0.1s cubic-bezier(0, 0.9, 0.6, 1);
+}
+
+.fine-tune-overlay:active .zone-indicator {
   opacity: 0.6;
-  transition: all 0.15s ease;
 }
 
 .zone-indicator.active {
-  opacity: 1;
+  opacity: 1 !important;
   transform: scale(1.1);
 }
 
 .zone-indicator .arrow,
 .zone-indicator .icon {
-  font-size: 32px;
-  color: rgba(255, 255, 255, 0.9);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  font-size: 24px;
+  color: var(--neon-primary);
+  text-shadow: 0 0 10px var(--neon-primary);
 }
 
-/* 方向按鈕 - 更大的觸控區域 */
+/* Reticle Style Direction Buttons */
 .zone-indicator.top,
 .zone-indicator.bottom,
 .zone-indicator.left,
 .zone-indicator.right {
-  width: 64px;
-  height: 64px;
-  background: rgba(0, 255, 136, 0.15);
-  border-radius: 50%;
-  border: 2px solid rgba(0, 255, 136, 0.3);
-  backdrop-filter: blur(4px);
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 10, 20, 0.8);
+  border: 1px solid var(--neon-primary);
+  /* Crosshair look */
+  clip-path: polygon(
+    30% 0, 70% 0, 70% 20%, 100% 20%, 100% 80%, 70% 80%, 70% 100%, 
+    30% 100%, 30% 80%, 0 80%, 0 20%, 30% 20%
+  );
 }
 
 .zone-indicator.top:active,
 .zone-indicator.bottom:active,
 .zone-indicator.left:active,
 .zone-indicator.right:active {
-  background: rgba(0, 255, 136, 0.4);
-  border-color: rgba(0, 255, 136, 0.6);
+  background: var(--neon-primary);
+  box-shadow: 0 0 20px var(--neon-primary);
 }
 
-.zone-indicator.top {
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+/* Active state: invert colors */
+.zone-indicator.active .arrow { color: #000; }
 
-.zone-indicator.top.active {
-  transform: translateX(-50%) scale(1.1);
-}
+.zone-indicator.top { top: 24px; left: 50%; transform: translateX(-50%); }
+.zone-indicator.top.active { transform: translateX(-50%) translateY(-4px); }
 
-.zone-indicator.bottom {
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+.zone-indicator.bottom { bottom: 24px; left: 50%; transform: translateX(-50%); }
+.zone-indicator.bottom.active { transform: translateX(-50%) translateY(4px); }
 
-.zone-indicator.bottom.active {
-  transform: translateX(-50%) scale(1.1);
-}
+.zone-indicator.left { left: 24px; top: 50%; transform: translateY(-50%); }
+.zone-indicator.left.active { transform: translateY(-50%) translateX(-4px); }
 
-.zone-indicator.left {
-  left: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-}
+.zone-indicator.right { right: 24px; top: 50%; transform: translateY(-50%); }
+.zone-indicator.right.active { transform: translateY(-50%) translateX(4px); }
 
-.zone-indicator.left.active {
-  transform: translateY(-50%) scale(1.1);
-}
-
-.zone-indicator.right {
-  right: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.zone-indicator.right.active {
-  transform: translateY(-50%) scale(1.1);
-}
-
+/* Center / Exit Button */
 .zone-indicator.center {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 80px;
   height: 80px;
-  border-radius: 50%;
-  background: rgba(255, 100, 100, 0.15);
-  border: 2px dashed rgba(255, 100, 100, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(20, 0, 0, 0.6);
+  border: 2px solid var(--neon-secondary);
+  clip-path: circle(50%);
 }
 
 .zone-indicator.center:active,
 .zone-indicator.center.active {
-  background: rgba(255, 100, 100, 0.3);
-  border-color: rgba(255, 100, 100, 0.6);
-  transform: translate(-50%, -50%) scale(1.1);
+  background: var(--neon-secondary);
+  box-shadow: 0 0 30px var(--neon-secondary);
 }
+.zone-indicator.center.active .icon { color: #000; }
+.zone-indicator.center .icon { color: var(--neon-secondary); }
 
-.zone-indicator.center .icon {
-  color: rgba(255, 100, 100, 0.9);
-}
-
+/* Ripples - Radar Scan Style */
 .ripple {
   position: absolute;
   pointer-events: none;
-  animation: ripple-effect 0.15s ease-out;
+  background: var(--neon-primary);
+  opacity: 0.3;
 }
+.ripple.top { top: 0; left: 0; right: 0; height: 2px; animation: scanDown 0.5s linear; }
+.ripple.bottom { bottom: 0; left: 0; right: 0; height: 2px; animation: scanUp 0.5s linear; }
+.ripple.left { left: 0; top: 0; bottom: 0; width: 2px; animation: scanRight 0.5s linear; }
+.ripple.right { right: 0; top: 0; bottom: 0; width: 2px; animation: scanLeft 0.5s linear; }
 
-.ripple.top {
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background: linear-gradient(to bottom, rgba(0, 255, 136, 0.2), transparent);
-}
+@keyframes scanDown { from { top: 0; opacity: 0.8; } to { top: 50%; opacity: 0; } }
+@keyframes scanUp { from { bottom: 0; opacity: 0.8; } to { bottom: 50%; opacity: 0; } }
+@keyframes scanRight { from { left: 0; opacity: 0.8; } to { left: 50%; opacity: 0; } }
+@keyframes scanLeft { from { right: 0; opacity: 0.8; } to { right: 50%; opacity: 0; } }
 
-.ripple.bottom {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 30%;
-  background: linear-gradient(to top, rgba(0, 255, 136, 0.2), transparent);
-}
-
-.ripple.left {
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 30%;
-  background: linear-gradient(to right, rgba(0, 255, 136, 0.2), transparent);
-}
-
-.ripple.right {
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 30%;
-  background: linear-gradient(to left, rgba(0, 255, 136, 0.2), transparent);
-}
-
-@keyframes ripple-effect {
-  from {
-    opacity: 0.6;
-  }
-  to {
-    opacity: 0.2;
-  }
-}
-
-/* 旋轉/縮放控制按鈕 */
+/* Control Buttons (Rotate/Scale corners) */
 .control-btn {
   position: absolute;
   width: 56px;
   height: 56px;
-  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  background: rgba(100, 150, 255, 0.2);
-  border: 2px solid rgba(100, 150, 255, 0.4);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 10, 20, 0.8);
+  border: 1px solid var(--neon-primary);
+  /* Hexagon or similar tech shape */
+  clip-path: polygon(20% 0, 80% 0, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0 80%, 0 20%);
   cursor: pointer;
   touch-action: none;
   user-select: none;
-  transition: all 0.15s ease;
+  transition: all 0.1s;
+}
+
+.control-btn:active {
+  background: var(--neon-primary);
+  transform: scale(0.95);
+}
+
+.control-btn span:first-child {
+  font-size: 20px;
+  color: #fff;
+}
+
+.control-btn .control-label {
+  font-size: 9px;
+  color: var(--neon-primary);
+  font-family: monospace;
+  text-transform: uppercase;
+}
+
+.control-btn:active span:first-child,
+.control-btn:active .control-label {
+  color: #000;
 }
 
 .control-btn span:first-child {

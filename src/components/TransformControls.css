@@ -1,179 +1,161 @@
 .transform-controls {
   position: fixed;
-  bottom: 80px;
+  bottom: 110px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 16px;
+  gap: 20px;
   z-index: 200;
-  padding: 10px 16px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
+  padding: 16px 24px;
+  /* Industrial Panel Background */
+  background: 
+    linear-gradient(45deg, transparent 10px, rgba(15, 20, 30, 0.95) 10px),
+    linear-gradient(135deg, transparent 10px, rgba(15, 20, 30, 0.95) 10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  white-space: nowrap;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  
+  /* Tech Borders */
+  border-top: 2px solid var(--neon-primary);
+  border-bottom: 2px solid var(--neon-primary);
 }
+
+/* Decorative side brackets */
+.transform-controls::before,
+.transform-controls::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background: var(--neon-primary);
+}
+.transform-controls::before { left: -6px; }
+.transform-controls::after { right: -6px; }
 
 .control-group {
   display: flex;
   align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
+  gap: 8px;
+  position: relative;
 }
 
 .group-label {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
-  min-width: 20px;
-  text-align: center;
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 1px;
   white-space: nowrap;
 }
 
 .transform-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1);
+  width: 52px;
+  height: 52px;
+  background: #1a1a24;
+  border: 1px solid #444;
+  border-bottom: 3px solid #222; /* Physical button depth */
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
   cursor: pointer;
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: all 0.15s ease;
-  flex-shrink: 0;
+  position: relative;
+  transition: all 0.1s;
+}
+
+.transform-btn:active {
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  background: #111;
 }
 
 .transform-btn .btn-icon {
   font-size: 20px;
-  color: white;
-  line-height: 1;
+  color: #888;
+  transition: color 0.2s;
 }
 
 .transform-btn .btn-label {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.6);
+  color: #555;
+  margin-top: 2px;
+  font-family: monospace;
 }
 
-.transform-btn:active,
-.transform-btn.active {
-  transform: scale(0.95);
-  background: rgba(0, 255, 136, 0.3);
-  border-color: rgba(0, 255, 136, 0.6);
-}
+/* --- Group Styles (Color Coding) --- */
 
-/* 旋轉按鈕樣式 */
-.rotate-group .transform-btn {
-  background: rgba(100, 150, 255, 0.15);
-  border-color: rgba(100, 150, 255, 0.3);
-}
-
+/* Rotate (Blue) */
+.rotate-group .transform-btn:hover { border-color: #3388ff; }
 .rotate-group .transform-btn:active,
 .rotate-group .transform-btn.active {
-  background: rgba(100, 150, 255, 0.4);
-  border-color: rgba(100, 150, 255, 0.7);
+  background: rgba(51, 136, 255, 0.2);
+  border-color: #3388ff;
+  box-shadow: 0 0 15px rgba(51, 136, 255, 0.3);
 }
+.rotate-group .transform-btn.active .btn-icon { color: #3388ff; }
 
-/* 寬度按鈕樣式 */
-.width-group .transform-btn {
-  background: rgba(255, 180, 100, 0.15);
-  border-color: rgba(255, 180, 100, 0.3);
-}
-
+/* Width (Orange) */
+.width-group .transform-btn:hover { border-color: #ffaa00; }
 .width-group .transform-btn:active,
 .width-group .transform-btn.active {
-  background: rgba(255, 180, 100, 0.4);
-  border-color: rgba(255, 180, 100, 0.7);
+  background: rgba(255, 170, 0, 0.2);
+  border-color: #ffaa00;
+  box-shadow: 0 0 15px rgba(255, 170, 0, 0.3);
 }
+.width-group .transform-btn.active .btn-icon { color: #ffaa00; }
 
-/* 高度按鈕樣式 */
-.height-group .transform-btn {
-  background: rgba(180, 255, 100, 0.15);
-  border-color: rgba(180, 255, 100, 0.3);
-}
-
+/* Height (Green) */
+.height-group .transform-btn:hover { border-color: #00ff88; }
 .height-group .transform-btn:active,
 .height-group .transform-btn.active {
-  background: rgba(180, 255, 100, 0.4);
-  border-color: rgba(180, 255, 100, 0.7);
+  background: rgba(0, 255, 136, 0.2);
+  border-color: #00ff88;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
 }
+.height-group .transform-btn.active .btn-icon { color: #00ff88; }
 
-/* 等比例縮放按鈕樣式 */
-.scale-group .transform-btn {
-  background: rgba(200, 150, 255, 0.15);
-  border-color: rgba(200, 150, 255, 0.3);
-}
-
+/* Scale (Magenta) */
+.scale-group .transform-btn:hover { border-color: #ff0055; }
 .scale-group .transform-btn:active,
 .scale-group .transform-btn.active {
-  background: rgba(200, 150, 255, 0.4);
-  border-color: rgba(200, 150, 255, 0.7);
+  background: rgba(255, 0, 85, 0.2);
+  border-color: #ff0055;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.3);
 }
+.scale-group .transform-btn.active .btn-icon { color: #ff0055; }
 
-/* 小按鈕樣式（用於寬高控制） */
-.transform-btn.small {
-  width: 36px;
-  height: 36px;
-}
-
-.transform-btn.small .btn-icon {
-  font-size: 16px;
-}
-
-/* 手機適配 */
-@media (max-width: 500px) {
+/* Mobile Optimization */
+@media (max-width: 600px) {
   .transform-controls {
-    gap: 10px;
-    padding: 8px 12px;
-    bottom: 60px;
+    bottom: 80px;
+    width: 96%;
+    padding: 24px 12px 12px 12px; /* Increased top padding for labels */
+    gap: 12px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    background: rgba(15, 20, 30, 0.95);
+    /* Hide scrollbar */
+    -ms-overflow-style: none; 
+    scrollbar-width: none;
   }
-
-  .transform-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .transform-btn.small {
-    width: 32px;
-    height: 32px;
-  }
-
-  .transform-btn .btn-icon {
-    font-size: 16px;
-  }
-
-  .transform-btn.small .btn-icon {
-    font-size: 14px;
-  }
-
-  .group-label {
-    font-size: 10px;
-    min-width: 16px;
-  }
-}
-
-@media (max-width: 380px) {
-  .transform-controls {
-    gap: 6px;
-    padding: 6px 8px;
-  }
-
-  .transform-btn {
-    width: 34px;
-    height: 34px;
-  }
-
-  .transform-btn.small {
-    width: 30px;
-    height: 30px;
-  }
-
-  .group-label {
+  
+  .transform-controls::-webkit-scrollbar {
     display: none;
+  }
+  
+  .group-label {
+    top: -18px; /* Adjust slightly */
+    font-size: 9px;
+  }
+  
+  .transform-btn {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
   }
 }

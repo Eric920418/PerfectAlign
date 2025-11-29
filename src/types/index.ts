@@ -115,7 +115,6 @@ export interface GameStoreState {
   totalError: number;
 
   // Snap 設定
-  snapEnabled: boolean;
   snapSize: SnapSize;
 
   // 縮放設定
@@ -130,7 +129,6 @@ export interface GameStoreState {
   addActionLog: (log: Omit<ActionLog, 'timestamp'>) => void;
   checkWinCondition: () => void;
   resetLevel: () => void;
-  setSnapEnabled: (enabled: boolean) => void;
   setSnapSize: (size: SnapSize) => void;
   snapToGrid: (value: number) => number;
   setCanvasZoom: (zoom: ZoomLevel) => void;

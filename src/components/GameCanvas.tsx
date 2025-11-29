@@ -94,11 +94,12 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
         updatePieceTransform(pieceId, { scaleX, scaleY });
         checkWinCondition();
       },
-      snapToGrid: (value: number) => {
-        return useGameStore.getState().snapToGrid(value);
-      },
-      getSnapEnabled: () => {
-        return useGameStore.getState().snapEnabled;
+      getSnapState: () => {
+        const state = useGameStore.getState();
+        return {
+          enabled: true,
+          size: state.snapSize,
+        };
       },
     });
 

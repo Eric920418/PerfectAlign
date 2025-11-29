@@ -5,15 +5,25 @@
 }
 
 :root {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Game Theme Variables */
+  --game-bg: #050510;
+  --game-grid: rgba(0, 255, 255, 0.07);
+  --neon-primary: #00f3ff; /* Cyan */
+  --neon-secondary: #ff0055; /* Magenta */
+  --neon-accent: #ffe600; /* Yellow */
+  --hud-bg: rgba(10, 15, 30, 0.9);
+  --hud-border: rgba(0, 243, 255, 0.5);
+  
+  font-family: 'Courier New', Courier, monospace, system-ui; /* Tech/Code look */
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 600;
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #0d0d1a;
+  color: #e0e0e0;
+  background-color: var(--game-bg);
+  
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: none; /* Sharper pixel feel */
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -27,11 +37,19 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Digital Grid Background */
+  background-image: 
+    linear-gradient(var(--game-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--game-grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
 }
 
 /* 禁用觸控裝置的預設行為 */
 canvas {
   touch-action: none;
+  outline: none;
+  image-rendering: pixelated; /* Retain sharp edges */
 }
 
 /* 遊戲區域禁用文字選取和觸控效果 */
@@ -48,5 +66,6 @@ canvas {
 
 /* 選取樣式 */
 ::selection {
-  background: rgba(0, 255, 136, 0.3);
+  background: var(--neon-primary);
+  color: #000;
 }

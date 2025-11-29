@@ -5,126 +5,180 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #0d0d1a;
+  background: transparent;
   overflow: hidden;
+  position: relative;
 }
 
+/* --- Header (HUD Top) --- */
 .level-header {
   position: fixed;
-  top: 16px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
   z-index: 100;
+  width: auto;
+  pointer-events: none;
 }
 
 .level-select-btn {
+  pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 24px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--neon-primary);
+  background: rgba(0, 10, 20, 0.8);
+  border: 2px solid var(--neon-primary);
+  /* Angled corners (clip-path) for sci-fi look */
+  clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
   transition: all 0.2s ease;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
 }
 
 .level-select-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.level-select-btn svg {
-  opacity: 0.6;
+  background: rgba(0, 243, 255, 0.15);
+  box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+  text-shadow: 0 0 8px var(--neon-primary);
 }
 
 .level-title {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
-  padding: 2px 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
-}
-
-/* 關卡選擇面板 */
-.level-select-panel {
-  position: fixed;
-  top: 70px;
+  position: absolute;
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(20, 20, 35, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  padding: 8px;
+  font-size: 10px;
+  color: var(--neon-accent);
+  background: #000;
+  padding: 2px 6px;
+  border: 1px solid var(--neon-accent);
+  margin-top: 4px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- Level Select Panel (Holographic Menu) --- */
+.level-select-panel {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(5, 5, 10, 0.95);
+  border: 2px solid var(--neon-primary);
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.15), inset 0 0 20px rgba(0, 243, 255, 0.05);
+  padding: 4px; /* Inner border gap */
   display: flex;
   flex-direction: column;
   gap: 4px;
   z-index: 200;
-  min-width: 200px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  animation: fadeIn 0.2s ease;
+  min-width: 260px;
+  animation: holoPop 0.2s cubic-bezier(0, 0.9, 0.6, 1);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
+@keyframes holoPop {
+  0% { opacity: 0; transform: translateX(-50%) scaleY(0); }
+  100% { opacity: 1; transform: translateX(-50%) scaleY(1); }
 }
 
 .level-option {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  padding: 10px 14px;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(0, 255, 255, 0.03);
+  border: 1px solid rgba(0, 255, 255, 0.1);
   cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
+  transition: all 0.1s;
+  position: relative;
 }
 
 .level-option:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 255, 255, 0.1);
+  border-color: var(--neon-primary);
 }
 
 .level-option.active {
-  background: rgba(0, 255, 136, 0.15);
-  border-color: rgba(0, 255, 136, 0.4);
+  background: var(--neon-primary);
+  border-color: var(--neon-primary);
+}
+
+.level-option.active .level-option-number,
+.level-option.active .level-option-title {
+  color: #000;
+  font-weight: 900;
 }
 
 .level-option-number {
-  font-size: 14px;
-  font-weight: bold;
-  color: white;
-}
-
-.level-option.active .level-option-number {
-  color: #00ff88;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--neon-primary);
+  font-family: monospace;
 }
 
 .level-option-title {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
 }
 
+/* --- Game Viewport (The Monitor) --- */
 .game-viewport {
   position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  border: 2px solid #333; /* Bezel */
+  box-shadow: 
+    0 0 0 4px #111, /* Outer Bezel */
+    0 20px 50px rgba(0, 0, 0, 0.8);
+  background: #000;
+  transition: transform 0.1s ease-out;
+  overflow: hidden; /* Ensure scanlines stay inside */
+}
+
+/* CRT Scanline Effect - Only inside the viewport */
+.game-viewport::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(90deg, rgba(255,0,0,0.06), rgba(0,255,0,0.02), rgba(0,0,255,0.06));
+  background-size: 100% 2px, 3px 100%;
+  z-index: 50; /* Above canvas, below UI overlays inside viewport if any */
+  pointer-events: none;
+}
+
+/* Add corner brackets to viewport */
+.game-viewport::after {
+  content: "";
+  position: absolute;
+  top: -8px; bottom: -8px; left: -8px; right: -8px;
+  border: 2px solid var(--neon-primary);
+  clip-path: polygon(
+    0 20px, 0 0, 20px 0, 
+    calc(100% - 20px) 0, 100% 0, 100% 20px, 
+    100% calc(100% - 20px), 100% 100%, calc(100% - 20px) 100%, 
+    20px 100%, 0 100%, 0 calc(100% - 20px)
+  );
+  /* We only want corners, so we mask the middle? 
+     Simpler approach: Linear gradient borders */
+  background: transparent;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 90;
 }
 
 .game-loading {
@@ -133,185 +187,194 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0d0d1a;
-  color: white;
-  font-size: 18px;
+  color: var(--neon-primary);
+  font-size: 24px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  animation: blink 0.5s infinite;
 }
 
+/* --- Status (Alerts) --- */
 .game-status {
   position: fixed;
-  top: 60px;
+  top: 90px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 150;
+  pointer-events: none;
 }
 
 .status-indicator {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 500;
-  animation: slideDown 0.3s ease;
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--neon-accent);
+  color: var(--neon-accent);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(255, 230, 0, 0.2);
 }
 
-.status-indicator.fine-tune {
-  background: rgba(0, 255, 136, 0.2);
-  color: #00ff88;
-  border: 1px solid rgba(0, 255, 136, 0.4);
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 工具列 */
+/* --- Bottom Toolbar (Control Deck) --- */
 .game-toolbar {
   position: fixed;
-  bottom: 16px;
-  left: 16px;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 16px;
   z-index: 100;
+  padding: 12px 24px;
+  background: #050510;
+  border-top: 2px solid var(--neon-primary);
+  border-bottom: 2px solid var(--neon-primary);
+  /* Angled ends */
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
 }
 
 .toolbar-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.6);
+  width: 48px;
+  height: 48px;
+  background: #111;
+  border: 1px solid #333;
+  color: #888; /* Increased contrast from #555 */
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.1s;
+  position: relative;
 }
 
+/* Mechanical button feel */
 .toolbar-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: #222;
+  color: #fff;
+  border-color: #666;
+}
+
+.toolbar-btn:active {
+  transform: translateY(2px);
 }
 
 .toolbar-btn.active {
-  background: rgba(0, 255, 136, 0.2);
-  border-color: rgba(0, 255, 136, 0.4);
-  color: #00ff88;
+  background: rgba(0, 243, 255, 0.1);
+  border: 1px solid var(--neon-primary);
+  color: var(--neon-primary);
+  box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.2);
 }
 
-.toolbar-btn svg {
-  width: 20px;
-  height: 20px;
+/* Add "LED" indicator to buttons */
+.toolbar-btn::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 4px;
+  height: 4px;
+  background: #333;
+  border-radius: 50%;
 }
 
-/* Snap 大小選擇器 */
+.toolbar-btn.active::after {
+  background: var(--neon-primary);
+  box-shadow: 0 0 4px var(--neon-primary);
+}
+
+/* Snap Selector (Radio buttons style) */
 .snap-size-selector {
   display: flex;
-  gap: 4px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
+  gap: 2px;
+  background: #111;
+  padding: 2px;
+  border: 1px solid #333;
 }
 
 .snap-size-btn {
   padding: 6px 10px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: none;
+  color: #888; /* Increased contrast */
   font-size: 12px;
-  font-weight: 500;
+  font-family: monospace;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 40px;
 }
 
-.snap-size-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
+.snap-size-btn:hover { color: #fff; }
 
 .snap-size-btn.active {
-  background: rgba(0, 255, 136, 0.3);
-  border-color: rgba(0, 255, 136, 0.5);
-  color: #00ff88;
+  background: var(--neon-primary);
+  color: #000;
+  font-weight: bold;
 }
 
-/* 縮放選擇器 */
+/* Zoom Selector */
 .zoom-selector {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
+  gap: 2px;
+  background: #111;
+  padding: 2px;
+  border: 1px solid #333;
 }
 
 .zoom-label {
-  font-size: 14px;
-  padding: 0 4px;
+  font-size: 10px;
+  padding: 0 6px;
+  color: #888; /* Increased contrast */
 }
 
 .zoom-btn {
   padding: 6px 8px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.6);
+  background: transparent;
+  border: none;
+  color: #888; /* Increased contrast */
   font-size: 12px;
-  font-weight: 500;
+  font-family: monospace;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 32px;
 }
 
-.zoom-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
+.zoom-btn:hover { color: #fff; }
 
 .zoom-btn.active {
-  background: rgba(100, 200, 255, 0.3);
-  border-color: rgba(100, 200, 255, 0.5);
-  color: #64c8ff;
+  background: #3388ff;
+  color: #000;
+  font-weight: bold;
 }
 
-/* 操作提示 */
-.game-hints {
-  position: fixed;
-  bottom: 16px;
-  right: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: right;
-  z-index: 100;
-}
+
 
 .hint-item {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  color: var(--neon-primary);
+  background: rgba(0, 0, 0, 0.8);
   padding: 4px 8px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
+  border-left: 2px solid var(--neon-primary);
+  text-transform: uppercase;
+  opacity: 0.7;
 }
 
-/* 行動裝置隱藏 PC 提示 */
+/* Mobile */
 @media (max-width: 768px) {
-  .hint-item:last-child {
-    display: none;
+  .game-toolbar {
+    width: 100%;
+    bottom: 0;
+    clip-path: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    border-top: 2px solid var(--neon-primary);
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #080810;
   }
-}
-
-@media (hover: none) {
-  .hint-item:last-child {
-    display: none;
+  
+  .level-select-btn {
+    font-size: 16px;
+    padding: 6px 16px;
   }
 }

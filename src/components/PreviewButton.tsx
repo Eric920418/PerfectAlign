@@ -63,21 +63,43 @@ export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: Previ
               className="preview-placeholder"
               style={{ width: canvasWidth, height: canvasHeight }}
             >
-              {levelConfig.pieces.map((piece) => (
-                <div
-                  key={piece.id}
-                  className="target-marker"
-                  style={{
-                    left: piece.target_transform.x,
-                    top: piece.target_transform.y,
-                    width: piece.shape?.width ?? 80,
-                    height: piece.shape?.height ?? 80,
-                    transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
-                  }}
-                >
-                  {piece.id}
-                </div>
-              ))}
+              {/* 使用 SVG 確保座標系統與遊戲一致 */}
+              <svg
+                className="preview-svg"
+                width={canvasWidth}
+                height={canvasHeight}
+                viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
+              >
+                {levelConfig.pieces.map((piece) => {
+                  const { x, y, rotation, scaleX, scaleY } = piece.target_transform;
+                  const w = piece.shape?.width ?? 80;
+                  const h = piece.shape?.height ?? 80;
+
+                  return (
+                    <g
+                      key={piece.id}
+                      transform={`translate(${x}, ${y}) rotate(${rotation}) scale(${scaleX}, ${scaleY})`}
+                    >
+                      <rect
+                        x={-w / 2}
+                        y={-h / 2}
+                        width={w}
+                        height={h}
+                        className="target-marker-rect"
+                      />
+                      <text
+                        x={0}
+                        y={0}
+                        className="target-marker-label"
+                        textAnchor="middle"
+                        dominantBaseline="central"
+                      >
+                        {piece.id}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
             </div>
           )}
         </div>

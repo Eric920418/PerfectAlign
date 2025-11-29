@@ -11,6 +11,8 @@ export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
   const [phase, setPhase] = useState<'showing' | 'fading' | 'done'>('showing');
   const [countdown, setCountdown] = useState(3);
 
+  const { width, height } = levelConfig.canvas;
+
   useEffect(() => {
     // 倒數計時
     const countdownInterval = setInterval(() => {
@@ -46,29 +48,64 @@ export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
   return (
     <div
       className={`target-preview ${phase}`}
-      style={{
-        width: levelConfig.canvas.width,
-        height: levelConfig.canvas.height,
-      }}
+      style={{ width, height }}
     >
-      {/* 直接在畫布上顯示目標位置 */}
-      {levelConfig.pieces.map((piece) => (
-        <div
-          key={piece.id}
-          className="target-piece"
-          style={{
-            left: piece.target_transform.x,
-            top: piece.target_transform.y,
-            width: piece.shape?.width || 80,
-            height: piece.shape?.height || 80,
-            transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
-          }}
-        >
-          <div className="target-piece-inner">
-            <span className="piece-label">{piece.id}</span>
-          </div>
-        </div>
-      ))}
+      {/* 使用 SVG 確保座標系統與 PixelGrid/GameEngine 完全一致 */}
+      <svg
+        className="target-preview-svg"
+        width={width}
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+      >
+        {levelConfig.pieces.map((piece) => {
+          const { x, y, rotation, scaleX, scaleY } = piece.target_transform;
+          const w = piece.shape?.width || 80;
+          const h = piece.shape?.height || 80;
+
+          return (
+            <g
+              key={piece.id}
+              transform={`translate(${x}, ${y}) rotate(${rotation}) scale(${scaleX}, ${scaleY})`}
+            >
+              {/* 目標框（中心對齊，與 PixiJS anchor(0.5) 一致） */}
+              <rect
+                x={-w / 2}
+                y={-h / 2}
+                width={w}
+                height={h}
+                className="target-rect"
+              />
+              {/* 標籤 */}
+              <text
+                x={0}
+                y={0}
+                className="target-label"
+                textAnchor="middle"
+                dominantBaseline="central"
+              >
+                {piece.id}
+              </text>
+              {/* 四角標記 */}
+              <path
+                d={`M${-w/2} ${-h/2 + 12} L${-w/2} ${-h/2} L${-w/2 + 12} ${-h/2}`}
+                className="corner-mark"
+              />
+              <path
+                d={`M${w/2 - 12} ${-h/2} L${w/2} ${-h/2} L${w/2} ${-h/2 + 12}`}
+                className="corner-mark"
+              />
+              <path
+                d={`M${-w/2} ${h/2 - 12} L${-w/2} ${h/2} L${-w/2 + 12} ${h/2}`}
+                className="corner-mark"
+              />
+              <path
+                d={`M${w/2 - 12} ${h/2} L${w/2} ${h/2} L${w/2} ${h/2 - 12}`}
+                className="corner-mark"
+              />
+            </g>
+          );
+        })}
+      </svg>
 
       {/* 倒數計時 */}
       <div className="preview-countdown">

@@ -1,4 +1,4 @@
-/* ===== Target Preview - 簡潔現代風格 ===== */
+/* ===== Target Preview - SVG 版本 ===== */
 
 .target-preview {
   position: absolute;
@@ -14,155 +14,45 @@
   opacity: 0;
 }
 
-/* ===== 頂部標籤 ===== */
-.preview-badge {
+/* ===== SVG 畫布 ===== */
+.target-preview-svg {
   position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  background: rgba(0, 243, 255, 0.1);
-  border: 1px solid rgba(0, 243, 255, 0.3);
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--neon-primary);
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  top: 0;
+  left: 0;
 }
 
-.badge-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--neon-primary);
-  border-radius: 50%;
-  animation: pulse 1s infinite;
+/* ===== 目標矩形 ===== */
+.target-rect {
+  fill: rgba(0, 243, 255, 0.05);
+  stroke: var(--neon-primary);
+  stroke-width: 2;
+  stroke-dasharray: 8 4;
+  animation: rectBreathe 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-
-/* ===== 主標題區 ===== */
-.preview-title-area {
-  padding-top: 60px;
-  text-align: center;
-}
-
-.preview-title {
-  margin: 0;
-  font-size: 28px;
-  font-weight: 300;
-  color: #fff;
-  letter-spacing: 8px;
-  text-transform: uppercase;
-}
-
-.preview-subtitle {
-  margin: 8px 0 0;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 400;
-}
-
-/* ===== 目標預覽區 ===== */
-.preview-canvas-wrapper {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  overflow: hidden;
-}
-
-.preview-canvas {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
-  background:
-    linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
-  transform-origin: center center;
-  box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
-}
-
-/* ===== 目標碎片 ===== */
-.target-piece {
-  position: absolute;
-}
-
-.target-piece-inner {
-  width: 100%;
-  height: 100%;
-  border: 2px dashed var(--neon-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 243, 255, 0.05);
-  position: relative;
-  animation: breathe 2s ease-in-out infinite;
-}
-
-@keyframes breathe {
+@keyframes rectBreathe {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2),
-                inset 0 0 20px rgba(0, 243, 255, 0.05);
+    filter: drop-shadow(0 0 10px rgba(0, 243, 255, 0.3));
   }
   50% {
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.4),
-                inset 0 0 30px rgba(0, 243, 255, 0.1);
+    filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.6));
   }
 }
 
-.piece-label {
-  color: var(--neon-primary);
-  font-weight: 700;
+/* ===== 標籤文字 ===== */
+.target-label {
+  fill: var(--neon-primary);
   font-size: 20px;
+  font-weight: 700;
   font-family: 'SF Mono', 'Consolas', monospace;
-  text-shadow: 0 0 10px var(--neon-primary);
+  filter: drop-shadow(0 0 8px var(--neon-primary));
 }
 
-/* 四角標記 */
+/* ===== 四角標記 ===== */
 .corner-mark {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: var(--neon-primary);
-  border-style: solid;
-  border-width: 0;
-}
-
-.corner-mark.tl {
-  top: -1px;
-  left: -1px;
-  border-top-width: 2px;
-  border-left-width: 2px;
-}
-
-.corner-mark.tr {
-  top: -1px;
-  right: -1px;
-  border-top-width: 2px;
-  border-right-width: 2px;
-}
-
-.corner-mark.bl {
-  bottom: -1px;
-  left: -1px;
-  border-bottom-width: 2px;
-  border-left-width: 2px;
-}
-
-.corner-mark.br {
-  bottom: -1px;
-  right: -1px;
-  border-bottom-width: 2px;
-  border-right-width: 2px;
+  fill: none;
+  stroke: var(--neon-primary);
+  stroke-width: 2;
 }
 
 /* ===== 底部倒數 ===== */

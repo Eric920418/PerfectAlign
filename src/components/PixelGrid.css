@@ -7,16 +7,16 @@
 }
 
 .grid-line {
-  stroke-width: 0.5px;
+  stroke-width: 1px;
   vector-effect: non-scaling-stroke;
 }
 
 .grid-line.minor {
-  stroke: rgba(255, 255, 255, 0.05);
+  stroke: rgba(100, 200, 255, 0.25);
 }
 
 .grid-line.major {
-  stroke: rgba(255, 255, 255, 0.12);
+  stroke: rgba(100, 200, 255, 0.5);
 }
 
 .grid-line.target {

@@ -27,6 +27,10 @@ export class GameEngine {
   private lastTapTime = 0;
   private animationFrameId: number | null = null;
 
+  // 用於 Sticky Snap
+  private lastSnappedX: number = 0;
+  private lastSnappedY: number = 0;
+
   // 雙指手勢狀態
   private pinchStartDistance = 0;
   private pinchStartRotation = 0;
@@ -333,7 +337,12 @@ export class GameEngine {
       this.isDragging = true;
       this.draggingPieceId = pieceId; // 記錄正在拖曳的方塊
       const globalPos = e.global;
-      this.targetPosition = { x: sprite.x, y: sprite.y };
+      
+      // 初始化 lastSnappedPosition
+      this.lastSnappedX = sprite.x;
+      this.lastSnappedY = sprite.y;
+      this.targetPosition = { x: sprite.x, y: sprite.y }; // 初始目標位置為當前方塊位置
+
       this.dragOffset = {
         x: sprite.x - globalPos.x,
         y: sprite.y - globalPos.y,
@@ -345,17 +354,41 @@ export class GameEngine {
       if (this.activeTouches.size > 1) return; // 雙指手勢時不拖曳
 
       const globalPos = e.global;
-      const { enabled: snapEnabled, size: snapSize } = this.getSnapState();
+      const { size: snapSize } = this.getSnapState(); // snapEnabled is always true now
 
-      let targetX = globalPos.x + this.dragOffset.x;
-      let targetY = globalPos.y + this.dragOffset.y;
+      // 計算原始的目標位置 (未吸附)
+      const newRawX = globalPos.x + this.dragOffset.x;
+      const newRawY = globalPos.y + this.dragOffset.y;
 
-      if (snapEnabled && snapSize > 0) {
-        targetX = Math.round(targetX / snapSize) * snapSize;
-        targetY = Math.round(targetY / snapSize) * snapSize;
+      let nextSnappedX = this.lastSnappedX;
+      let nextSnappedY = this.lastSnappedY;
+
+      if (snapSize > 0) {
+        // 判斷是否超過了吸附閾值
+        const threshold = snapSize / 2;
+
+        // X 軸
+        if (Math.abs(newRawX - this.lastSnappedX) >= threshold) {
+          // 已經移動超過半個吸附距離，計算下一個吸附點
+          nextSnappedX = Math.round(newRawX / snapSize) * snapSize;
+        }
+        
+        // Y 軸
+        if (Math.abs(newRawY - this.lastSnappedY) >= threshold) {
+          nextSnappedY = Math.round(newRawY / snapSize) * snapSize;
+        }
+
+        // 如果計算出的下一個吸附點與當前不同，則更新
+        if (nextSnappedX !== this.lastSnappedX || nextSnappedY !== this.lastSnappedY) {
+          this.lastSnappedX = nextSnappedX;
+          this.lastSnappedY = nextSnappedY;
+        }
+      } else { // snapSize is 0 or negative, which shouldn't happen, but just in case
+        this.lastSnappedX = newRawX;
+        this.lastSnappedY = newRawY;
       }
-
-      this.targetPosition = { x: targetX, y: targetY };
+      
+      this.targetPosition = { x: this.lastSnappedX, y: this.lastSnappedY };
     });
 
     sprite.on('pointerup', () => {
@@ -363,20 +396,13 @@ export class GameEngine {
         this.isDragging = false;
         this.draggingPieceId = null;
         
-        // 確保最後位置也對齊
-        const { enabled: snapEnabled, size: snapSize } = this.getSnapState();
-        let finalX = sprite.x;
-        let finalY = sprite.y;
-
-        if (snapEnabled && snapSize > 0) {
-          finalX = Math.round(finalX / snapSize) * snapSize;
-          finalY = Math.round(finalY / snapSize) * snapSize;
-        }
-
-        sprite.x = finalX;
-        sprite.y = finalY;
+        // 確保最後位置也對齊（使用最新的 lastSnappedX/Y）
+        // 由於已經在 move 時處理了吸附，這裡只需要更新 sprite 位置
+        sprite.x = this.lastSnappedX;
+        sprite.y = this.lastSnappedY;
+        
         this.updateSelectionBox(pieceId);
-        this.onPieceTransformEnd(pieceId, finalX, finalY);
+        this.onPieceTransformEnd(pieceId, sprite.x, sprite.y);
       }
     });
 
@@ -385,19 +411,11 @@ export class GameEngine {
         this.isDragging = false;
         this.draggingPieceId = null;
         
-        const { enabled: snapEnabled, size: snapSize } = this.getSnapState();
-        let finalX = sprite.x;
-        let finalY = sprite.y;
+        sprite.x = this.lastSnappedX;
+        sprite.y = this.lastSnappedY;
 
-        if (snapEnabled && snapSize > 0) {
-          finalX = Math.round(finalX / snapSize) * snapSize;
-          finalY = Math.round(finalY / snapSize) * snapSize;
-        }
-
-        sprite.x = finalX;
-        sprite.y = finalY;
         this.updateSelectionBox(pieceId);
-        this.onPieceTransformEnd(pieceId, finalX, finalY);
+        this.onPieceTransformEnd(pieceId, sprite.x, sprite.y);
       }
     });
   }

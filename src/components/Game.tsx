@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { GameCanvas } from './GameCanvas';
 import { FineTuneOverlay } from './FineTuneOverlay';
 import { PreviewButton } from './PreviewButton';
@@ -31,6 +31,12 @@ export function Game() {
   const [showLevelSelect, setShowLevelSelect] = useState(false);
   const { gameState, snapSize, setSnapSize, resetLevel } = useGameStore();
 
+  // 畫布拖動和縮放狀態（像 Figma）
+  const [panX, setPanX] = useState(0);
+  const [panY, setPanY] = useState(0);
+  const [zoom, setZoom] = useState(1);
+  const lastTouchRef = useRef<{ x: number; y: number; dist: number } | null>(null);
+
   // 實際 snap 值：1px→5, 5px→10, 10px→20
   const actualSnapSize = snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20;
 
@@ -48,6 +54,51 @@ export function Game() {
   const handleTargetPreviewComplete = useCallback(() => {
     setShowTargetPreview(false);
     setGameReady(true);
+  }, []);
+
+  // 雙指手勢處理（拖動 + 縮放）
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const centerX = (touch1.clientX + touch2.clientX) / 2;
+      const centerY = (touch1.clientY + touch2.clientY) / 2;
+      const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+      lastTouchRef.current = { x: centerX, y: centerY, dist };
+    }
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2 && lastTouchRef.current) {
+      const touch1 = e.touches[0];
+      const touch2 = e.touches[1];
+      const centerX = (touch1.clientX + touch2.clientX) / 2;
+      const centerY = (touch1.clientY + touch2.clientY) / 2;
+      const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+
+      // 拖動
+      const deltaX = centerX - lastTouchRef.current.x;
+      const deltaY = centerY - lastTouchRef.current.y;
+      setPanX(prev => prev + deltaX);
+      setPanY(prev => prev + deltaY);
+
+      // 縮放
+      const scaleFactor = dist / lastTouchRef.current.dist;
+      setZoom(prev => Math.max(0.5, Math.min(3, prev * scaleFactor)));
+
+      lastTouchRef.current = { x: centerX, y: centerY, dist };
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    lastTouchRef.current = null;
+  }, []);
+
+  // 重置視圖
+  const resetView = useCallback(() => {
+    setPanX(0);
+    setPanY(0);
+    setZoom(1);
   }, []);
 
   const handleReplay = () => {
@@ -136,10 +187,13 @@ export function Game() {
 
       <div
         className="game-viewport"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
           width: levelConfig.canvas.width,
           height: levelConfig.canvas.height,
-          transform: `scale(${scale})`,
+          transform: `translate(${panX}px, ${panY}px) scale(${scale * zoom})`,
           transformOrigin: 'center center',
         }}
       >
@@ -213,6 +267,12 @@ export function Game() {
             </button>
           ))}
         </div>
+        {/* 重置視圖按鈕（縮放不等於 1 或有平移時顯示） */}
+        {(zoom !== 1 || panX !== 0 || panY !== 0) && (
+          <button className="reset-view-btn" onClick={resetView}>
+            重置
+          </button>
+        )}
       </div>
 
      

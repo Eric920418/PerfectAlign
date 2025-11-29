@@ -199,8 +199,9 @@ pnpm preview
 - [x] 格線密度隨縮放調整（放大時顯示更細的格線）
 
 ### Phase 10 - 手機版面修復 ✅
-- [x] 修復 TargetPreview 標題溢出問題（縮短 SYSTEM_OBJECTIVE 為 SYS_OBJ）
-- [x] 調整 TargetPreview 的 padding 和字體大小
+- [x] 重新設計 TargetPreview 預覽頁面（簡潔現代風格）
+- [x] 新增倒數計時動畫（3 秒倒數 + 旋轉環）
+- [x] 目標碎片加入呼吸動畫和四角標記
 - [x] 響應式縮放預留 header (80px) 和 toolbar (80px) 空間
 - [x] 限制最大縮放為 0.9 避免邊緣被切掉
 

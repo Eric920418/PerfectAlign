@@ -1,0 +1,54 @@
+{
+  "level_id": 3,
+  "level_type": "image_match",
+  "title": "挑戰：寬高獨立調整",
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level3/complete.png",
+  "text_hint": "這關需要分別調整寬度和高度",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#2e1a2e"
+  },
+  "win_threshold": 10,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level3/piece_01.png",
+      "shape": { "width": 120, "height": 60 },
+      "start_transform": {
+        "x": 100,
+        "y": 130,
+        "rotation": -20,
+        "scaleX": 0.8,
+        "scaleY": 1.2
+      },
+      "target_transform": {
+        "x": 187,
+        "y": 180,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level3/piece_02.png",
+      "shape": { "width": 60, "height": 100 },
+      "start_transform": {
+        "x": 290,
+        "y": 350,
+        "rotation": 30,
+        "scaleX": 1.15,
+        "scaleY": 0.85
+      },
+      "target_transform": {
+        "x": 187,
+        "y": 350,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

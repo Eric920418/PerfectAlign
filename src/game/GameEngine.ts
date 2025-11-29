@@ -35,6 +35,9 @@ export class GameEngine {
   private pinchStartAngle = 0;
   private activeTouches: Map<number, { x: number; y: number }> = new Map();
 
+  // 選取框顯示狀態
+  private hideSelectionBox = false;
+
   // 回調函數
   private onPieceSelect: (id: string | null) => void;
   private onPieceTransformEnd: (id: string, x: number, y: number) => void;
@@ -256,8 +259,11 @@ export class GameEngine {
     } catch {
       // 使用圖形作為占位符
       const graphics = new PIXI.Graphics();
+      const width = piece.shape?.width ?? 80;
+      const height = piece.shape?.height ?? 80;
+
       graphics.beginFill(this.getColorForPiece(piece.id));
-      graphics.drawRoundedRect(-40, -40, 80, 80, 8);
+      graphics.drawRoundedRect(-width / 2, -height / 2, width, height, 8);
       graphics.endFill();
 
       // 添加 ID 文字
@@ -390,9 +396,51 @@ export class GameEngine {
     });
   }
 
-  private drawSelectionBox(_graphics: PIXI.Graphics, _sprite: PIXI.Sprite) {
-    // 不繪製選取框，避免影響對齊判斷
-    // 保留方法以維持程式結構
+  private drawSelectionBox(graphics: PIXI.Graphics, sprite: PIXI.Sprite) {
+    graphics.clear();
+
+    // 如果隱藏選取框（對答案時），不繪製
+    if (this.hideSelectionBox) {
+      return;
+    }
+
+    // 繪製選取框
+    const bounds = sprite.getLocalBounds();
+    const padding = 4;
+
+    graphics.lineStyle(2, 0x00ff88, 0.8);
+    graphics.drawRect(
+      bounds.x - padding,
+      bounds.y - padding,
+      bounds.width + padding * 2,
+      bounds.height + padding * 2
+    );
+
+    // 繪製角落小方塊
+    const cornerSize = 6;
+    graphics.beginFill(0x00ff88);
+    // 左上
+    graphics.drawRect(bounds.x - padding - cornerSize / 2, bounds.y - padding - cornerSize / 2, cornerSize, cornerSize);
+    // 右上
+    graphics.drawRect(bounds.x + bounds.width + padding - cornerSize / 2, bounds.y - padding - cornerSize / 2, cornerSize, cornerSize);
+    // 左下
+    graphics.drawRect(bounds.x - padding - cornerSize / 2, bounds.y + bounds.height + padding - cornerSize / 2, cornerSize, cornerSize);
+    // 右下
+    graphics.drawRect(bounds.x + bounds.width + padding - cornerSize / 2, bounds.y + bounds.height + padding - cornerSize / 2, cornerSize, cornerSize);
+    graphics.endFill();
+  }
+
+  // 設定是否隱藏選取框（對答案時使用）
+  setHideSelectionBox(hide: boolean) {
+    this.hideSelectionBox = hide;
+    // 更新當前選取框的顯示狀態
+    if (this.selectedPieceId) {
+      const sprite = this.pieceSprites.get(this.selectedPieceId);
+      const graphics = this.pieceGraphics.get(this.selectedPieceId);
+      if (sprite && graphics) {
+        this.drawSelectionBox(graphics, sprite);
+      }
+    }
   }
 
   private startRenderLoop() {

@@ -12,16 +12,27 @@ import { useGameStore } from '../stores/gameStore';
 import { useResponsiveScale } from '../hooks/useResponsiveScale';
 import type { LevelConfig, SnapSize } from '../types';
 import level1Config from '../assets/levels/level1/config.json';
+import level2Config from '../assets/levels/level2/config.json';
+import level3Config from '../assets/levels/level3/config.json';
 import './Game.css';
 
+// 關卡列表
+const levels: LevelConfig[] = [
+  level1Config as LevelConfig,
+  level2Config as LevelConfig,
+  level3Config as LevelConfig,
+];
+
 export function Game() {
+  const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [levelConfig, setLevelConfig] = useState<LevelConfig | null>(null);
   const [showDebug, setShowDebug] = useState(false);
   const [showReplay, setShowReplay] = useState(false);
   const [showGrid, setShowGrid] = useState(true);
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
-  const { gameState, snapEnabled, snapSize, setSnapEnabled, setSnapSize } = useGameStore();
+  const [showLevelSelect, setShowLevelSelect] = useState(false);
+  const { gameState, snapEnabled, snapSize, setSnapEnabled, setSnapSize, resetLevel } = useGameStore();
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -31,8 +42,8 @@ export function Game() {
 
   useEffect(() => {
     // 載入關卡設定
-    setLevelConfig(level1Config as LevelConfig);
-  }, []);
+    setLevelConfig(levels[currentLevelIndex]);
+  }, [currentLevelIndex]);
 
   const handleTargetPreviewComplete = useCallback(() => {
     setShowTargetPreview(false);
@@ -41,17 +52,36 @@ export function Game() {
 
   const handleReplay = () => {
     // 重新載入同一關卡
+    resetLevel();
     setLevelConfig(null);
     setShowTargetPreview(true);
     setGameReady(false);
     setTimeout(() => {
-      setLevelConfig(level1Config as LevelConfig);
+      setLevelConfig(levels[currentLevelIndex]);
     }, 100);
   };
 
   const handleNextLevel = () => {
-    // TODO: 載入下一關
-    alert('恭喜通關！下一關開發中...');
+    if (currentLevelIndex < levels.length - 1) {
+      // 載入下一關
+      resetLevel();
+      setLevelConfig(null);
+      setShowTargetPreview(true);
+      setGameReady(false);
+      setCurrentLevelIndex(currentLevelIndex + 1);
+    } else {
+      // 已經是最後一關
+      alert('🎉 恭喜通關所有關卡！');
+    }
+  };
+
+  const handleSelectLevel = (index: number) => {
+    resetLevel();
+    setLevelConfig(null);
+    setShowTargetPreview(true);
+    setGameReady(false);
+    setShowLevelSelect(false);
+    setCurrentLevelIndex(index);
   };
 
   const handleWatchReplay = () => {
@@ -74,11 +104,35 @@ export function Game() {
     <div className="game-container">
       {/* 關卡標題 */}
       <div className="level-header">
-        <span className="level-number">Level {levelConfig.level_id}</span>
-        <span className="level-type">
-          {levelConfig.level_type === 'image_match' ? '圖片對齊' : '文字提示'}
+        <button
+          className="level-select-btn"
+          onClick={() => setShowLevelSelect(!showLevelSelect)}
+        >
+          Level {levelConfig.level_id}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        <span className="level-title">
+          {levelConfig.title || (levelConfig.level_type === 'image_match' ? '圖片對齊' : '文字提示')}
         </span>
       </div>
+
+      {/* 關卡選擇面板 */}
+      {showLevelSelect && (
+        <div className="level-select-panel">
+          {levels.map((level, index) => (
+            <button
+              key={level.level_id}
+              className={`level-option ${index === currentLevelIndex ? 'active' : ''}`}
+              onClick={() => handleSelectLevel(index)}
+            >
+              <span className="level-option-number">Level {level.level_id}</span>
+              <span className="level-option-title">{level.title}</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       <div
         className="game-viewport"

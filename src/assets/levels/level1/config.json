@@ -1,47 +1,31 @@
 {
   "level_id": 1,
   "level_type": "image_match",
+  "title": "入門：移動與旋轉",
   "allow_preview": true,
   "preview_image": "/assets/levels/level1/complete.png",
-  "text_hint": "",
+  "text_hint": "將方塊移動到目標位置並調整角度",
   "canvas": {
     "width": 375,
     "height": 500,
     "background": "#1a1a2e"
   },
-  "win_threshold": 3,
+  "win_threshold": 15,
   "pieces": [
     {
       "id": "p1",
       "texture": "/assets/levels/level1/piece_01.png",
+      "shape": { "width": 80, "height": 80 },
       "start_transform": {
-        "x": 80,
-        "y": 100,
-        "rotation": 25,
-        "scaleX": 1.1,
-        "scaleY": 1.1
-      },
-      "target_transform": {
-        "x": 187,
-        "y": 200,
-        "rotation": 0,
+        "x": 100,
+        "y": 150,
+        "rotation": 35,
         "scaleX": 1.0,
         "scaleY": 1.0
-      }
-    },
-    {
-      "id": "p2",
-      "texture": "/assets/levels/level1/piece_02.png",
-      "start_transform": {
-        "x": 280,
-        "y": 350,
-        "rotation": -30,
-        "scaleX": 0.9,
-        "scaleY": 0.9
       },
       "target_transform": {
         "x": 187,
-        "y": 300,
+        "y": 250,
         "rotation": 0,
         "scaleX": 1.0,
         "scaleY": 1.0

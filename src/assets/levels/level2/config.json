@@ -1,0 +1,54 @@
+{
+  "level_id": 2,
+  "level_type": "image_match",
+  "title": "進階：等比例縮放",
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level2/complete.png",
+  "text_hint": "調整位置、旋轉和大小（等比例縮放）",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#1a2e3d"
+  },
+  "win_threshold": 12,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level2/piece_01.png",
+      "shape": { "width": 90, "height": 90 },
+      "start_transform": {
+        "x": 280,
+        "y": 120,
+        "rotation": -25,
+        "scaleX": 1.3,
+        "scaleY": 1.3
+      },
+      "target_transform": {
+        "x": 187,
+        "y": 200,
+        "rotation": 15,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level2/piece_02.png",
+      "shape": { "width": 70, "height": 70 },
+      "start_transform": {
+        "x": 80,
+        "y": 380,
+        "rotation": 40,
+        "scaleX": 0.7,
+        "scaleY": 0.7
+      },
+      "target_transform": {
+        "x": 187,
+        "y": 340,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

@@ -11,14 +11,22 @@ export interface Transform {
 export interface PieceState {
   id: string;
   texture: string;
+  shape?: PieceShape;  // 碎片形狀，預設 80x80
   current: Transform;
   target: Transform;
+}
+
+// ===== 碎片形狀設定 =====
+export interface PieceShape {
+  width: number;   // 碎片寬度（像素）
+  height: number;  // 碎片高度（像素）
 }
 
 // ===== 碎片設定 (來自 JSON) =====
 export interface PieceConfig {
   id: string;
   texture: string;
+  shape?: PieceShape;  // 可選，預設 80x80
   start_transform: Transform;
   target_transform: Transform;
 }
@@ -27,6 +35,7 @@ export interface PieceConfig {
 export interface LevelConfig {
   level_id: number;
   level_type: 'image_match' | 'text_hint';
+  title?: string;          // 關卡標題
   allow_preview: boolean;
   preview_image: string;
   text_hint: string;

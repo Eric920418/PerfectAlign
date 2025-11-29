@@ -14,6 +14,7 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
   const {
     pieces,
     selectedPieceId,
+    isPreviewActive,
     loadLevel,
     selectPiece,
     updatePieceTransform,
@@ -108,6 +109,7 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
       const initialPieces = levelConfig.pieces.map((p) => ({
         id: p.id,
         texture: p.texture,
+        shape: p.shape,
         current: { ...p.start_transform },
         target: { ...p.target_transform },
       }));
@@ -137,6 +139,13 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
       });
     }
   }, [pieces]);
+
+  // 對答案時隱藏選取框
+  useEffect(() => {
+    if (engineRef.current) {
+      engineRef.current.setHideSelectionBox(isPreviewActive);
+    }
+  }, [isPreviewActive]);
 
   return (
     <div

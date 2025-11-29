@@ -117,9 +117,6 @@ export interface GameStoreState {
   // Snap 設定
   snapSize: SnapSize;
 
-  // 縮放設定
-  canvasZoom: ZoomLevel;
-
   // 動作方法
   loadLevel: (config: LevelConfig) => void;
   selectPiece: (id: string | null) => void;

@@ -31,9 +31,9 @@ export function Game() {
   const [showLevelSelect, setShowLevelSelect] = useState(false);
   const { gameState, snapSize, setSnapSize, resetLevel } = useGameStore();
 
-  // 縮放自動跟隨 snapSize
-  // 1px 和 5px 都用 2x 縮放（格線視覺最小 5px）
-  const autoZoom = snapSize === 10 ? 1 : 2;
+  // 縮放自動跟隨 snapSize（玩家選擇 → 實際效果）
+  // 1px → 1.5x, 5px → 1x, 10px → 0.5x
+  const autoZoom = snapSize === 1 ? 1.5 : snapSize === 5 ? 1 : 0.5;
 
   // 響應式縮放
   const { scale } = useResponsiveScale(

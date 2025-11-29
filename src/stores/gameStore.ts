@@ -7,7 +7,6 @@ import type {
   Transform,
   ActionLog,
   SnapSize,
-  ZoomLevel,
 } from '../types';
 import { calculateError, getWinRating, normalizeAngle, clampScale } from '../utils';
 
@@ -22,8 +21,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   isPreviewActive: false,
   winRating: null,
   totalError: 0,
-  snapSize: 1,        // 預設 1px 為一格
-  canvasZoom: 1,      // 預設 1x 縮放
+  snapSize: 1,        // 預設 1px（實際 5px）
 
   // 載入關卡
   loadLevel: (config: LevelConfig) => {
@@ -132,17 +130,14 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   // Snap 設定
   setSnapSize: (size: SnapSize) => {
-    let zoom: ZoomLevel = 1;
-    if (size === 1) zoom = 3;
-    else if (size === 5) zoom = 1.5;
-    else if (size === 10) zoom = 1;
-
-    set({ snapSize: size, canvasZoom: zoom });
+    set({ snapSize: size });
   },
 
   // 將數值對齊到格線
+  // 玩家選擇 1px → 實際 5px, 5px → 10px, 10px → 20px
   snapToGrid: (value: number): number => {
     const { snapSize } = get();
-    return Math.round(value / snapSize) * snapSize;
+    const actualSnap = snapSize * 5; // 實際 snap 是顯示值的 5 倍
+    return Math.round(value / actualSnap) * actualSnap;
   },
 }));

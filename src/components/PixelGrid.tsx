@@ -16,9 +16,9 @@ interface PixelGridProps {
 }
 
 export function PixelGrid({ width, height, visible, targetPositions = [], zoom = 1 }: PixelGridProps) {
-  // 格線視覺間距：最小 5px，不會更細（太細看不清）
-  // zoom=2 時顯示 5px 格線，zoom=1 時顯示 10px 格線
-  const visualGridSize = zoom >= 2 ? 5 : 10;
+  // 視覺格線間距根據縮放決定
+  // 1.5x → 5px, 1x → 10px, 0.5x → 20px
+  const visualGridSize = zoom >= 1.5 ? 5 : zoom >= 1 ? 10 : 20;
 
   const gridPattern = useMemo(() => {
     // 計算網格線

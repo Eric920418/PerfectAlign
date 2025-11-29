@@ -4,9 +4,11 @@ import './PreviewButton.css';
 
 interface PreviewButtonProps {
   previewImage: string;
+  canvasWidth: number;
+  canvasHeight: number;
 }
 
-export function PreviewButton({ previewImage }: PreviewButtonProps) {
+export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: PreviewButtonProps) {
   const { levelConfig, isPreviewActive, setPreviewActive, gameState } = useGameStore();
   const [imageError, setImageError] = useState(false);
 
@@ -57,8 +59,10 @@ export function PreviewButton({ previewImage }: PreviewButtonProps) {
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="preview-placeholder">
-              <span>目標位置</span>
+            <div
+              className="preview-placeholder"
+              style={{ width: canvasWidth, height: canvasHeight }}
+            >
               {levelConfig.pieces.map((piece) => (
                 <div
                   key={piece.id}

@@ -243,7 +243,11 @@ export function Game() {
         </div>
         {/* 預覽按鈕 */}
         {gameReady && (
-          <PreviewButton previewImage={levelConfig.preview_image} />
+          <PreviewButton
+            previewImage={levelConfig.preview_image}
+            canvasWidth={levelConfig.canvas.width}
+            canvasHeight={levelConfig.canvas.height}
+          />
         )}
         {/* 重置視圖（有縮放或平移時顯示） */}
         {(viewTransform.scale !== 1 || viewTransform.x !== 0 || viewTransform.y !== 0) && (

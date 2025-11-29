@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import type { LevelConfig, PieceState } from '../types';
-import { lerp, degToRad, radToDeg, clampScale, normalizeAngle } from '../utils';
+import { degToRad, radToDeg, clampScale, normalizeAngle } from '../utils';
 
 export interface GameEngineOptions {
   container: HTMLElement;
@@ -10,8 +10,7 @@ export interface GameEngineOptions {
   onDoubleTap: (pieceId: string) => void;
   onRotate: (pieceId: string, rotation: number) => void;
   onScale: (pieceId: string, scaleX: number, scaleY: number) => void;
-  snapToGrid: (value: number) => number;
-  getSnapEnabled: () => boolean;
+  getSnapState: () => { enabled: boolean; size: number };
 }
 
 export class GameEngine {

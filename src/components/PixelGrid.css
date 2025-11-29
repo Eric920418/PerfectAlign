@@ -36,3 +36,35 @@
   fill: rgba(255, 255, 255, 0.3);
   font-family: monospace;
 }
+
+/* ===== 目標方塊預覽 ===== */
+.target-box {
+  fill: rgba(0, 243, 255, 0.1);
+  stroke: var(--neon-primary);
+  stroke-width: 2;
+  stroke-dasharray: 8 4;
+  animation: targetBoxPulse 2s ease-in-out infinite;
+}
+
+@keyframes targetBoxPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(0, 243, 255, 0.8));
+  }
+}
+
+.target-box-label {
+  fill: var(--neon-primary);
+  font-size: 18px;
+  font-weight: 700;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  filter: drop-shadow(0 0 6px var(--neon-primary));
+}
+
+.target-box-corner {
+  fill: none;
+  stroke: var(--neon-primary);
+  stroke-width: 2;
+}

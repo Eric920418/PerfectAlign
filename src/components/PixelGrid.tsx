@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import type { ReactElement } from 'react';
+import type { PieceConfig } from '../types';
 import './PixelGrid.css';
 
 interface TargetPosition {
@@ -12,20 +13,27 @@ interface PixelGridProps {
   height: number;
   visible: boolean;
   targetPositions?: TargetPosition[];
-  gridSize: number; // 格線間距 = 實際 snap 大小
+  gridSize: number;
+  // 目標預覽模式
+  showTargetBoxes?: boolean;
+  pieces?: PieceConfig[];
 }
 
-export function PixelGrid({ width, height, visible, targetPositions = [], gridSize }: PixelGridProps) {
-  // 格線間距直接使用實際 snap 大小，確保完全同步
+export function PixelGrid({
+  width,
+  height,
+  visible,
+  targetPositions = [],
+  gridSize,
+  showTargetBoxes = false,
+  pieces = []
+}: PixelGridProps) {
   const visualGridSize = gridSize;
 
   const gridPattern = useMemo(() => {
-    // 計算網格線
     const lines: ReactElement[] = [];
-    // 每 10 格顯示粗線 (如果是 10px 格子，就是 100px 一條粗線)
     const majorInterval = visualGridSize * 10;
 
-    // 垂直線
     for (let x = 0; x <= width; x += visualGridSize) {
       const isMajor = x % majorInterval === 0;
       lines.push(
@@ -40,7 +48,6 @@ export function PixelGrid({ width, height, visible, targetPositions = [], gridSi
       );
     }
 
-    // 水平線
     for (let y = 0; y <= height; y += visualGridSize) {
       const isMajor = y % majorInterval === 0;
       lines.push(
@@ -73,7 +80,6 @@ export function PixelGrid({ width, height, visible, targetPositions = [], gridSi
       {/* 目標位置輔助線 */}
       {targetPositions.map((pos, index) => (
         <g key={`target-${index}`}>
-          {/* 垂直輔助線 */}
           <line
             x1={pos.x}
             y1={0}
@@ -81,7 +87,6 @@ export function PixelGrid({ width, height, visible, targetPositions = [], gridSi
             y2={height}
             className="grid-line target"
           />
-          {/* 水平輔助線 */}
           <line
             x1={0}
             y1={pos.y}
@@ -89,7 +94,6 @@ export function PixelGrid({ width, height, visible, targetPositions = [], gridSi
             y2={pos.y}
             className="grid-line target"
           />
-          {/* 目標點 */}
           <circle
             cx={pos.x}
             cy={pos.y}
@@ -98,6 +102,56 @@ export function PixelGrid({ width, height, visible, targetPositions = [], gridSi
           />
         </g>
       ))}
+
+      {/* 目標方塊預覽（與 PixiJS anchor(0.5) 完全一致的座標） */}
+      {showTargetBoxes && pieces.map((piece) => {
+        const { x, y, rotation, scaleX, scaleY } = piece.target_transform;
+        const w = piece.shape?.width || 80;
+        const h = piece.shape?.height || 80;
+
+        return (
+          <g
+            key={`target-box-${piece.id}`}
+            transform={`translate(${x}, ${y}) rotate(${rotation}) scale(${scaleX}, ${scaleY})`}
+          >
+            {/* 目標框 - 中心在原點，與 PixiJS anchor(0.5) 一致 */}
+            <rect
+              x={-w / 2}
+              y={-h / 2}
+              width={w}
+              height={h}
+              className="target-box"
+            />
+            {/* 標籤 */}
+            <text
+              x={0}
+              y={0}
+              className="target-box-label"
+              textAnchor="middle"
+              dominantBaseline="central"
+            >
+              {piece.id}
+            </text>
+            {/* 四角標記 */}
+            <path
+              d={`M${-w/2} ${-h/2 + 10} L${-w/2} ${-h/2} L${-w/2 + 10} ${-h/2}`}
+              className="target-box-corner"
+            />
+            <path
+              d={`M${w/2 - 10} ${-h/2} L${w/2} ${-h/2} L${w/2} ${-h/2 + 10}`}
+              className="target-box-corner"
+            />
+            <path
+              d={`M${-w/2} ${h/2 - 10} L${-w/2} ${h/2} L${-w/2 + 10} ${h/2}`}
+              className="target-box-corner"
+            />
+            <path
+              d={`M${w/2 - 10} ${h/2} L${w/2} ${h/2} L${w/2} ${h/2 - 10}`}
+              className="target-box-corner"
+            />
+          </g>
+        );
+      })}
 
       {/* 座標標記 */}
       <text x={4} y={12} className="grid-label">0,0</text>

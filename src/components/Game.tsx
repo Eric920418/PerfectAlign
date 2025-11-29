@@ -3,7 +3,6 @@ import { GameCanvas } from './GameCanvas';
 import { PreviewButton } from './PreviewButton';
 import { WinScreen } from './WinScreen';
 import { ReplayPlayer } from './ReplayPlayer';
-import { TargetPreview } from './TargetPreview';
 import { PixelGrid } from './PixelGrid';
 import { TransformControls } from './TransformControls';
 import { useGameStore } from '../stores/gameStore';
@@ -25,7 +24,8 @@ export function Game() {
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [levelConfig, setLevelConfig] = useState<LevelConfig | null>(null);
   const [showReplay, setShowReplay] = useState(false);
-  const [showTargetPreview, setShowTargetPreview] = useState(true);
+  const [showTargetBoxes, setShowTargetBoxes] = useState(true);
+  const [countdown, setCountdown] = useState(3);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
   const { snapSize, setSnapSize, resetLevel } = useGameStore();
@@ -49,10 +49,25 @@ export function Game() {
     setLevelConfig(levels[currentLevelIndex]);
   }, [currentLevelIndex]);
 
-  const handleTargetPreviewComplete = useCallback(() => {
-    setShowTargetPreview(false);
-    setGameReady(true);
-  }, []);
+  // 倒數計時邏輯
+  useEffect(() => {
+    if (!showTargetBoxes || !levelConfig) return;
+
+    const countdownInterval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdownInterval);
+          // 倒數結束，隱藏目標框並開始遊戲
+          setShowTargetBoxes(false);
+          setGameReady(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(countdownInterval);
+  }, [showTargetBoxes, levelConfig]);
 
   // 雙指手勢處理（只控制視窗，不控制元素）
   const handleContainerTouchStart = useCallback((e: React.TouchEvent) => {
@@ -102,7 +117,8 @@ export function Game() {
     // 重新載入同一關卡
     resetLevel();
     setLevelConfig(null);
-    setShowTargetPreview(true);
+    setShowTargetBoxes(true);
+    setCountdown(3);
     setGameReady(false);
     setTimeout(() => {
       setLevelConfig(levels[currentLevelIndex]);
@@ -114,19 +130,21 @@ export function Game() {
       // 載入下一關
       resetLevel();
       setLevelConfig(null);
-      setShowTargetPreview(true);
+      setShowTargetBoxes(true);
+      setCountdown(3);
       setGameReady(false);
       setCurrentLevelIndex(currentLevelIndex + 1);
     } else {
       // 已經是最後一關
-      alert('🎉 恭喜通關所有關卡！');
+      alert('恭喜通關所有關卡！');
     }
   };
 
   const handleSelectLevel = (index: number) => {
     resetLevel();
     setLevelConfig(null);
-    setShowTargetPreview(true);
+    setShowTargetBoxes(true);
+    setCountdown(3);
     setGameReady(false);
     setShowLevelSelect(false);
     setCurrentLevelIndex(index);
@@ -196,7 +214,7 @@ export function Game() {
           transformOrigin: 'center center',
         }}
       >
-        {/* 像素網格 - 間距 = 實際 snap 大小 */}
+        {/* 像素網格 + 目標方塊預覽（整合在同一個 SVG 中確保座標一致） */}
         <PixelGrid
           width={levelConfig.canvas.width}
           height={levelConfig.canvas.height}
@@ -206,17 +224,21 @@ export function Game() {
             x: p.target_transform.x,
             y: p.target_transform.y,
           }))}
+          showTargetBoxes={showTargetBoxes}
+          pieces={levelConfig.pieces}
         />
 
         {/* 遊戲畫布 */}
         <GameCanvas levelConfig={levelConfig} />
 
-        {/* 目標位置預覽（遊戲開始時） */}
-        {showTargetPreview && (
-          <TargetPreview
-            levelConfig={levelConfig}
-            onComplete={handleTargetPreviewComplete}
-          />
+        {/* 倒數計時覆蓋層 */}
+        {showTargetBoxes && (
+          <div className="countdown-overlay">
+            <div className="countdown-ring">
+              <span className="countdown-number">{countdown}</span>
+            </div>
+            <span className="countdown-text">秒後開始</span>
+          </div>
         )}
 
         {/* 勝利畫面 */}

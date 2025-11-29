@@ -149,6 +149,10 @@ export function Game() {
           height={levelConfig.canvas.height}
           gridSize={10}
           visible={showGrid && gameReady}
+          targetPositions={levelConfig.pieces.map(p => ({
+            x: p.target_transform.x,
+            y: p.target_transform.y,
+          }))}
         />
 
         {/* 遊戲畫布 */}

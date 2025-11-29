@@ -2,9 +2,10 @@
   "level_id": 1,
   "level_type": "image_match",
   "title": "入門：移動與旋轉",
+  "uniform_scale_only": true,
   "allow_preview": true,
   "preview_image": "/assets/levels/level1/complete.png",
-  "text_hint": "將方塊移動到目標位置並調整角度",
+  "text_hint": "將方塊移動到目標位置並調整角度（不需要縮放）",
   "canvas": {
     "width": 375,
     "height": 500,
@@ -24,7 +25,7 @@
         "scaleY": 1.0
       },
       "target_transform": {
-        "x": 187,
+        "x": 190,
         "y": 250,
         "rotation": 0,
         "scaleX": 1.0,

@@ -24,6 +24,17 @@
   stroke-dasharray: 4 4;
 }
 
+.grid-line.target {
+  stroke: rgba(255, 200, 50, 0.4);
+  stroke-dasharray: 6 4;
+}
+
+.target-point {
+  fill: rgba(255, 200, 50, 0.8);
+  stroke: rgba(255, 200, 50, 1);
+  stroke-width: 2;
+}
+
 .grid-label {
   font-size: 8px;
   fill: rgba(255, 255, 255, 0.3);

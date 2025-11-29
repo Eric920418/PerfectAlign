@@ -36,6 +36,7 @@ export interface LevelConfig {
   level_id: number;
   level_type: 'image_match' | 'text_hint';
   title?: string;          // 關卡標題
+  uniform_scale_only?: boolean;  // 是否只允許等比例縮放
   allow_preview: boolean;
   preview_image: string;
   text_hint: string;

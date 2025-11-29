@@ -24,7 +24,7 @@
         "scaleY": 1.2
       },
       "target_transform": {
-        "x": 187,
+        "x": 190,
         "y": 180,
         "rotation": 0,
         "scaleX": 1.0,
@@ -43,7 +43,7 @@
         "scaleY": 0.85
       },
       "target_transform": {
-        "x": 187,
+        "x": 190,
         "y": 350,
         "rotation": 0,
         "scaleX": 1.0,

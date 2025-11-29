@@ -103,6 +103,18 @@
   border-color: rgba(180, 255, 100, 0.7);
 }
 
+/* 等比例縮放按鈕樣式 */
+.scale-group .transform-btn {
+  background: rgba(200, 150, 255, 0.15);
+  border-color: rgba(200, 150, 255, 0.3);
+}
+
+.scale-group .transform-btn:active,
+.scale-group .transform-btn.active {
+  background: rgba(200, 150, 255, 0.4);
+  border-color: rgba(200, 150, 255, 0.7);
+}
+
 /* 小按鈕樣式（用於寬高控制） */
 .transform-btn.small {
   width: 36px;

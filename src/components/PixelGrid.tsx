@@ -2,14 +2,20 @@ import { useMemo } from 'react';
 import type { ReactElement } from 'react';
 import './PixelGrid.css';
 
+interface TargetPosition {
+  x: number;
+  y: number;
+}
+
 interface PixelGridProps {
   width: number;
   height: number;
   gridSize?: number;
   visible: boolean;
+  targetPositions?: TargetPosition[];
 }
 
-export function PixelGrid({ width, height, gridSize = 10, visible }: PixelGridProps) {
+export function PixelGrid({ width, height, gridSize = 10, visible, targetPositions = [] }: PixelGridProps) {
   const gridPattern = useMemo(() => {
     // 計算網格線
     const lines: ReactElement[] = [];
@@ -73,6 +79,35 @@ export function PixelGrid({ width, height, gridSize = 10, visible }: PixelGridPr
         y2={height / 2}
         className="grid-line center"
       />
+
+      {/* 目標位置輔助線 */}
+      {targetPositions.map((pos, index) => (
+        <g key={`target-${index}`}>
+          {/* 垂直輔助線 */}
+          <line
+            x1={pos.x}
+            y1={0}
+            x2={pos.x}
+            y2={height}
+            className="grid-line target"
+          />
+          {/* 水平輔助線 */}
+          <line
+            x1={0}
+            y1={pos.y}
+            x2={width}
+            y2={pos.y}
+            className="grid-line target"
+          />
+          {/* 目標點 */}
+          <circle
+            cx={pos.x}
+            cy={pos.y}
+            r={4}
+            className="target-point"
+          />
+        </g>
+      ))}
 
       {/* 座標標記 */}
       <text x={4} y={12} className="grid-label">0,0</text>

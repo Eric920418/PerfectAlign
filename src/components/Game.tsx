@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { GameCanvas } from './GameCanvas';
+import { FineTuneOverlay } from './FineTuneOverlay';
 import { PreviewButton } from './PreviewButton';
 import { WinScreen } from './WinScreen';
 import { ReplayPlayer } from './ReplayPlayer';
+import { TargetPreview } from './TargetPreview';
 import { PixelGrid } from './PixelGrid';
 import { TransformControls } from './TransformControls';
 import { useGameStore } from '../stores/gameStore';
@@ -24,19 +26,10 @@ export function Game() {
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [levelConfig, setLevelConfig] = useState<LevelConfig | null>(null);
   const [showReplay, setShowReplay] = useState(false);
-  const [showTargetBoxes, setShowTargetBoxes] = useState(true);
-  const [countdown, setCountdown] = useState(3);
+  const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { snapSize, setSnapSize, resetLevel } = useGameStore();
-
-  // 實際 snap 值：1px→5, 5px→10, 10px→20
-  const actualSnapSize = snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20;
-
-  // 雙指手勢控制視窗（不影響元素操作）
-  const [viewTransform, setViewTransform] = useState({ x: 0, y: 0, scale: 1 });
-  const gestureRef = useRef<{ x: number; y: number; dist: number } | null>(null);
-  const isTwoFingerRef = useRef(false);
+  const { gameState, snapSize, setSnapSize, resetLevel } = useGameStore();
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -49,76 +42,16 @@ export function Game() {
     setLevelConfig(levels[currentLevelIndex]);
   }, [currentLevelIndex]);
 
-  // 倒數計時邏輯
-  useEffect(() => {
-    if (!showTargetBoxes || !levelConfig) return;
-
-    const countdownInterval = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(countdownInterval);
-          // 倒數結束，隱藏目標框並開始遊戲
-          setShowTargetBoxes(false);
-          setGameReady(true);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(countdownInterval);
-  }, [showTargetBoxes, levelConfig]);
-
-  // 雙指手勢處理（只控制視窗，不控制元素）
-  const handleContainerTouchStart = useCallback((e: React.TouchEvent) => {
-    if (e.touches.length === 2) {
-      isTwoFingerRef.current = true;
-      const t1 = e.touches[0], t2 = e.touches[1];
-      gestureRef.current = {
-        x: (t1.clientX + t2.clientX) / 2,
-        y: (t1.clientY + t2.clientY) / 2,
-        dist: Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
-      };
-    }
-  }, []);
-
-  const handleContainerTouchMove = useCallback((e: React.TouchEvent) => {
-    if (e.touches.length === 2 && gestureRef.current && isTwoFingerRef.current) {
-      e.preventDefault(); // 阻止頁面滾動
-      const t1 = e.touches[0], t2 = e.touches[1];
-      const cx = (t1.clientX + t2.clientX) / 2;
-      const cy = (t1.clientY + t2.clientY) / 2;
-      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
-
-      const dx = cx - gestureRef.current.x;
-      const dy = cy - gestureRef.current.y;
-      const scaleFactor = dist / gestureRef.current.dist;
-
-      setViewTransform(prev => ({
-        x: prev.x + dx,
-        y: prev.y + dy,
-        scale: Math.max(0.5, Math.min(3, prev.scale * scaleFactor))
-      }));
-
-      gestureRef.current = { x: cx, y: cy, dist };
-    }
-  }, []);
-
-  const handleContainerTouchEnd = useCallback(() => {
-    gestureRef.current = null;
-    isTwoFingerRef.current = false;
-  }, []);
-
-  const resetView = useCallback(() => {
-    setViewTransform({ x: 0, y: 0, scale: 1 });
+  const handleTargetPreviewComplete = useCallback(() => {
+    setShowTargetPreview(false);
+    setGameReady(true);
   }, []);
 
   const handleReplay = () => {
     // 重新載入同一關卡
     resetLevel();
     setLevelConfig(null);
-    setShowTargetBoxes(true);
-    setCountdown(3);
+    setShowTargetPreview(true);
     setGameReady(false);
     setTimeout(() => {
       setLevelConfig(levels[currentLevelIndex]);
@@ -130,8 +63,7 @@ export function Game() {
       // 載入下一關
       resetLevel();
       setLevelConfig(null);
-      setShowTargetBoxes(true);
-      setCountdown(3);
+      setShowTargetPreview(true);
       setGameReady(false);
       setCurrentLevelIndex(currentLevelIndex + 1);
     } else {
@@ -143,8 +75,7 @@ export function Game() {
   const handleSelectLevel = (index: number) => {
     resetLevel();
     setLevelConfig(null);
-    setShowTargetBoxes(true);
-    setCountdown(3);
+    setShowTargetPreview(true);
     setGameReady(false);
     setShowLevelSelect(false);
     setCurrentLevelIndex(index);
@@ -167,12 +98,7 @@ export function Game() {
   }
 
   return (
-    <div
-      className="game-container"
-      onTouchStart={handleContainerTouchStart}
-      onTouchMove={handleContainerTouchMove}
-      onTouchEnd={handleContainerTouchEnd}
-    >
+    <div className="game-container">
       {/* 關卡標題 */}
       <div className="level-header">
         <button
@@ -210,35 +136,48 @@ export function Game() {
         style={{
           width: levelConfig.canvas.width,
           height: levelConfig.canvas.height,
-          transform: `translate(${viewTransform.x}px, ${viewTransform.y}px) scale(${scale * viewTransform.scale})`,
+          transform: `scale(${scale})`,
           transformOrigin: 'center center',
         }}
       >
-        {/* 像素網格 + 目標方塊預覽（整合在同一個 SVG 中確保座標一致） */}
+        {/* 像素網格 */}
         <PixelGrid
           width={levelConfig.canvas.width}
           height={levelConfig.canvas.height}
           visible={true}
-          gridSize={actualSnapSize}
+          gridSize={snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20}
           targetPositions={levelConfig.pieces.map(p => ({
             x: p.target_transform.x,
             y: p.target_transform.y,
           }))}
-          showTargetBoxes={showTargetBoxes}
-          pieces={levelConfig.pieces}
         />
 
         {/* 遊戲畫布 */}
         <GameCanvas levelConfig={levelConfig} />
 
-        {/* 倒數計時覆蓋層 */}
-        {showTargetBoxes && (
-          <div className="countdown-overlay">
-            <div className="countdown-ring">
-              <span className="countdown-number">{countdown}</span>
-            </div>
-            <span className="countdown-text">秒後開始</span>
-          </div>
+        {/* 目標位置預覽（遊戲開始時） */}
+        {showTargetPreview && (
+          <TargetPreview
+            levelConfig={levelConfig}
+            onComplete={handleTargetPreviewComplete}
+          />
+        )}
+
+        {/* 微調模式覆蓋層 */}
+        {gameReady && (
+          <FineTuneOverlay
+            width={levelConfig.canvas.width}
+            height={levelConfig.canvas.height}
+          />
+        )}
+
+        {/* 預覽按鈕 */}
+        {gameReady && (
+          <PreviewButton
+            previewImage={levelConfig.preview_image}
+            canvasWidth={levelConfig.canvas.width}
+            canvasHeight={levelConfig.canvas.height}
+          />
         )}
 
         {/* 勝利畫面 */}
@@ -249,6 +188,14 @@ export function Game() {
         />
       </div>
 
+      {/* 狀態指示器 */}
+      <div className="game-status">
+        {gameState === 'FINE_TUNE' && (
+          <div className="status-indicator fine-tune">
+            微調模式 - 點擊中央退出
+          </div>
+        )}
+      </div>
 
       {/* 工具列 */}
       <div className="game-toolbar">
@@ -263,23 +210,7 @@ export function Game() {
             </button>
           ))}
         </div>
-        {/* 預覽按鈕 */}
-        {gameReady && (
-          <PreviewButton
-            previewImage={levelConfig.preview_image}
-            canvasWidth={levelConfig.canvas.width}
-            canvasHeight={levelConfig.canvas.height}
-          />
-        )}
-        {/* 重置視圖（有縮放或平移時顯示） */}
-        {(viewTransform.scale !== 1 || viewTransform.x !== 0 || viewTransform.y !== 0) && (
-          <button className="reset-view-btn" onClick={resetView}>
-            重置
-          </button>
-        )}
       </div>
-
-     
 
       {/* 回放播放器 */}
       {showReplay && <ReplayPlayer onClose={handleCloseReplay} />}

@@ -1,0 +1,116 @@
+import { useState, useEffect } from 'react';
+import type { LevelConfig } from '../types';
+import './TargetPreview.css';
+
+interface TargetPreviewProps {
+  levelConfig: LevelConfig;
+  onComplete: () => void;
+}
+
+export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
+  const [phase, setPhase] = useState<'showing' | 'fading' | 'done'>('showing');
+  const [countdown, setCountdown] = useState(3);
+
+  // 計算預覽區縮放比例（預覽區大約佔 50% 高度）
+  const previewScale = Math.min(
+    (levelConfig.canvas.width - 40) / levelConfig.canvas.width,
+    (levelConfig.canvas.height * 0.5) / levelConfig.canvas.height
+  );
+
+  useEffect(() => {
+    // 倒數計時
+    const countdownInterval = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(countdownInterval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // 顯示 3 秒後開始淡出
+    const showTimer = setTimeout(() => {
+      setPhase('fading');
+    }, 3000);
+
+    // 淡出動畫完成後
+    const fadeTimer = setTimeout(() => {
+      setPhase('done');
+      onComplete();
+    }, 3500);
+
+    return () => {
+      clearInterval(countdownInterval);
+      clearTimeout(showTimer);
+      clearTimeout(fadeTimer);
+    };
+  }, [onComplete]);
+
+  if (phase === 'done') return null;
+
+  return (
+    <div
+      className={`target-preview ${phase}`}
+      style={{
+        width: levelConfig.canvas.width,
+        height: levelConfig.canvas.height,
+      }}
+    >
+      {/* 頂部標籤 */}
+      <div className="preview-badge">
+        <span className="badge-dot" />
+        <span>TARGET</span>
+      </div>
+
+      {/* 主標題區 */}
+      <div className="preview-title-area">
+        <h1 className="preview-title">目標位置</h1>
+        <p className="preview-subtitle">記住碎片的目標位置</p>
+      </div>
+
+      {/* 目標預覽區 - 使用縮放來適應空間 */}
+      <div className="preview-canvas-wrapper">
+        <div
+          className="preview-canvas"
+          style={{
+            width: levelConfig.canvas.width,
+            height: levelConfig.canvas.height,
+            transform: `scale(${previewScale})`,
+          }}
+        >
+          {levelConfig.pieces.map((piece) => (
+            <div
+              key={piece.id}
+              className="target-piece"
+              style={{
+                left: piece.target_transform.x,
+                top: piece.target_transform.y,
+                width: piece.shape?.width || 80,
+                height: piece.shape?.height || 80,
+                transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
+              }}
+            >
+              <div className="target-piece-inner">
+                <span className="piece-label">{piece.id}</span>
+              </div>
+              {/* 四角標記 */}
+              <div className="corner-mark tl" />
+              <div className="corner-mark tr" />
+              <div className="corner-mark bl" />
+              <div className="corner-mark br" />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 底部倒數 */}
+      <div className="preview-countdown">
+        <div className="countdown-ring">
+          <span className="countdown-number">{countdown}</span>
+        </div>
+        <span className="countdown-text">秒後開始</span>
+      </div>
+    </div>
+  );
+}

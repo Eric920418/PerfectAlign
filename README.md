@@ -19,7 +19,7 @@ src/
 ├── assets/           # 靜態資源
 │   └── levels/       # 關卡設定與圖片
 ├── components/       # React 組件
-│   ├── Game.tsx          # 主遊戲容器（含倒數計時）
+│   ├── Game.tsx          # 主遊戲容器
 │   ├── GameCanvas.tsx    # Pixi.js 畫布包裝
 │   ├── FineTuneOverlay.tsx  # 微調模式覆蓋層
 │   ├── TransformControls.tsx # 旋轉/縮放控制列
@@ -27,7 +27,8 @@ src/
 │   ├── WinScreen.tsx        # 勝利畫面
 │   ├── DebugPanel.tsx       # 除錯面板
 │   ├── ReplayPlayer.tsx     # 回放播放器
-│   └── PixelGrid.tsx        # 像素網格線 + 目標預覽
+│   ├── TargetPreview.tsx    # 目標位置預覽（倒數計時）
+│   └── PixelGrid.tsx        # 像素網格線
 ├── game/             # 遊戲引擎
 │   └── GameEngine.ts     # Pixi.js 遊戲引擎
 ├── hooks/            # React Hooks
@@ -203,13 +204,6 @@ pnpm preview
 - [x] 目標碎片加入呼吸動畫和四角標記
 - [x] 響應式縮放預留 header (80px) 和 toolbar (80px) 空間
 - [x] 限制最大縮放為 0.9 避免邊緣被切掉
-
-### Phase 11 - 座標系統統一 ✅
-- [x] 將目標預覽整合到 PixelGrid 組件中（確保 100% 座標一致）
-- [x] 目標框使用與 PixelGrid 相同的 SVG 座標系統
-- [x] SVG transform `translate(x,y) rotate() scale()` + `rect x={-w/2} y={-h/2}` 與 PixiJS anchor(0.5) 完全一致
-- [x] 移除獨立的 TargetPreview 組件，簡化架構
-- [x] 倒數計時覆蓋層直接在 Game.tsx 中實現
 
 ## 待擴展功能
 

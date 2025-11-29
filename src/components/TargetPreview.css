@@ -72,17 +72,25 @@
 }
 
 /* ===== 目標預覽區 ===== */
-.preview-canvas {
+.preview-canvas-wrapper {
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.preview-canvas {
   position: relative;
-  margin: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   background:
     linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
-  overflow: hidden;
+  transform-origin: center center;
+  box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
 }
 
 /* ===== 目標碎片 ===== */

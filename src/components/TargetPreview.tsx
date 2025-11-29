@@ -11,6 +11,12 @@ export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
   const [phase, setPhase] = useState<'showing' | 'fading' | 'done'>('showing');
   const [countdown, setCountdown] = useState(3);
 
+  // 計算預覽區縮放比例（預覽區大約佔 60% 高度）
+  const previewScale = Math.min(
+    (levelConfig.canvas.width - 40) / levelConfig.canvas.width,
+    (levelConfig.canvas.height * 0.5) / levelConfig.canvas.height
+  );
+
   useEffect(() => {
     // 倒數計時
     const countdownInterval = setInterval(() => {
@@ -63,30 +69,39 @@ export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
         <p className="preview-subtitle">記住碎片的目標位置</p>
       </div>
 
-      {/* 目標預覽區 */}
-      <div className="preview-canvas">
-        {levelConfig.pieces.map((piece) => (
-          <div
-            key={piece.id}
-            className="target-piece"
-            style={{
-              left: piece.target_transform.x,
-              top: piece.target_transform.y,
-              width: piece.shape?.width || 80,
-              height: piece.shape?.height || 80,
-              transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
-            }}
-          >
-            <div className="target-piece-inner">
-              <span className="piece-label">{piece.id}</span>
+      {/* 目標預覽區 - 使用縮放來適應空間 */}
+      <div className="preview-canvas-wrapper">
+        <div
+          className="preview-canvas"
+          style={{
+            width: levelConfig.canvas.width,
+            height: levelConfig.canvas.height,
+            transform: `scale(${previewScale})`,
+          }}
+        >
+          {levelConfig.pieces.map((piece) => (
+            <div
+              key={piece.id}
+              className="target-piece"
+              style={{
+                left: piece.target_transform.x,
+                top: piece.target_transform.y,
+                width: piece.shape?.width || 80,
+                height: piece.shape?.height || 80,
+                transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
+              }}
+            >
+              <div className="target-piece-inner">
+                <span className="piece-label">{piece.id}</span>
+              </div>
+              {/* 四角標記 */}
+              <div className="corner-mark tl" />
+              <div className="corner-mark tr" />
+              <div className="corner-mark bl" />
+              <div className="corner-mark br" />
             </div>
-            {/* 四角標記 */}
-            <div className="corner-mark tl" />
-            <div className="corner-mark tr" />
-            <div className="corner-mark bl" />
-            <div className="corner-mark br" />
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       {/* 底部倒數 */}

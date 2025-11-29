@@ -131,11 +131,10 @@
   text-transform: uppercase;
 }
 
-/* --- Game Viewport (無邊界，像 Figma) --- */
+/* --- Game Viewport (無邊界) --- */
 .game-viewport {
   position: relative;
   background: transparent;
-  touch-action: none; /* 允許自定義觸控手勢 */
 }
 
 .game-loading {

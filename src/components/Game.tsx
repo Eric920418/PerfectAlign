@@ -31,14 +31,13 @@ export function Game() {
   const [showLevelSelect, setShowLevelSelect] = useState(false);
   const { gameState, snapSize, setSnapSize, resetLevel } = useGameStore();
 
-  // 畫布拖動和縮放狀態（像 Figma）
-  const [panX, setPanX] = useState(0);
-  const [panY, setPanY] = useState(0);
-  const [zoom, setZoom] = useState(1);
-  const lastTouchRef = useRef<{ x: number; y: number; dist: number } | null>(null);
-
   // 實際 snap 值：1px→5, 5px→10, 10px→20
   const actualSnapSize = snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20;
+
+  // 雙指手勢控制視窗（不影響元素操作）
+  const [viewTransform, setViewTransform] = useState({ x: 0, y: 0, scale: 1 });
+  const gestureRef = useRef<{ x: number; y: number; dist: number } | null>(null);
+  const isTwoFingerRef = useRef(false);
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -56,49 +55,48 @@ export function Game() {
     setGameReady(true);
   }, []);
 
-  // 雙指手勢處理（拖動 + 縮放）
-  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+  // 雙指手勢處理（只控制視窗，不控制元素）
+  const handleContainerTouchStart = useCallback((e: React.TouchEvent) => {
     if (e.touches.length === 2) {
-      const touch1 = e.touches[0];
-      const touch2 = e.touches[1];
-      const centerX = (touch1.clientX + touch2.clientX) / 2;
-      const centerY = (touch1.clientY + touch2.clientY) / 2;
-      const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
-      lastTouchRef.current = { x: centerX, y: centerY, dist };
+      isTwoFingerRef.current = true;
+      const t1 = e.touches[0], t2 = e.touches[1];
+      gestureRef.current = {
+        x: (t1.clientX + t2.clientX) / 2,
+        y: (t1.clientY + t2.clientY) / 2,
+        dist: Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
+      };
     }
   }, []);
 
-  const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    if (e.touches.length === 2 && lastTouchRef.current) {
-      const touch1 = e.touches[0];
-      const touch2 = e.touches[1];
-      const centerX = (touch1.clientX + touch2.clientX) / 2;
-      const centerY = (touch1.clientY + touch2.clientY) / 2;
-      const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+  const handleContainerTouchMove = useCallback((e: React.TouchEvent) => {
+    if (e.touches.length === 2 && gestureRef.current && isTwoFingerRef.current) {
+      e.preventDefault(); // 阻止頁面滾動
+      const t1 = e.touches[0], t2 = e.touches[1];
+      const cx = (t1.clientX + t2.clientX) / 2;
+      const cy = (t1.clientY + t2.clientY) / 2;
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
 
-      // 拖動
-      const deltaX = centerX - lastTouchRef.current.x;
-      const deltaY = centerY - lastTouchRef.current.y;
-      setPanX(prev => prev + deltaX);
-      setPanY(prev => prev + deltaY);
+      const dx = cx - gestureRef.current.x;
+      const dy = cy - gestureRef.current.y;
+      const scaleFactor = dist / gestureRef.current.dist;
 
-      // 縮放
-      const scaleFactor = dist / lastTouchRef.current.dist;
-      setZoom(prev => Math.max(0.5, Math.min(3, prev * scaleFactor)));
+      setViewTransform(prev => ({
+        x: prev.x + dx,
+        y: prev.y + dy,
+        scale: Math.max(0.5, Math.min(3, prev.scale * scaleFactor))
+      }));
 
-      lastTouchRef.current = { x: centerX, y: centerY, dist };
+      gestureRef.current = { x: cx, y: cy, dist };
     }
   }, []);
 
-  const handleTouchEnd = useCallback(() => {
-    lastTouchRef.current = null;
+  const handleContainerTouchEnd = useCallback(() => {
+    gestureRef.current = null;
+    isTwoFingerRef.current = false;
   }, []);
 
-  // 重置視圖
   const resetView = useCallback(() => {
-    setPanX(0);
-    setPanY(0);
-    setZoom(1);
+    setViewTransform({ x: 0, y: 0, scale: 1 });
   }, []);
 
   const handleReplay = () => {
@@ -152,7 +150,12 @@ export function Game() {
   }
 
   return (
-    <div className="game-container">
+    <div
+      className="game-container"
+      onTouchStart={handleContainerTouchStart}
+      onTouchMove={handleContainerTouchMove}
+      onTouchEnd={handleContainerTouchEnd}
+    >
       {/* 關卡標題 */}
       <div className="level-header">
         <button
@@ -187,13 +190,10 @@ export function Game() {
 
       <div
         className="game-viewport"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
         style={{
           width: levelConfig.canvas.width,
           height: levelConfig.canvas.height,
-          transform: `translate(${panX}px, ${panY}px) scale(${scale * zoom})`,
+          transform: `translate(${viewTransform.x}px, ${viewTransform.y}px) scale(${scale * viewTransform.scale})`,
           transformOrigin: 'center center',
         }}
       >
@@ -228,15 +228,6 @@ export function Game() {
           />
         )}
 
-        {/* 預覽按鈕 */}
-        {gameReady && (
-          <PreviewButton
-            previewImage={levelConfig.preview_image}
-            canvasWidth={levelConfig.canvas.width}
-            canvasHeight={levelConfig.canvas.height}
-          />
-        )}
-
         {/* 勝利畫面 */}
         <WinScreen
           onReplay={handleReplay}
@@ -267,8 +258,16 @@ export function Game() {
             </button>
           ))}
         </div>
-        {/* 重置視圖按鈕（縮放不等於 1 或有平移時顯示） */}
-        {(zoom !== 1 || panX !== 0 || panY !== 0) && (
+        {/* 預覽按鈕 */}
+        {gameReady && (
+          <PreviewButton
+            previewImage={levelConfig.preview_image}
+            canvasWidth={levelConfig.canvas.width}
+            canvasHeight={levelConfig.canvas.height}
+          />
+        )}
+        {/* 重置視圖（有縮放或平移時顯示） */}
+        {(viewTransform.scale !== 1 || viewTransform.x !== 0 || viewTransform.y !== 0) && (
           <button className="reset-view-btn" onClick={resetView}>
             重置
           </button>

@@ -7,6 +7,7 @@ import { DebugPanel } from './DebugPanel';
 import { ReplayPlayer } from './ReplayPlayer';
 import { TargetPreview } from './TargetPreview';
 import { PixelGrid } from './PixelGrid';
+import { TransformControls } from './TransformControls';
 import { useGameStore } from '../stores/gameStore';
 import { useResponsiveScale } from '../hooks/useResponsiveScale';
 import type { LevelConfig, SnapSize } from '../types';
@@ -196,6 +197,9 @@ export function Game() {
 
       {/* 回放播放器 */}
       {showReplay && <ReplayPlayer onClose={handleCloseReplay} />}
+
+      {/* 旋轉/縮放控制（選取方塊後顯示） */}
+      {gameReady && <TransformControls />}
     </div>
   );
 }

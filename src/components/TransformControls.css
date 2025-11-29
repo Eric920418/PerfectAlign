@@ -1,0 +1,109 @@
+.transform-controls {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 24px;
+  z-index: 200;
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.group-label {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.5);
+  min-width: 32px;
+  text-align: center;
+}
+
+.transform-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.15s ease;
+}
+
+.transform-btn .btn-icon {
+  font-size: 22px;
+  color: white;
+  line-height: 1;
+}
+
+.transform-btn .btn-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.transform-btn:active,
+.transform-btn.active {
+  transform: scale(0.95);
+  background: rgba(0, 255, 136, 0.3);
+  border-color: rgba(0, 255, 136, 0.6);
+}
+
+/* 旋轉按鈕樣式 */
+.rotate-group .transform-btn {
+  background: rgba(100, 150, 255, 0.15);
+  border-color: rgba(100, 150, 255, 0.3);
+}
+
+.rotate-group .transform-btn:active,
+.rotate-group .transform-btn.active {
+  background: rgba(100, 150, 255, 0.4);
+  border-color: rgba(100, 150, 255, 0.7);
+}
+
+/* 縮放按鈕樣式 */
+.scale-group .transform-btn {
+  background: rgba(255, 180, 100, 0.15);
+  border-color: rgba(255, 180, 100, 0.3);
+}
+
+.scale-group .transform-btn:active,
+.scale-group .transform-btn.active {
+  background: rgba(255, 180, 100, 0.4);
+  border-color: rgba(255, 180, 100, 0.7);
+}
+
+/* 手機適配 */
+@media (max-width: 400px) {
+  .transform-controls {
+    gap: 12px;
+    padding: 10px 16px;
+  }
+
+  .transform-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .transform-btn .btn-icon {
+    font-size: 20px;
+  }
+
+  .group-label {
+    display: none;
+  }
+}

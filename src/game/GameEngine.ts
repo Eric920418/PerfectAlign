@@ -22,6 +22,7 @@ export class GameEngine {
   private pieceGraphics: Map<string, PIXI.Graphics> = new Map();
   private selectedPieceId: string | null = null;
   private isDragging = false;
+  private draggingPieceId: string | null = null; // 正在拖曳的方塊 ID
   private dragOffset = { x: 0, y: 0 };
   private targetPosition = { x: 0, y: 0 };
   private lastTapTime = 0;
@@ -327,6 +328,7 @@ export class GameEngine {
 
       // 開始拖曳
       this.isDragging = true;
+      this.draggingPieceId = pieceId; // 記錄正在拖曳的方塊
       const globalPos = e.global;
       this.targetPosition = { x: sprite.x, y: sprite.y };
       this.dragOffset = {
@@ -336,7 +338,7 @@ export class GameEngine {
     });
 
     sprite.on('globalpointermove', (e: PIXI.FederatedPointerEvent) => {
-      if (!this.isDragging || this.selectedPieceId !== pieceId) return;
+      if (!this.isDragging || this.draggingPieceId !== pieceId) return;
       if (this.activeTouches.size > 1) return; // 雙指手勢時不拖曳
 
       const globalPos = e.global;
@@ -348,8 +350,9 @@ export class GameEngine {
     });
 
     sprite.on('pointerup', () => {
-      if (this.isDragging && this.selectedPieceId === pieceId) {
+      if (this.isDragging && this.draggingPieceId === pieceId) {
         this.isDragging = false;
+        this.draggingPieceId = null;
         // Snap 到格線
         const snappedX = this.snapToGrid(sprite.x);
         const snappedY = this.snapToGrid(sprite.y);
@@ -361,8 +364,9 @@ export class GameEngine {
     });
 
     sprite.on('pointerupoutside', () => {
-      if (this.isDragging && this.selectedPieceId === pieceId) {
+      if (this.isDragging && this.draggingPieceId === pieceId) {
         this.isDragging = false;
+        this.draggingPieceId = null;
         // Snap 到格線
         const snappedX = this.snapToGrid(sprite.x);
         const snappedY = this.snapToGrid(sprite.y);
@@ -401,8 +405,9 @@ export class GameEngine {
 
   private startRenderLoop() {
     const animate = () => {
-      if (this.isDragging && this.selectedPieceId) {
-        const sprite = this.pieceSprites.get(this.selectedPieceId);
+      // 只移動正在拖曳的那個方塊
+      if (this.isDragging && this.draggingPieceId) {
+        const sprite = this.pieceSprites.get(this.draggingPieceId);
         if (sprite) {
           if (this.getSnapEnabled()) {
             // Snap 開啟時：直接跳到目標位置，產生段落感
@@ -415,7 +420,7 @@ export class GameEngine {
           }
 
           // 更新選取框
-          const graphics = this.pieceGraphics.get(this.selectedPieceId);
+          const graphics = this.pieceGraphics.get(this.draggingPieceId);
           if (graphics && graphics.visible) {
             this.drawSelectionBox(graphics, sprite);
           }

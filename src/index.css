@@ -34,6 +34,18 @@ canvas {
   touch-action: none;
 }
 
+/* 遊戲區域禁用文字選取和觸控效果 */
+.game-container,
+.game-viewport,
+.fine-tune-overlay {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* 選取樣式 */
 ::selection {
   background: rgba(0, 255, 136, 0.3);

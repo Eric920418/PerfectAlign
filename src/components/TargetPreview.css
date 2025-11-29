@@ -77,20 +77,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
-  overflow: hidden;
+  padding: 20px;
+  overflow: visible;
 }
 
 .preview-canvas {
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   background:
     linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
   background-size: 20px 20px;
   transform-origin: center center;
-  box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+  box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
 }
 
 /* ===== 目標碎片 ===== */

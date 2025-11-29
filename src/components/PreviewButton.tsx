@@ -32,7 +32,7 @@ export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: Previ
 
   return (
     <>
-      {/* 預覽按鈕 */}
+      {/* 預覽按鈕 - 移到工具列 */}
       <button
         className="preview-button"
         onPointerDown={handlePointerDown}
@@ -46,62 +46,63 @@ export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: Previ
         </svg>
       </button>
 
-      {/* 預覽覆蓋層 */}
+      {/* 半透明預覽覆蓋層 - 疊加在遊戲畫面上 */}
       {isPreviewActive && (
         <div
           className="preview-overlay"
+          style={{ width: canvasWidth, height: canvasHeight }}
           onPointerUp={handlePointerUp}
         >
           {!imageError ? (
             <img
               src={previewImage}
               alt="目標完成圖"
+              style={{ width: canvasWidth, height: canvasHeight }}
               onError={() => setImageError(true)}
             />
           ) : (
-            <div
-              className="preview-placeholder"
-              style={{ width: canvasWidth, height: canvasHeight }}
+            <svg
+              className="preview-svg"
+              width={canvasWidth}
+              height={canvasHeight}
+              viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
             >
-              {/* 使用 SVG 確保座標系統與遊戲一致 */}
-              <svg
-                className="preview-svg"
-                width={canvasWidth}
-                height={canvasHeight}
-                viewBox={`0 0 ${canvasWidth} ${canvasHeight}`}
-              >
-                {levelConfig.pieces.map((piece) => {
-                  const { x, y, rotation, scaleX, scaleY } = piece.target_transform;
-                  const w = piece.shape?.width ?? 80;
-                  const h = piece.shape?.height ?? 80;
+              {levelConfig.pieces.map((piece) => {
+                const { x, y, rotation, scaleX, scaleY } = piece.target_transform;
+                const w = piece.shape?.width ?? 80;
+                const h = piece.shape?.height ?? 80;
 
-                  return (
-                    <g
-                      key={piece.id}
-                      transform={`translate(${x}, ${y}) rotate(${rotation}) scale(${scaleX}, ${scaleY})`}
+                return (
+                  <g
+                    key={piece.id}
+                    transform={`translate(${x}, ${y}) rotate(${rotation}) scale(${scaleX}, ${scaleY})`}
+                  >
+                    <rect
+                      x={-w / 2}
+                      y={-h / 2}
+                      width={w}
+                      height={h}
+                      className="target-marker-rect"
+                    />
+                    <text
+                      x={0}
+                      y={0}
+                      className="target-marker-label"
+                      textAnchor="middle"
+                      dominantBaseline="central"
                     >
-                      <rect
-                        x={-w / 2}
-                        y={-h / 2}
-                        width={w}
-                        height={h}
-                        className="target-marker-rect"
-                      />
-                      <text
-                        x={0}
-                        y={0}
-                        className="target-marker-label"
-                        textAnchor="middle"
-                        dominantBaseline="central"
-                      >
-                        {piece.id}
-                      </text>
-                    </g>
-                  );
-                })}
-              </svg>
-            </div>
+                      {piece.id}
+                    </text>
+                  </g>
+                );
+              })}
+            </svg>
           )}
+
+          {/* 提示文字 */}
+          <div className="preview-hint">
+            放開以關閉預覽
+          </div>
         </div>
       )}
     </>

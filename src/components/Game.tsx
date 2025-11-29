@@ -9,7 +9,7 @@ import { PixelGrid } from './PixelGrid';
 import { TransformControls } from './TransformControls';
 import { useGameStore } from '../stores/gameStore';
 import { useResponsiveScale } from '../hooks/useResponsiveScale';
-import type { LevelConfig, SnapSize, ZoomLevel } from '../types';
+import type { LevelConfig, SnapSize } from '../types';
 import level1Config from '../assets/levels/level1/config.json';
 import level2Config from '../assets/levels/level2/config.json';
 import level3Config from '../assets/levels/level3/config.json';
@@ -29,7 +29,7 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { gameState, snapSize, setSnapSize, resetLevel, canvasZoom, setCanvasZoom } = useGameStore();
+  const { gameState, snapSize, setSnapSize, resetLevel, canvasZoom } = useGameStore();
 
   // 響應式縮放
   const { scale } = useResponsiveScale(

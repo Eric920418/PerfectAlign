@@ -132,17 +132,17 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   // Snap 設定
   setSnapSize: (size: SnapSize) => {
-    set({ snapSize: size });
+    let zoom: ZoomLevel = 1;
+    if (size === 1) zoom = 3;
+    else if (size === 5) zoom = 1.5;
+    else if (size === 10) zoom = 1;
+
+    set({ snapSize: size, canvasZoom: zoom });
   },
 
   // 將數值對齊到格線
   snapToGrid: (value: number): number => {
     const { snapSize } = get();
     return Math.round(value / snapSize) * snapSize;
-  },
-
-  // 設定畫布縮放
-  setCanvasZoom: (zoom: ZoomLevel) => {
-    set({ canvasZoom: zoom });
   },
 }));

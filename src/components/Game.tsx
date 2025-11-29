@@ -210,18 +210,6 @@ export function Game() {
             </button>
           ))}
         </div>
-        <div className="zoom-selector">
-          <span className="zoom-label">🔍</span>
-          {([1, 1.5, 2, 3] as ZoomLevel[]).map((zoom) => (
-            <button
-              key={zoom}
-              className={`zoom-btn ${canvasZoom === zoom ? 'active' : ''}`}
-              onClick={() => setCanvasZoom(zoom)}
-            >
-              {zoom}x
-            </button>
-          ))}
-        </div>
       </div>
 
      

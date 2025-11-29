@@ -131,5 +131,4 @@ export interface GameStoreState {
   resetLevel: () => void;
   setSnapSize: (size: SnapSize) => void;
   snapToGrid: (value: number) => number;
-  setCanvasZoom: (zoom: ZoomLevel) => void;
 }

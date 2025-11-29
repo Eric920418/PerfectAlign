@@ -66,7 +66,7 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
       width={width}
       height={height}
       style={{ width, height }}
-      shapeRendering="crispEdges"
+      shapeRendering="geometricPrecision"
     >
       {gridPattern}
 

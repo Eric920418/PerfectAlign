@@ -404,7 +404,13 @@ export class GameEngine {
       return;
     }
 
-    // 繪製選取框
+    // 同步 graphics 的變換與 sprite
+    graphics.x = sprite.x;
+    graphics.y = sprite.y;
+    graphics.rotation = sprite.rotation;
+    graphics.scale.set(sprite.scale.x, sprite.scale.y);
+
+    // 繪製選取框（使用本地座標）
     const bounds = sprite.getLocalBounds();
     const padding = 4;
 

@@ -40,7 +40,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
 }
 
 .preview-overlay img {
@@ -62,14 +63,14 @@
 
 .target-marker {
   position: absolute;
-  width: 80px;
-  height: 80px;
-  border: 2px dashed rgba(0, 255, 136, 0.6);
+  border: 3px dashed #00ff88;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(0, 255, 136, 0.8);
-  font-size: 12px;
+  color: #00ff88;
+  font-size: 14px;
   font-weight: bold;
+  background: rgba(0, 255, 136, 0.15);
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
 }

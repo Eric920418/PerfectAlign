@@ -69,6 +69,8 @@ export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: Previ
                   style={{
                     left: piece.target_transform.x,
                     top: piece.target_transform.y,
+                    width: piece.shape?.width ?? 80,
+                    height: piece.shape?.height ?? 80,
                     transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
                   }}
                 >

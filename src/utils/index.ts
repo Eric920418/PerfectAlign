@@ -25,10 +25,11 @@ export function calculateError(pieces: PieceState[]): number {
 }
 
 // ===== 獲取勝利評級 =====
+// 更嚴格的判定：必須非常精確
 export function getWinRating(totalError: number): WinRating {
-  if (totalError < 3) return 'Perfect';
-  if (totalError < 8) return 'Great';
-  if (totalError < 15) return 'Good';
+  if (totalError < 0.5) return 'Perfect';  // 幾乎完美
+  if (totalError < 2) return 'Great';      // 非常好
+  if (totalError < 5) return 'Good';       // 可以過關
   return null;
 }
 

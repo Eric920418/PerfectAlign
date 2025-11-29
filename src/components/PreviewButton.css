@@ -1,20 +1,15 @@
 .preview-button {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 200;
   transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
 }
 
 .preview-button:hover {
@@ -33,14 +28,16 @@
 }
 
 .preview-overlay {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  z-index: 300;
+  right: 0;
+  bottom: 0;
+  z-index: 500;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
 

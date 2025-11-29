@@ -4,11 +4,9 @@ import './PreviewButton.css';
 
 interface PreviewButtonProps {
   previewImage: string;
-  canvasWidth: number;
-  canvasHeight: number;
 }
 
-export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: PreviewButtonProps) {
+export function PreviewButton({ previewImage }: PreviewButtonProps) {
   const { levelConfig, isPreviewActive, setPreviewActive, gameState } = useGameStore();
   const [imageError, setImageError] = useState(false);
 
@@ -50,7 +48,6 @@ export function PreviewButton({ previewImage, canvasWidth, canvasHeight }: Previ
       {isPreviewActive && (
         <div
           className="preview-overlay"
-          style={{ width: canvasWidth, height: canvasHeight }}
           onPointerUp={handlePointerUp}
         >
           {!imageError ? (

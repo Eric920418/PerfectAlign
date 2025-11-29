@@ -7,6 +7,7 @@ import type {
   Transform,
   ActionLog,
   SnapSize,
+  ZoomLevel,
 } from '../types';
 import { calculateError, getWinRating, normalizeAngle, clampScale } from '../utils';
 
@@ -23,6 +24,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   totalError: 0,
   snapEnabled: true,  // 預設開啟 snap
   snapSize: 5,        // 預設 5px 為一格
+  canvasZoom: 1,      // 預設 1x 縮放
 
   // 載入關卡
   loadLevel: (config: LevelConfig) => {
@@ -143,5 +145,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     const { snapEnabled, snapSize } = get();
     if (!snapEnabled) return value;
     return Math.round(value / snapSize) * snapSize;
+  },
+
+  // 設定畫布縮放
+  setCanvasZoom: (zoom: ZoomLevel) => {
+    set({ canvasZoom: zoom });
   },
 }));

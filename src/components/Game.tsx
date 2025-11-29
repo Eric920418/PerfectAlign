@@ -10,7 +10,7 @@ import { PixelGrid } from './PixelGrid';
 import { TransformControls } from './TransformControls';
 import { useGameStore } from '../stores/gameStore';
 import { useResponsiveScale } from '../hooks/useResponsiveScale';
-import type { LevelConfig, SnapSize } from '../types';
+import type { LevelConfig, SnapSize, ZoomLevel } from '../types';
 import level1Config from '../assets/levels/level1/config.json';
 import level2Config from '../assets/levels/level2/config.json';
 import level3Config from '../assets/levels/level3/config.json';
@@ -32,7 +32,7 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { gameState, snapEnabled, snapSize, setSnapEnabled, setSnapSize, resetLevel } = useGameStore();
+  const { gameState, snapEnabled, snapSize, setSnapEnabled, setSnapSize, resetLevel, canvasZoom, setCanvasZoom } = useGameStore();
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -139,7 +139,7 @@ export function Game() {
         style={{
           width: levelConfig.canvas.width,
           height: levelConfig.canvas.height,
-          transform: `scale(${scale})`,
+          transform: `scale(${scale * canvasZoom})`,
           transformOrigin: 'center center',
         }}
       >
@@ -233,6 +233,18 @@ export function Game() {
             ))}
           </div>
         )}
+        <div className="zoom-selector">
+          <span className="zoom-label">🔍</span>
+          {([1, 1.5, 2, 3] as ZoomLevel[]).map((zoom) => (
+            <button
+              key={zoom}
+              className={`zoom-btn ${canvasZoom === zoom ? 'active' : ''}`}
+              onClick={() => setCanvasZoom(zoom)}
+            >
+              {zoom}x
+            </button>
+          ))}
+        </div>
         <button
           className={`toolbar-btn ${showDebug ? 'active' : ''}`}
           onClick={() => setShowDebug(!showDebug)}

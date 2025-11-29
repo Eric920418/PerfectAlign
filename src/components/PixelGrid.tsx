@@ -66,22 +66,6 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
     >
       {gridPattern}
 
-      {/* 中心十字線 */}
-      <line
-        x1={width / 2}
-        y1={0}
-        x2={width / 2}
-        y2={height}
-        className="grid-line center"
-      />
-      <line
-        x1={0}
-        y1={height / 2}
-        x2={width}
-        y2={height / 2}
-        className="grid-line center"
-      />
-
       {/* 目標位置輔助線 */}
       {targetPositions.map((pos, index) => (
         <g key={`target-${index}`}>

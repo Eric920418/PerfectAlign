@@ -92,6 +92,9 @@ export type WinRating = 'Perfect' | 'Great' | 'Good' | null;
 // ===== Snap 設定 =====
 export type SnapSize = 1 | 5 | 10;
 
+// ===== 畫布縮放等級 =====
+export type ZoomLevel = 1 | 1.5 | 2 | 3;
+
 // ===== 遊戲商店狀態 =====
 export interface GameStoreState {
   // 遊戲狀態
@@ -115,6 +118,9 @@ export interface GameStoreState {
   snapEnabled: boolean;
   snapSize: SnapSize;
 
+  // 縮放設定
+  canvasZoom: ZoomLevel;
+
   // 動作方法
   loadLevel: (config: LevelConfig) => void;
   selectPiece: (id: string | null) => void;
@@ -127,4 +133,5 @@ export interface GameStoreState {
   setSnapEnabled: (enabled: boolean) => void;
   setSnapSize: (size: SnapSize) => void;
   snapToGrid: (value: number) => number;
+  setCanvasZoom: (zoom: ZoomLevel) => void;
 }

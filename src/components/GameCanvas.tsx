@@ -18,7 +18,6 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
     loadLevel,
     selectPiece,
     updatePieceTransform,
-    setGameState,
     addActionLog,
     checkWinCondition,
   } = useGameStore();
@@ -54,13 +53,8 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
         checkWinCondition();
       },
       onDoubleTap: (pieceId) => {
-        const currentState = useGameStore.getState().gameState;
-        if (currentState === 'PLAYING') {
-          selectPiece(pieceId);
-          setGameState('FINE_TUNE');
-        } else if (currentState === 'FINE_TUNE') {
-          setGameState('PLAYING');
-        }
+        // 雙擊選中方塊
+        selectPiece(pieceId);
       },
       onRotate: (pieceId, rotation) => {
         const piece = useGameStore.getState().pieces.find((p) => p.id === pieceId);

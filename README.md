@@ -21,7 +21,6 @@ src/
 ├── components/       # React 組件
 │   ├── Game.tsx          # 主遊戲容器
 │   ├── GameCanvas.tsx    # Pixi.js 畫布包裝
-│   ├── FineTuneOverlay.tsx  # 微調模式覆蓋層
 │   ├── TransformControls.tsx # 旋轉/縮放控制列
 │   ├── PreviewButton.tsx    # 預覽按鈕
 │   ├── WinScreen.tsx        # 勝利畫面
@@ -69,8 +68,8 @@ pnpm preview
 
 1. **選擇關卡** - 點擊頂部關卡按鈕選擇要挑戰的關卡
 2. **開始時顯示目標** - 遊戲開始時會展示目標位置 2 秒
-3. **拖曳對齊** - 將碎片拖曳到目標位置附近
-4. **微調模式** - 雙擊進入精確微調
+3. **拖曳對齊** - 將碎片拖曳到目標位置
+4. **調整旋轉/縮放** - 使用底部控制列調整方塊
 5. **勝利判定** - 誤差達到門檻即可通關
 
 ## 遊戲操作

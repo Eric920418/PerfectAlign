@@ -50,10 +50,7 @@ export interface LevelConfig {
 }
 
 // ===== 遊戲狀態機 =====
-export type GameState = 'IDLE' | 'PLAYING' | 'FINE_TUNE' | 'WIN' | 'COMPLETE';
-
-// ===== 微調區域 =====
-export type Zone = 'TOP' | 'BOTTOM' | 'LEFT' | 'RIGHT' | 'CENTER';
+export type GameState = 'IDLE' | 'PLAYING' | 'WIN' | 'COMPLETE';
 
 // ===== 操作記錄 =====
 export type ActionType = 'drag' | 'fine_move' | 'rotate' | 'scale';

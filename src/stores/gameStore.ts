@@ -47,14 +47,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   // 選取碎片
   selectPiece: (id: string | null) => {
-    const { gameState } = get();
-
-    // 如果正在微調模式，選取其他碎片時退出微調
-    if (gameState === 'FINE_TUNE' && id !== get().selectedPieceId) {
-      set({ gameState: 'PLAYING', selectedPieceId: id });
-    } else {
-      set({ selectedPieceId: id });
-    }
+    set({ selectedPieceId: id });
   },
 
   // 更新碎片變換

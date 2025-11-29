@@ -1,4 +1,4 @@
-import type { PieceState, Zone, WinRating } from '../types';
+import type { PieceState, WinRating } from '../types';
 
 // ===== 角度正規化 =====
 export function normalizeAngle(angle: number): number {
@@ -31,27 +31,6 @@ export function getWinRating(totalError: number): WinRating {
   if (totalError < 0.01) return 'Great';   // 幾乎完美（浮點數誤差容許）
   if (totalError < 0.1) return 'Good';     // 非常接近
   return null;  // 不過關
-}
-
-// ===== 微調區域判定 =====
-export function getZone(px: number, py: number, w: number, h: number): Zone {
-  const cx = w / 2;
-  const cy = h / 2;
-  const R = Math.min(w, h) * 0.12;
-  const distToCenter = Math.sqrt((px - cx) ** 2 + (py - cy) ** 2);
-
-  if (distToCenter < R) return 'CENTER';
-
-  const aboveMain = py < (h / w) * px;
-  const aboveSub = py < -(h / w) * px + h;
-
-  if (aboveMain && aboveSub) return 'TOP';
-  if (!aboveMain && !aboveSub) return 'BOTTOM';
-  if (!aboveMain && aboveSub) return 'LEFT';
-  if (aboveMain && !aboveSub) return 'RIGHT';
-
-  // 預設返回中央（理論上不會到達這裡）
-  return 'CENTER';
 }
 
 // ===== Lerp 插值 =====

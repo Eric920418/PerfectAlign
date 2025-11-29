@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { GameCanvas } from './GameCanvas';
-import { FineTuneOverlay } from './FineTuneOverlay';
 import { PreviewButton } from './PreviewButton';
 import { WinScreen } from './WinScreen';
 import { ReplayPlayer } from './ReplayPlayer';
@@ -29,7 +28,7 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { gameState, snapSize, setSnapSize, resetLevel } = useGameStore();
+  const { snapSize, setSnapSize, resetLevel } = useGameStore();
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -163,14 +162,6 @@ export function Game() {
           />
         )}
 
-        {/* 微調模式覆蓋層 */}
-        {gameReady && (
-          <FineTuneOverlay
-            width={levelConfig.canvas.width}
-            height={levelConfig.canvas.height}
-          />
-        )}
-
         {/* 預覽按鈕 */}
         {gameReady && (
           <PreviewButton
@@ -188,14 +179,6 @@ export function Game() {
         />
       </div>
 
-      {/* 狀態指示器 */}
-      <div className="game-status">
-        {gameState === 'FINE_TUNE' && (
-          <div className="status-indicator fine-tune">
-            微調模式 - 點擊中央退出
-          </div>
-        )}
-      </div>
 
       {/* 工具列 */}
       <div className="game-toolbar">

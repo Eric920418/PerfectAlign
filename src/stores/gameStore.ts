@@ -71,8 +71,11 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         if (transform.rotation !== undefined) {
           newCurrent.rotation = normalizeAngle(transform.rotation);
         }
-        if (transform.scale !== undefined) {
-          newCurrent.scale = clampScale(transform.scale);
+        if (transform.scaleX !== undefined) {
+          newCurrent.scaleX = clampScale(transform.scaleX);
+        }
+        if (transform.scaleY !== undefined) {
+          newCurrent.scaleY = clampScale(transform.scaleY);
         }
 
         return { ...piece, current: newCurrent };

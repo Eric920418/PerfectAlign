@@ -17,9 +17,10 @@ export function calculateError(pieces: PieceState[]): number {
     const dx = Math.abs(piece.current.x - piece.target.x);
     const dy = Math.abs(piece.current.y - piece.target.y);
     const dr = Math.abs(normalizeAngle(piece.current.rotation - piece.target.rotation));
-    const ds = Math.abs(piece.current.scale - piece.target.scale);
+    const dsx = Math.abs(piece.current.scaleX - piece.target.scaleX);
+    const dsy = Math.abs(piece.current.scaleY - piece.target.scaleY);
 
-    return total + (dx + dy) * W_POSITION + dr * W_ROTATION + ds * W_SCALE;
+    return total + (dx + dy) * W_POSITION + dr * W_ROTATION + (dsx + dsy) * W_SCALE;
   }, 0);
 }
 

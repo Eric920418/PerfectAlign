@@ -76,19 +76,21 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
         updatePieceTransform(pieceId, { rotation });
         checkWinCondition();
       },
-      onScale: (pieceId, scale) => {
+      onScale: (pieceId, scaleX, scaleY) => {
         const piece = useGameStore.getState().pieces.find((p) => p.id === pieceId);
         if (piece) {
           addActionLog({
             pieceId,
             type: 'scale',
             payload: {
-              fromScale: piece.current.scale,
-              toScale: scale,
+              fromScaleX: piece.current.scaleX,
+              fromScaleY: piece.current.scaleY,
+              toScaleX: scaleX,
+              toScaleY: scaleY,
             },
           });
         }
-        updatePieceTransform(pieceId, { scale });
+        updatePieceTransform(pieceId, { scaleX, scaleY });
         checkWinCondition();
       },
       snapToGrid: (value: number) => {

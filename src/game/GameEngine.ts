@@ -9,7 +9,7 @@ export interface GameEngineOptions {
   onPieceTransformEnd: (id: string, x: number, y: number) => void;
   onDoubleTap: (pieceId: string) => void;
   onRotate: (pieceId: string, rotation: number) => void;
-  onScale: (pieceId: string, scale: number) => void;
+  onScale: (pieceId: string, scaleX: number, scaleY: number) => void;
   snapToGrid: (value: number) => number;
   getSnapEnabled: () => boolean;
 }
@@ -40,7 +40,7 @@ export class GameEngine {
   private onPieceTransformEnd: (id: string, x: number, y: number) => void;
   private onDoubleTap: (pieceId: string) => void;
   private onRotate: (pieceId: string, rotation: number) => void;
-  private onScale: (pieceId: string, scale: number) => void;
+  private onScale: (pieceId: string, scaleX: number, scaleY: number) => void;
   private snapToGrid: (value: number) => number;
   private getSnapEnabled: () => boolean;
 
@@ -111,11 +111,11 @@ export class GameEngine {
         this.onRotate(this.selectedPieceId, newRotation);
         this.updateSelectionBox(this.selectedPieceId);
       } else if (e.ctrlKey || e.metaKey) {
-        // Ctrl/Cmd + 滾輪：縮放 ±0.05
-        const currentScale = sprite.scale.x;
-        const newScale = clampScale(currentScale + delta * 0.05);
-        sprite.scale.set(newScale);
-        this.onScale(this.selectedPieceId, newScale);
+        // Ctrl/Cmd + 滾輪：等比例縮放 ±0.05
+        const newScaleX = clampScale(sprite.scale.x + delta * 0.05);
+        const newScaleY = clampScale(sprite.scale.y + delta * 0.05);
+        sprite.scale.set(newScaleX, newScaleY);
+        this.onScale(this.selectedPieceId, newScaleX, newScaleY);
         this.updateSelectionBox(this.selectedPieceId);
       }
     }, { passive: false });
@@ -203,10 +203,10 @@ export class GameEngine {
     const currentDistance = this.getDistance(points.p1, points.p2);
     const currentAngle = this.getAngle(points.p1, points.p2);
 
-    // 縮放
+    // 等比例縮放
     const scaleRatio = currentDistance / this.pinchStartDistance;
     const newScale = clampScale(this.pinchStartScale * scaleRatio);
-    sprite.scale.set(newScale);
+    sprite.scale.set(newScale, newScale);
 
     // 旋轉
     const angleDelta = currentAngle - this.pinchStartAngle;
@@ -227,7 +227,7 @@ export class GameEngine {
     sprite.rotation = degToRad(finalRotation);
 
     this.onRotate(this.selectedPieceId, finalRotation);
-    this.onScale(this.selectedPieceId, sprite.scale.x);
+    this.onScale(this.selectedPieceId, sprite.scale.x, sprite.scale.y);
   }
 
   private updateSelectionBox(pieceId: string) {
@@ -278,7 +278,7 @@ export class GameEngine {
     sprite.x = piece.current.x;
     sprite.y = piece.current.y;
     sprite.rotation = degToRad(piece.current.rotation);
-    sprite.scale.set(piece.current.scale);
+    sprite.scale.set(piece.current.scaleX, piece.current.scaleY);
 
     // 設定互動
     sprite.eventMode = 'static';
@@ -390,17 +390,9 @@ export class GameEngine {
     });
   }
 
-  private drawSelectionBox(graphics: PIXI.Graphics, sprite: PIXI.Sprite) {
-    graphics.clear();
-    graphics.lineStyle(2, 0x00ff00, 1);
-
-    const bounds = sprite.getBounds();
-    graphics.drawRect(
-      bounds.x - 4,
-      bounds.y - 4,
-      bounds.width + 8,
-      bounds.height + 8
-    );
+  private drawSelectionBox(_graphics: PIXI.Graphics, _sprite: PIXI.Sprite) {
+    // 不繪製選取框，避免影響對齊判斷
+    // 保留方法以維持程式結構
   }
 
   private startRenderLoop() {
@@ -434,14 +426,19 @@ export class GameEngine {
   }
 
   // 更新碎片變換（供外部調用）
-  updatePiece(id: string, transform: { x?: number; y?: number; rotation?: number; scale?: number }) {
+  updatePiece(id: string, transform: { x?: number; y?: number; rotation?: number; scaleX?: number; scaleY?: number }) {
     const sprite = this.pieceSprites.get(id);
     if (!sprite) return;
 
     if (transform.x !== undefined) sprite.x = transform.x;
     if (transform.y !== undefined) sprite.y = transform.y;
     if (transform.rotation !== undefined) sprite.rotation = degToRad(transform.rotation);
-    if (transform.scale !== undefined) sprite.scale.set(transform.scale);
+    if (transform.scaleX !== undefined || transform.scaleY !== undefined) {
+      sprite.scale.set(
+        transform.scaleX ?? sprite.scale.x,
+        transform.scaleY ?? sprite.scale.y
+      );
+    }
 
     // 更新選取框
     const graphics = this.pieceGraphics.get(id);

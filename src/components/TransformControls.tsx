@@ -2,7 +2,11 @@ import { useCallback, useRef, useState } from 'react';
 import { useGameStore } from '../stores/gameStore';
 import './TransformControls.css';
 
-type ControlAction = 'rotate-left' | 'rotate-right' | 'scale-up' | 'scale-down';
+type ControlAction =
+  | 'rotate-left' | 'rotate-right'
+  | 'scale-up' | 'scale-down'
+  | 'width-up' | 'width-down'
+  | 'height-up' | 'height-down';
 
 export function TransformControls() {
   const {
@@ -31,10 +35,28 @@ export function TransformControls() {
           updatePieceTransform(selectedPieceId, { rotation: piece.current.rotation + 5 });
           break;
         case 'scale-up':
-          updatePieceTransform(selectedPieceId, { scale: piece.current.scale + 0.05 });
+          updatePieceTransform(selectedPieceId, {
+            scaleX: piece.current.scaleX + 0.05,
+            scaleY: piece.current.scaleY + 0.05
+          });
           break;
         case 'scale-down':
-          updatePieceTransform(selectedPieceId, { scale: piece.current.scale - 0.05 });
+          updatePieceTransform(selectedPieceId, {
+            scaleX: piece.current.scaleX - 0.05,
+            scaleY: piece.current.scaleY - 0.05
+          });
+          break;
+        case 'width-up':
+          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX + 0.05 });
+          break;
+        case 'width-down':
+          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX - 0.05 });
+          break;
+        case 'height-up':
+          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY + 0.05 });
+          break;
+        case 'height-down':
+          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY - 0.05 });
           break;
       }
       checkWinCondition();
@@ -82,7 +104,6 @@ export function TransformControls() {
           onPointerCancel={handleControlUp}
         >
           <span className="btn-icon">↺</span>
-          <span className="btn-label">-5°</span>
         </button>
         <span className="group-label">旋轉</span>
         <button
@@ -93,32 +114,52 @@ export function TransformControls() {
           onPointerCancel={handleControlUp}
         >
           <span className="btn-icon">↻</span>
-          <span className="btn-label">+5°</span>
         </button>
       </div>
 
-      {/* 縮放控制 */}
-      <div className="control-group scale-group">
+      {/* 寬度控制 */}
+      <div className="control-group width-group">
         <button
-          className={`transform-btn ${activeControl === 'scale-down' ? 'active' : ''}`}
-          onPointerDown={(e) => handleControlDown('scale-down', e)}
+          className={`transform-btn small ${activeControl === 'width-down' ? 'active' : ''}`}
+          onPointerDown={(e) => handleControlDown('width-down', e)}
           onPointerUp={handleControlUp}
           onPointerLeave={handleControlUp}
           onPointerCancel={handleControlUp}
         >
           <span className="btn-icon">−</span>
-          <span className="btn-label">縮小</span>
         </button>
-        <span className="group-label">縮放</span>
+        <span className="group-label">寬</span>
         <button
-          className={`transform-btn ${activeControl === 'scale-up' ? 'active' : ''}`}
-          onPointerDown={(e) => handleControlDown('scale-up', e)}
+          className={`transform-btn small ${activeControl === 'width-up' ? 'active' : ''}`}
+          onPointerDown={(e) => handleControlDown('width-up', e)}
           onPointerUp={handleControlUp}
           onPointerLeave={handleControlUp}
           onPointerCancel={handleControlUp}
         >
           <span className="btn-icon">+</span>
-          <span className="btn-label">放大</span>
+        </button>
+      </div>
+
+      {/* 高度控制 */}
+      <div className="control-group height-group">
+        <button
+          className={`transform-btn small ${activeControl === 'height-down' ? 'active' : ''}`}
+          onPointerDown={(e) => handleControlDown('height-down', e)}
+          onPointerUp={handleControlUp}
+          onPointerLeave={handleControlUp}
+          onPointerCancel={handleControlUp}
+        >
+          <span className="btn-icon">−</span>
+        </button>
+        <span className="group-label">高</span>
+        <button
+          className={`transform-btn small ${activeControl === 'height-up' ? 'active' : ''}`}
+          onPointerDown={(e) => handleControlDown('height-up', e)}
+          onPointerUp={handleControlUp}
+          onPointerLeave={handleControlUp}
+          onPointerCancel={handleControlUp}
+        >
+          <span className="btn-icon">+</span>
         </button>
       </div>
     </div>

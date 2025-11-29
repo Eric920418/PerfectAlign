@@ -1,9 +1,10 @@
 // ===== 基礎變換型別 =====
 export interface Transform {
-  x: number;      // 像素，相對畫布左上角
-  y: number;      // 像素，相對畫布左上角
-  rotation: number;  // 角度，順時針為正，範圍 -180 ~ 180
-  scale: number;     // 倍率，1.0 為原始大小
+  x: number;        // 像素，相對畫布左上角
+  y: number;        // 像素，相對畫布左上角
+  rotation: number; // 角度，順時針為正，範圍 -180 ~ 180
+  scaleX: number;   // 寬度倍率，1.0 為原始大小
+  scaleY: number;   // 高度倍率，1.0 為原始大小
 }
 
 // ===== 碎片狀態 =====
@@ -62,8 +63,10 @@ export interface ActionPayload {
   toRotation?: number;
 
   // scale
-  fromScale?: number;
-  toScale?: number;
+  fromScaleX?: number;
+  fromScaleY?: number;
+  toScaleX?: number;
+  toScaleY?: number;
 }
 
 export interface ActionLog {

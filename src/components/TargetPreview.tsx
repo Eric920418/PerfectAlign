@@ -51,7 +51,7 @@ export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
             style={{
               left: piece.target_transform.x,
               top: piece.target_transform.y,
-              transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scale})`,
+              transform: `translate(-50%, -50%) rotate(${piece.target_transform.rotation}deg) scale(${piece.target_transform.scaleX}, ${piece.target_transform.scaleY})`,
             }}
           >
             <div className="target-piece-inner">

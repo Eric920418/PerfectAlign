@@ -62,8 +62,11 @@ export function ReplayPlayer({ onClose }: ReplayPlayerProps) {
           }
           break;
         case 'scale':
-          if (action.payload.toScale !== undefined) {
-            updatedPiece.scale = action.payload.toScale;
+          if (action.payload.toScaleX !== undefined) {
+            updatedPiece.scaleX = action.payload.toScaleX;
+          }
+          if (action.payload.toScaleY !== undefined) {
+            updatedPiece.scaleY = action.payload.toScaleY;
           }
           break;
       }
@@ -180,7 +183,7 @@ export function ReplayPlayer({ onClose }: ReplayPlayerProps) {
               style={{
                 left: transform.x,
                 top: transform.y,
-                transform: `translate(-50%, -50%) rotate(${transform.rotation}deg) scale(${transform.scale})`,
+                transform: `translate(-50%, -50%) rotate(${transform.rotation}deg) scale(${transform.scaleX}, ${transform.scaleY})`,
               }}
             >
               {id}
@@ -195,7 +198,7 @@ export function ReplayPlayer({ onClose }: ReplayPlayerProps) {
               style={{
                 left: p.target_transform.x,
                 top: p.target_transform.y,
-                transform: `translate(-50%, -50%) rotate(${p.target_transform.rotation}deg) scale(${p.target_transform.scale})`,
+                transform: `translate(-50%, -50%) rotate(${p.target_transform.rotation}deg) scale(${p.target_transform.scaleX}, ${p.target_transform.scaleY})`,
               }}
             />
           ))}

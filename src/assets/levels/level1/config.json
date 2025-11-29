@@ -18,13 +18,15 @@
         "x": 80,
         "y": 100,
         "rotation": 25,
-        "scale": 1.1
+        "scaleX": 1.1,
+        "scaleY": 1.1
       },
       "target_transform": {
         "x": 187,
         "y": 200,
         "rotation": 0,
-        "scale": 1.0
+        "scaleX": 1.0,
+        "scaleY": 1.0
       }
     },
     {
@@ -34,13 +36,15 @@
         "x": 280,
         "y": 350,
         "rotation": -30,
-        "scale": 0.9
+        "scaleX": 0.9,
+        "scaleY": 0.9
       },
       "target_transform": {
         "x": 187,
         "y": 300,
         "rotation": 0,
-        "scale": 1.0
+        "scaleX": 1.0,
+        "scaleY": 1.0
       }
     }
   ]

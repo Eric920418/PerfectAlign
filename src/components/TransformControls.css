@@ -75,32 +75,76 @@
   border-color: rgba(100, 150, 255, 0.7);
 }
 
-/* 縮放按鈕樣式 */
-.scale-group .transform-btn {
+/* 寬度按鈕樣式 */
+.width-group .transform-btn {
   background: rgba(255, 180, 100, 0.15);
   border-color: rgba(255, 180, 100, 0.3);
 }
 
-.scale-group .transform-btn:active,
-.scale-group .transform-btn.active {
+.width-group .transform-btn:active,
+.width-group .transform-btn.active {
   background: rgba(255, 180, 100, 0.4);
   border-color: rgba(255, 180, 100, 0.7);
 }
 
+/* 高度按鈕樣式 */
+.height-group .transform-btn {
+  background: rgba(180, 255, 100, 0.15);
+  border-color: rgba(180, 255, 100, 0.3);
+}
+
+.height-group .transform-btn:active,
+.height-group .transform-btn.active {
+  background: rgba(180, 255, 100, 0.4);
+  border-color: rgba(180, 255, 100, 0.7);
+}
+
+/* 小按鈕樣式（用於寬高控制） */
+.transform-btn.small {
+  width: 40px;
+  height: 40px;
+}
+
+.transform-btn.small .btn-icon {
+  font-size: 18px;
+}
+
 /* 手機適配 */
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   .transform-controls {
-    gap: 12px;
-    padding: 10px 16px;
+    gap: 8px;
+    padding: 8px 12px;
+    bottom: 60px;
   }
 
   .transform-btn {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .transform-btn.small {
+    width: 34px;
+    height: 34px;
   }
 
   .transform-btn .btn-icon {
-    font-size: 20px;
+    font-size: 18px;
+  }
+
+  .transform-btn.small .btn-icon {
+    font-size: 14px;
+  }
+
+  .group-label {
+    font-size: 10px;
+    min-width: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .transform-controls {
+    gap: 6px;
+    padding: 6px 10px;
   }
 
   .group-label {

@@ -36,14 +36,16 @@ export function DebugPanel() {
             <span>X: {selectedPiece.current.x.toFixed(1)}</span>
             <span>Y: {selectedPiece.current.y.toFixed(1)}</span>
             <span>R: {selectedPiece.current.rotation.toFixed(1)}°</span>
-            <span>S: {selectedPiece.current.scale.toFixed(2)}</span>
+            <span>W: {selectedPiece.current.scaleX.toFixed(2)}</span>
+            <span>H: {selectedPiece.current.scaleY.toFixed(2)}</span>
           </div>
           <strong>目標位置:</strong>
           <div className="debug-values">
             <span>X: {selectedPiece.target.x.toFixed(1)}</span>
             <span>Y: {selectedPiece.target.y.toFixed(1)}</span>
             <span>R: {selectedPiece.target.rotation.toFixed(1)}°</span>
-            <span>S: {selectedPiece.target.scale.toFixed(2)}</span>
+            <span>W: {selectedPiece.target.scaleX.toFixed(2)}</span>
+            <span>H: {selectedPiece.target.scaleY.toFixed(2)}</span>
           </div>
         </div>
       )}

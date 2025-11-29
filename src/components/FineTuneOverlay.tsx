@@ -81,13 +81,17 @@ export function FineTuneOverlay({ width, height }: FineTuneOverlayProps) {
       const piece = pieces.find((p) => p.id === selectedPieceId);
       if (!piece) return;
 
-      // 長按上/下區縮放，左/右區旋轉
+      // 長按上/下區縮放（同時調整寬高），左/右區旋轉
       if (zone === 'TOP') {
-        const newScale = piece.current.scale + 0.01;
-        updatePieceTransform(selectedPieceId, { scale: newScale });
+        updatePieceTransform(selectedPieceId, {
+          scaleX: piece.current.scaleX + 0.01,
+          scaleY: piece.current.scaleY + 0.01,
+        });
       } else if (zone === 'BOTTOM') {
-        const newScale = piece.current.scale - 0.01;
-        updatePieceTransform(selectedPieceId, { scale: newScale });
+        updatePieceTransform(selectedPieceId, {
+          scaleX: piece.current.scaleX - 0.01,
+          scaleY: piece.current.scaleY - 0.01,
+        });
       } else if (zone === 'LEFT') {
         const newRotation = piece.current.rotation - 1;
         updatePieceTransform(selectedPieceId, { rotation: newRotation });

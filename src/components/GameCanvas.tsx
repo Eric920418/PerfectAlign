@@ -98,7 +98,7 @@ export function GameCanvas({ levelConfig }: GameCanvasProps) {
         const state = useGameStore.getState();
         return {
           enabled: true,
-          size: state.snapSize,
+          size: state.snapSize * 5, // 實際 snap 是顯示值的 5 倍
         };
       },
     });

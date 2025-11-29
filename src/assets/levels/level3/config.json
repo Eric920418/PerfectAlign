@@ -18,13 +18,13 @@
       "shape": { "width": 120, "height": 60 },
       "start_transform": {
         "x": 100,
-        "y": 130,
+        "y": 120,
         "rotation": -20,
         "scaleX": 0.8,
         "scaleY": 1.2
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 180,
         "rotation": 0,
         "scaleX": 1.0,
@@ -36,15 +36,15 @@
       "texture": "/assets/levels/level3/piece_02.png",
       "shape": { "width": 60, "height": 100 },
       "start_transform": {
-        "x": 290,
-        "y": 350,
+        "x": 280,
+        "y": 360,
         "rotation": 30,
         "scaleX": 1.15,
         "scaleY": 0.85
       },
       "target_transform": {
-        "x": 190,
-        "y": 350,
+        "x": 200,
+        "y": 360,
         "rotation": 0,
         "scaleX": 1.0,
         "scaleY": 1.0

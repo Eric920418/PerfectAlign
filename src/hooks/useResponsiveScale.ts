@@ -17,13 +17,15 @@ export function useResponsiveScale(
 
   const calculateScale = useCallback(() => {
     const viewportWidth = window.innerWidth - padding * 2;
-    const viewportHeight = window.innerHeight - padding * 2;
+    // 預留更多垂直空間給 header (80px) 和 toolbar (80px)
+    const reservedHeight = 160;
+    const viewportHeight = window.innerHeight - reservedHeight;
 
     const scaleX = viewportWidth / baseWidth;
     const scaleY = viewportHeight / baseHeight;
 
-    // 使用較小的縮放值以確保完全可見
-    const newScale = Math.min(scaleX, scaleY, 1); // 最大不超過 1
+    // 使用較小的縮放值以確保完全可見，限制最大 0.9 避免邊緣被切掉
+    const newScale = Math.min(scaleX, scaleY, 0.9);
 
     setScale(newScale);
     setContainerWidth(baseWidth * newScale);

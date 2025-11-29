@@ -137,7 +137,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   // 玩家選擇 1px → 實際 5px, 5px → 10px, 10px → 20px
   snapToGrid: (value: number): number => {
     const { snapSize } = get();
-    const actualSnap = snapSize * 5; // 實際 snap 是顯示值的 5 倍
+    const actualSnap = snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20;
     return Math.round(value / actualSnap) * actualSnap;
   },
 }));

@@ -12,13 +12,12 @@ interface PixelGridProps {
   height: number;
   visible: boolean;
   targetPositions?: TargetPosition[];
-  zoom?: number;
+  gridSize: number; // 格線間距 = 實際 snap 大小
 }
 
-export function PixelGrid({ width, height, visible, targetPositions = [], zoom = 1 }: PixelGridProps) {
-  // 視覺格線間距根據縮放決定
-  // 1.5x → 5px, 1x → 10px, 0.5x → 20px
-  const visualGridSize = zoom >= 1.5 ? 5 : zoom >= 1 ? 10 : 20;
+export function PixelGrid({ width, height, visible, targetPositions = [], gridSize }: PixelGridProps) {
+  // 格線間距直接使用實際 snap 大小，確保完全同步
+  const visualGridSize = gridSize;
 
   const gridPattern = useMemo(() => {
     // 計算網格線

@@ -2,7 +2,7 @@
 
 .target-preview {
   position: absolute;
-  top: 0;
+  top: -1px;
   left: 0;
   z-index: 600;
   background: linear-gradient(180deg, #0a0a0f 0%, #000 100%);

@@ -19,26 +19,27 @@
 /* ===== 頂部標籤 ===== */
 .preview-badge {
   position: absolute;
-  top: 16px;
+  top: 12px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
+  padding: 5px 14px;
   background: rgba(0, 243, 255, 0.1);
   border: 1px solid rgba(0, 243, 255, 0.3);
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--neon-primary);
   letter-spacing: 2px;
   text-transform: uppercase;
+  z-index: 10;
 }
 
 .badge-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   background: var(--neon-primary);
   border-radius: 50%;
   animation: pulse 1s infinite;
@@ -51,22 +52,23 @@
 
 /* ===== 主標題區 ===== */
 .preview-title-area {
-  padding-top: 60px;
+  padding-top: 50px;
+  padding-bottom: 10px;
   text-align: center;
+  flex-shrink: 0;
 }
 
 .preview-title {
   margin: 0;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 300;
   color: #fff;
-  letter-spacing: 8px;
-  text-transform: uppercase;
+  letter-spacing: 6px;
 }
 
 .preview-subtitle {
-  margin: 8px 0 0;
-  font-size: 13px;
+  margin: 6px 0 0;
+  font-size: 12px;
   color: rgba(255, 255, 255, 0.5);
   font-weight: 400;
 }
@@ -77,94 +79,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  overflow: visible;
+  padding: 10px 20px;
+  min-height: 0; /* 重要：讓 flex 子元素可以縮小 */
 }
 
-.preview-canvas {
-  position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  background:
-    linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
-  background-size: 20px 20px;
-  transform-origin: center center;
-  box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
-}
-
-/* ===== 目標碎片 ===== */
-.target-piece {
-  position: absolute;
-}
-
-.target-piece-inner {
+.preview-canvas-svg {
   width: 100%;
   height: 100%;
-  border: 2px dashed var(--neon-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 243, 255, 0.05);
-  position: relative;
+  max-width: 100%;
+  max-height: 100%;
+  filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.1));
+}
+
+/* 目標框呼吸動畫 */
+.target-box-animate {
   animation: breathe 2s ease-in-out infinite;
 }
 
 @keyframes breathe {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2),
-                inset 0 0 20px rgba(0, 243, 255, 0.05);
+    filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.3));
   }
   50% {
-    box-shadow: 0 0 30px rgba(0, 243, 255, 0.4),
-                inset 0 0 30px rgba(0, 243, 255, 0.1);
+    filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.6));
   }
-}
-
-.piece-label {
-  color: var(--neon-primary);
-  font-weight: 700;
-  font-size: 20px;
-  font-family: 'SF Mono', 'Consolas', monospace;
-  text-shadow: 0 0 10px var(--neon-primary);
-}
-
-/* 四角標記 */
-.corner-mark {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  border-color: var(--neon-primary);
-  border-style: solid;
-  border-width: 0;
-}
-
-.corner-mark.tl {
-  top: -1px;
-  left: -1px;
-  border-top-width: 2px;
-  border-left-width: 2px;
-}
-
-.corner-mark.tr {
-  top: -1px;
-  right: -1px;
-  border-top-width: 2px;
-  border-right-width: 2px;
-}
-
-.corner-mark.bl {
-  bottom: -1px;
-  left: -1px;
-  border-bottom-width: 2px;
-  border-left-width: 2px;
-}
-
-.corner-mark.br {
-  bottom: -1px;
-  right: -1px;
-  border-bottom-width: 2px;
-  border-right-width: 2px;
 }
 
 /* ===== 底部倒數 ===== */
@@ -172,13 +110,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 30px;
-  gap: 8px;
+  padding: 15px 0 20px;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .countdown-ring {
-  width: 56px;
-  height: 56px;
+  width: 50px;
+  height: 50px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
   display: flex;
@@ -206,14 +145,14 @@
 }
 
 .countdown-number {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: #fff;
   font-family: 'SF Mono', 'Consolas', monospace;
 }
 
 .countdown-text {
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 1px;
 }

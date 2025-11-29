@@ -147,7 +147,6 @@ export function Game() {
         <PixelGrid
           width={levelConfig.canvas.width}
           height={levelConfig.canvas.height}
-          gridSize={snapSize}
           visible={true}
           zoom={autoZoom}
           targetPositions={levelConfig.pieces.map(p => ({

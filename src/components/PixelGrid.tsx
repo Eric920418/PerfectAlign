@@ -10,13 +10,12 @@ interface TargetPosition {
 interface PixelGridProps {
   width: number;
   height: number;
-  gridSize?: number;
   visible: boolean;
   targetPositions?: TargetPosition[];
   zoom?: number;
 }
 
-export function PixelGrid({ width, height, gridSize = 10, visible, targetPositions = [], zoom = 1 }: PixelGridProps) {
+export function PixelGrid({ width, height, visible, targetPositions = [], zoom = 1 }: PixelGridProps) {
   // 根據縮放等級決定視覺格線間距
   // zoom 越高，可以顯示更細的格線
   const getVisualGridSize = () => {

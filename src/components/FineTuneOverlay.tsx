@@ -9,6 +9,8 @@ interface FineTuneOverlayProps {
   height: number;
 }
 
+type ControlAction = 'rotate-left' | 'rotate-right' | 'scale-up' | 'scale-down';
+
 export function FineTuneOverlay({ width, height }: FineTuneOverlayProps) {
   const {
     gameState,
@@ -22,8 +24,10 @@ export function FineTuneOverlay({ width, height }: FineTuneOverlayProps) {
   } = useGameStore();
 
   const [activeZone, setActiveZone] = useState<Zone | null>(null);
+  const [activeControl, setActiveControl] = useState<ControlAction | null>(null);
   const longPressTimerRef = useRef<number | null>(null);
   const longPressIntervalRef = useRef<number | null>(null);
+  const controlIntervalRef = useRef<number | null>(null);
 
   const handleZoneAction = useCallback(
     (zone: Zone) => {
@@ -140,6 +144,55 @@ export function FineTuneOverlay({ width, height }: FineTuneOverlayProps) {
     }
   }, [selectedPieceId, checkWinCondition]);
 
+  // 旋轉/縮放控制按鈕
+  const handleControlAction = useCallback(
+    (action: ControlAction) => {
+      if (!selectedPieceId) return;
+
+      const piece = pieces.find((p) => p.id === selectedPieceId);
+      if (!piece) return;
+
+      switch (action) {
+        case 'rotate-left':
+          updatePieceTransform(selectedPieceId, { rotation: piece.current.rotation - 5 });
+          break;
+        case 'rotate-right':
+          updatePieceTransform(selectedPieceId, { rotation: piece.current.rotation + 5 });
+          break;
+        case 'scale-up':
+          updatePieceTransform(selectedPieceId, { scale: piece.current.scale + 0.05 });
+          break;
+        case 'scale-down':
+          updatePieceTransform(selectedPieceId, { scale: piece.current.scale - 0.05 });
+          break;
+      }
+      checkWinCondition();
+    },
+    [selectedPieceId, pieces, updatePieceTransform, checkWinCondition]
+  );
+
+  const handleControlDown = useCallback(
+    (action: ControlAction, e: React.PointerEvent) => {
+      e.stopPropagation();
+      setActiveControl(action);
+      handleControlAction(action);
+
+      // 長按持續執行
+      controlIntervalRef.current = window.setInterval(() => {
+        handleControlAction(action);
+      }, 100);
+    },
+    [handleControlAction]
+  );
+
+  const handleControlUp = useCallback(() => {
+    setActiveControl(null);
+    if (controlIntervalRef.current) {
+      clearInterval(controlIntervalRef.current);
+      controlIntervalRef.current = null;
+    }
+  }, []);
+
   if (gameState !== 'FINE_TUNE') {
     return null;
   }
@@ -173,6 +226,46 @@ export function FineTuneOverlay({ width, height }: FineTuneOverlayProps) {
       {activeZone && activeZone !== 'CENTER' && (
         <div className={`ripple ${activeZone.toLowerCase()}`} />
       )}
+
+      {/* 旋轉控制按鈕 */}
+      <div
+        className={`control-btn rotate-left ${activeControl === 'rotate-left' ? 'active' : ''}`}
+        onPointerDown={(e) => handleControlDown('rotate-left', e)}
+        onPointerUp={handleControlUp}
+        onPointerLeave={handleControlUp}
+      >
+        <span>↺</span>
+        <span className="control-label">-5°</span>
+      </div>
+      <div
+        className={`control-btn rotate-right ${activeControl === 'rotate-right' ? 'active' : ''}`}
+        onPointerDown={(e) => handleControlDown('rotate-right', e)}
+        onPointerUp={handleControlUp}
+        onPointerLeave={handleControlUp}
+      >
+        <span>↻</span>
+        <span className="control-label">+5°</span>
+      </div>
+
+      {/* 縮放控制按鈕 */}
+      <div
+        className={`control-btn scale-down ${activeControl === 'scale-down' ? 'active' : ''}`}
+        onPointerDown={(e) => handleControlDown('scale-down', e)}
+        onPointerUp={handleControlUp}
+        onPointerLeave={handleControlUp}
+      >
+        <span>−</span>
+        <span className="control-label">縮小</span>
+      </div>
+      <div
+        className={`control-btn scale-up ${activeControl === 'scale-up' ? 'active' : ''}`}
+        onPointerDown={(e) => handleControlDown('scale-up', e)}
+        onPointerUp={handleControlUp}
+        onPointerLeave={handleControlUp}
+      >
+        <span>+</span>
+        <span className="control-label">放大</span>
+      </div>
     </div>
   );
 }

@@ -31,11 +31,7 @@ export class GameEngine {
   private lastSnappedX: number = 0;
   private lastSnappedY: number = 0;
 
-  // 雙指手勢狀態
-  private pinchStartDistance = 0;
-  private pinchStartRotation = 0;
-  private pinchStartScale = 1;
-  private pinchStartAngle = 0;
+  // 觸控追蹤（用於判斷單指/多指）
   private activeTouches: Map<number, { x: number; y: number }> = new Map();
 
   // 選取框顯示狀態
@@ -125,7 +121,7 @@ export class GameEngine {
     }, { passive: false });
   }
 
-  // 觸控雙指手勢
+  // 觸控追蹤（用於判斷單指/多指，避免多指時誤觸拖曳）
   private setupTouchGestures() {
     const canvas = this.app.view as HTMLCanvasElement;
 
@@ -134,104 +130,17 @@ export class GameEngine {
         const touch = e.changedTouches[i];
         this.activeTouches.set(touch.identifier, { x: touch.clientX, y: touch.clientY });
       }
-
-      if (this.activeTouches.size === 2 && this.selectedPieceId) {
-        e.preventDefault();
-        this.startPinchGesture();
-      }
-    }, { passive: false });
-
-    canvas.addEventListener('touchmove', (e: TouchEvent) => {
-      for (let i = 0; i < e.changedTouches.length; i++) {
-        const touch = e.changedTouches[i];
-        this.activeTouches.set(touch.identifier, { x: touch.clientX, y: touch.clientY });
-      }
-
-      if (this.activeTouches.size === 2 && this.selectedPieceId) {
-        e.preventDefault();
-        this.handlePinchGesture();
-      }
-    }, { passive: false });
+    }, { passive: true });
 
     canvas.addEventListener('touchend', (e: TouchEvent) => {
       for (let i = 0; i < e.changedTouches.length; i++) {
         this.activeTouches.delete(e.changedTouches[i].identifier);
       }
-
-      if (this.activeTouches.size < 2) {
-        this.endPinchGesture();
-      }
     });
 
     canvas.addEventListener('touchcancel', () => {
       this.activeTouches.clear();
-      this.endPinchGesture();
     });
-  }
-
-  private getTouchPoints(): { p1: { x: number; y: number }; p2: { x: number; y: number } } | null {
-    const touches = Array.from(this.activeTouches.values());
-    if (touches.length < 2) return null;
-    return { p1: touches[0], p2: touches[1] };
-  }
-
-  private getDistance(p1: { x: number; y: number }, p2: { x: number; y: number }): number {
-    return Math.sqrt((p2.x - p1.x) ** 2 + (p2.y - p1.y) ** 2);
-  }
-
-  private getAngle(p1: { x: number; y: number }, p2: { x: number; y: number }): number {
-    return Math.atan2(p2.y - p1.y, p2.x - p1.x);
-  }
-
-  private startPinchGesture() {
-    const points = this.getTouchPoints();
-    if (!points || !this.selectedPieceId) return;
-
-    const sprite = this.pieceSprites.get(this.selectedPieceId);
-    if (!sprite) return;
-
-    this.pinchStartDistance = this.getDistance(points.p1, points.p2);
-    this.pinchStartAngle = this.getAngle(points.p1, points.p2);
-    this.pinchStartScale = sprite.scale.x;
-    this.pinchStartRotation = sprite.rotation;
-    this.isDragging = false; // 停止拖曳
-  }
-
-  private handlePinchGesture() {
-    const points = this.getTouchPoints();
-    if (!points || !this.selectedPieceId) return;
-
-    const sprite = this.pieceSprites.get(this.selectedPieceId);
-    if (!sprite) return;
-
-    const currentDistance = this.getDistance(points.p1, points.p2);
-    const currentAngle = this.getAngle(points.p1, points.p2);
-
-    // 等比例縮放
-    const scaleRatio = currentDistance / this.pinchStartDistance;
-    const newScale = clampScale(this.pinchStartScale * scaleRatio);
-    sprite.scale.set(newScale, newScale);
-
-    // 旋轉
-    const angleDelta = currentAngle - this.pinchStartAngle;
-    const newRotation = this.pinchStartRotation + angleDelta;
-    sprite.rotation = newRotation;
-
-    this.updateSelectionBox(this.selectedPieceId);
-  }
-
-  private endPinchGesture() {
-    if (!this.selectedPieceId) return;
-
-    const sprite = this.pieceSprites.get(this.selectedPieceId);
-    if (!sprite) return;
-
-    // 通知外部旋轉和縮放變化
-    const finalRotation = normalizeAngle(radToDeg(sprite.rotation));
-    sprite.rotation = degToRad(finalRotation);
-
-    this.onRotate(this.selectedPieceId, finalRotation);
-    this.onScale(this.selectedPieceId, sprite.scale.x, sprite.scale.y);
   }
 
   private updateSelectionBox(pieceId: string) {

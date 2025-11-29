@@ -54,8 +54,7 @@ canvas {
 
 /* 遊戲區域禁用文字選取和觸控效果 */
 .game-container,
-.game-viewport,
-.fine-tune-overlay {
+.game-viewport {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

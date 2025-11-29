@@ -16,14 +16,17 @@ interface PixelGridProps {
 }
 
 export function PixelGrid({ width, height, gridSize = 10, visible, targetPositions = [] }: PixelGridProps) {
+  // 如果 snapSize 是 1，視覺上還是畫 10px 的格子，避免畫面全白
+  const visualGridSize = gridSize === 1 ? 10 : gridSize;
+
   const gridPattern = useMemo(() => {
     // 計算網格線
     const lines: ReactElement[] = [];
-    // 每 10 格顯示粗線
-    const majorInterval = gridSize * 10;
+    // 每 10 格顯示粗線 (如果是 10px 格子，就是 100px 一條粗線)
+    const majorInterval = visualGridSize * 10;
 
     // 垂直線
-    for (let x = 0; x <= width; x += gridSize) {
+    for (let x = 0; x <= width; x += visualGridSize) {
       const isMajor = x % majorInterval === 0;
       lines.push(
         <line
@@ -38,7 +41,7 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
     }
 
     // 水平線
-    for (let y = 0; y <= height; y += gridSize) {
+    for (let y = 0; y <= height; y += visualGridSize) {
       const isMajor = y % majorInterval === 0;
       lines.push(
         <line
@@ -53,7 +56,7 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
     }
 
     return lines;
-  }, [width, height, gridSize]);
+  }, [width, height, visualGridSize]);
 
   if (!visible) return null;
 
@@ -63,6 +66,7 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
       width={width}
       height={height}
       style={{ width, height }}
+      shapeRendering="crispEdges"
     >
       {gridPattern}
 

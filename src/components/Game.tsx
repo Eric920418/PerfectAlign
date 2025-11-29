@@ -26,7 +26,6 @@ export function Game() {
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [levelConfig, setLevelConfig] = useState<LevelConfig | null>(null);
   const [showReplay, setShowReplay] = useState(false);
-  const [showGrid, setShowGrid] = useState(true);
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
@@ -146,7 +145,7 @@ export function Game() {
           width={levelConfig.canvas.width}
           height={levelConfig.canvas.height}
           gridSize={snapSize}
-          visible={showGrid && gameReady}
+          visible={true}
           targetPositions={levelConfig.pieces.map(p => ({
             x: p.target_transform.x,
             y: p.target_transform.y,
@@ -200,15 +199,6 @@ export function Game() {
 
       {/* 工具列 */}
       <div className="game-toolbar">
-        <button
-          className={`toolbar-btn ${showGrid ? 'active' : ''}`}
-          onClick={() => setShowGrid(!showGrid)}
-          title="切換網格"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18" />
-          </svg>
-        </button>
         <div className="snap-size-selector">
           {([1, 5, 10] as SnapSize[]).map((size) => (
             <button

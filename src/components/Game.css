@@ -141,6 +141,12 @@
   background: #000;
   transition: transform 0.1s ease-out;
   overflow: hidden; /* Ensure scanlines stay inside */
+  
+  /* Force pixelated scaling to prevent blurriness */
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 /* CRT Scanline Effect - Only inside the viewport */

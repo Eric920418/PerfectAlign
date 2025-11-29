@@ -1,0 +1,47 @@
+{
+  "level_id": 1,
+  "level_type": "image_match",
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level1/complete.png",
+  "text_hint": "",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#1a1a2e"
+  },
+  "win_threshold": 3,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level1/piece_01.png",
+      "start_transform": {
+        "x": 80,
+        "y": 100,
+        "rotation": 25,
+        "scale": 1.1
+      },
+      "target_transform": {
+        "x": 187,
+        "y": 200,
+        "rotation": 0,
+        "scale": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level1/piece_02.png",
+      "start_transform": {
+        "x": 280,
+        "y": 350,
+        "rotation": -30,
+        "scale": 0.9
+      },
+      "target_transform": {
+        "x": 187,
+        "y": 300,
+        "rotation": 0,
+        "scale": 1.0
+      }
+    }
+  ]
+}

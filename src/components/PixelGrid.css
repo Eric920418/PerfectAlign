@@ -1,0 +1,31 @@
+.pixel-grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.grid-line {
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.grid-line.minor {
+  stroke: rgba(255, 255, 255, 0.05);
+}
+
+.grid-line.major {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+
+.grid-line.center {
+  stroke: rgba(0, 255, 136, 0.2);
+  stroke-dasharray: 4 4;
+}
+
+.grid-label {
+  font-size: 8px;
+  fill: rgba(255, 255, 255, 0.3);
+  font-family: monospace;
+}

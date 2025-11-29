@@ -1,0 +1,1 @@
+export { useResponsiveScale } from './useResponsiveScale';

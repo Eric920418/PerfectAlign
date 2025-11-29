@@ -1,0 +1,150 @@
+import { useEffect, useRef } from 'react';
+import { useGameStore } from '../stores/gameStore';
+import { GameEngine } from '../game/GameEngine';
+import type { LevelConfig } from '../types';
+
+interface GameCanvasProps {
+  levelConfig: LevelConfig;
+}
+
+export function GameCanvas({ levelConfig }: GameCanvasProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const engineRef = useRef<GameEngine | null>(null);
+
+  const {
+    pieces,
+    selectedPieceId,
+    loadLevel,
+    selectPiece,
+    updatePieceTransform,
+    setGameState,
+    addActionLog,
+    checkWinCondition,
+  } = useGameStore();
+
+  // 初始化遊戲引擎
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // 載入關卡
+    loadLevel(levelConfig);
+
+    const engine = new GameEngine({
+      container: containerRef.current,
+      levelConfig,
+      onPieceSelect: (id) => {
+        selectPiece(id);
+      },
+      onPieceTransformEnd: (id, x, y) => {
+        const piece = useGameStore.getState().pieces.find((p) => p.id === id);
+        if (piece) {
+          addActionLog({
+            pieceId: id,
+            type: 'drag',
+            payload: {
+              fromX: piece.current.x,
+              fromY: piece.current.y,
+              toX: x,
+              toY: y,
+            },
+          });
+        }
+        updatePieceTransform(id, { x, y });
+        checkWinCondition();
+      },
+      onDoubleTap: (pieceId) => {
+        const currentState = useGameStore.getState().gameState;
+        if (currentState === 'PLAYING') {
+          selectPiece(pieceId);
+          setGameState('FINE_TUNE');
+        } else if (currentState === 'FINE_TUNE') {
+          setGameState('PLAYING');
+        }
+      },
+      onRotate: (pieceId, rotation) => {
+        const piece = useGameStore.getState().pieces.find((p) => p.id === pieceId);
+        if (piece) {
+          addActionLog({
+            pieceId,
+            type: 'rotate',
+            payload: {
+              fromRotation: piece.current.rotation,
+              toRotation: rotation,
+            },
+          });
+        }
+        updatePieceTransform(pieceId, { rotation });
+        checkWinCondition();
+      },
+      onScale: (pieceId, scale) => {
+        const piece = useGameStore.getState().pieces.find((p) => p.id === pieceId);
+        if (piece) {
+          addActionLog({
+            pieceId,
+            type: 'scale',
+            payload: {
+              fromScale: piece.current.scale,
+              toScale: scale,
+            },
+          });
+        }
+        updatePieceTransform(pieceId, { scale });
+        checkWinCondition();
+      },
+      snapToGrid: (value: number) => {
+        return useGameStore.getState().snapToGrid(value);
+      },
+      getSnapEnabled: () => {
+        return useGameStore.getState().snapEnabled;
+      },
+    });
+
+    engineRef.current = engine;
+
+    // 載入碎片
+    const loadPieces = async () => {
+      const initialPieces = levelConfig.pieces.map((p) => ({
+        id: p.id,
+        texture: p.texture,
+        current: { ...p.start_transform },
+        target: { ...p.target_transform },
+      }));
+      await engine.loadPieces(initialPieces);
+    };
+
+    loadPieces();
+
+    return () => {
+      engine.destroy();
+      engineRef.current = null;
+    };
+  }, [levelConfig]);
+
+  // 同步選取狀態
+  useEffect(() => {
+    if (engineRef.current) {
+      engineRef.current.setSelectedPiece(selectedPieceId);
+    }
+  }, [selectedPieceId]);
+
+  // 同步碎片變換
+  useEffect(() => {
+    if (engineRef.current) {
+      pieces.forEach((piece) => {
+        engineRef.current?.updatePiece(piece.id, piece.current);
+      });
+    }
+  }, [pieces]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: levelConfig.canvas.width,
+        height: levelConfig.canvas.height,
+        touchAction: 'none',
+        userSelect: 'none',
+      }}
+    />
+  );
+}

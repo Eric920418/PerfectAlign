@@ -1,0 +1,160 @@
+.fine-tune-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: auto;
+  touch-action: none;
+  z-index: 100;
+}
+
+.zone-indicator {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: all 0.15s ease;
+}
+
+.zone-indicator.active {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.zone-indicator .arrow,
+.zone-indicator .icon {
+  font-size: 32px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* 方向按鈕 - 更大的觸控區域 */
+.zone-indicator.top,
+.zone-indicator.bottom,
+.zone-indicator.left,
+.zone-indicator.right {
+  width: 64px;
+  height: 64px;
+  background: rgba(0, 255, 136, 0.15);
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 136, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.zone-indicator.top:active,
+.zone-indicator.bottom:active,
+.zone-indicator.left:active,
+.zone-indicator.right:active {
+  background: rgba(0, 255, 136, 0.4);
+  border-color: rgba(0, 255, 136, 0.6);
+}
+
+.zone-indicator.top {
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.zone-indicator.top.active {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.zone-indicator.bottom {
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.zone-indicator.bottom.active {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.zone-indicator.left {
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.zone-indicator.left.active {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.zone-indicator.right {
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.zone-indicator.right.active {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.zone-indicator.center {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 100, 100, 0.15);
+  border: 2px dashed rgba(255, 100, 100, 0.4);
+  backdrop-filter: blur(4px);
+}
+
+.zone-indicator.center:active,
+.zone-indicator.center.active {
+  background: rgba(255, 100, 100, 0.3);
+  border-color: rgba(255, 100, 100, 0.6);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.zone-indicator.center .icon {
+  color: rgba(255, 100, 100, 0.9);
+}
+
+.ripple {
+  position: absolute;
+  pointer-events: none;
+  animation: ripple-effect 0.15s ease-out;
+}
+
+.ripple.top {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to bottom, rgba(0, 255, 136, 0.2), transparent);
+}
+
+.ripple.bottom {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(to top, rgba(0, 255, 136, 0.2), transparent);
+}
+
+.ripple.left {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 30%;
+  background: linear-gradient(to right, rgba(0, 255, 136, 0.2), transparent);
+}
+
+.ripple.right {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 30%;
+  background: linear-gradient(to left, rgba(0, 255, 136, 0.2), transparent);
+}
+
+@keyframes ripple-effect {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 0.2;
+  }
+}

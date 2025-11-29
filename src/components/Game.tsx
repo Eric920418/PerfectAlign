@@ -29,7 +29,10 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { gameState, snapSize, setSnapSize, resetLevel, canvasZoom } = useGameStore();
+  const { gameState, snapSize, setSnapSize, resetLevel } = useGameStore();
+
+  // 縮放自動跟隨 snapSize：越精細越放大
+  const autoZoom = snapSize === 1 ? 3 : snapSize === 5 ? 2 : 1;
 
   // 響應式縮放
   const { scale } = useResponsiveScale(
@@ -136,7 +139,7 @@ export function Game() {
         style={{
           width: levelConfig.canvas.width,
           height: levelConfig.canvas.height,
-          transform: `scale(${scale * canvasZoom})`,
+          transform: `scale(${scale * autoZoom})`,
           transformOrigin: 'center center',
         }}
       >
@@ -146,6 +149,7 @@ export function Game() {
           height={levelConfig.canvas.height}
           gridSize={snapSize}
           visible={true}
+          zoom={autoZoom}
           targetPositions={levelConfig.pieces.map(p => ({
             x: p.target_transform.x,
             y: p.target_transform.y,

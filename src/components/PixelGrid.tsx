@@ -13,11 +13,19 @@ interface PixelGridProps {
   gridSize?: number;
   visible: boolean;
   targetPositions?: TargetPosition[];
+  zoom?: number;
 }
 
-export function PixelGrid({ width, height, gridSize = 10, visible, targetPositions = [] }: PixelGridProps) {
-  // 如果 snapSize 是 1，視覺上還是畫 10px 的格子，避免畫面全白
-  const visualGridSize = gridSize === 1 ? 10 : gridSize;
+export function PixelGrid({ width, height, gridSize = 10, visible, targetPositions = [], zoom = 1 }: PixelGridProps) {
+  // 根據縮放等級決定視覺格線間距
+  // zoom 越高，可以顯示更細的格線
+  const getVisualGridSize = () => {
+    if (zoom >= 3) return 5;   // 3x 縮放時顯示 5px 格線
+    if (zoom >= 2) return 10;  // 2x 縮放時顯示 10px 格線
+    return 10;                  // 預設 10px
+  };
+
+  const visualGridSize = getVisualGridSize();
 
   const gridPattern = useMemo(() => {
     // 計算網格線
@@ -56,7 +64,7 @@ export function PixelGrid({ width, height, gridSize = 10, visible, targetPositio
     }
 
     return lines;
-  }, [width, height, visualGridSize]);
+  }, [width, height, visualGridSize, zoom]);
 
   if (!visible) return null;
 

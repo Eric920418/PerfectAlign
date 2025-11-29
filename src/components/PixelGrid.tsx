@@ -16,15 +16,9 @@ interface PixelGridProps {
 }
 
 export function PixelGrid({ width, height, visible, targetPositions = [], zoom = 1 }: PixelGridProps) {
-  // 根據縮放等級決定視覺格線間距
-  // zoom 越高，可以顯示更細的格線
-  const getVisualGridSize = () => {
-    if (zoom >= 3) return 5;   // 3x 縮放時顯示 5px 格線
-    if (zoom >= 2) return 10;  // 2x 縮放時顯示 10px 格線
-    return 10;                  // 預設 10px
-  };
-
-  const visualGridSize = getVisualGridSize();
+  // 格線視覺間距：最小 5px，不會更細（太細看不清）
+  // zoom=2 時顯示 5px 格線，zoom=1 時顯示 10px 格線
+  const visualGridSize = zoom >= 2 ? 5 : 10;
 
   const gridPattern = useMemo(() => {
     // 計算網格線
@@ -63,7 +57,7 @@ export function PixelGrid({ width, height, visible, targetPositions = [], zoom =
     }
 
     return lines;
-  }, [width, height, visualGridSize, zoom]);
+  }, [width, height, visualGridSize]);
 
   if (!visible) return null;
 

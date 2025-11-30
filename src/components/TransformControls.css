@@ -20,16 +20,7 @@
 }
 
 /* Decorative side brackets */
-.transform-controls::before,
-.transform-controls::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 60%;
-  background: var(--neon-primary);
-}
+
 .transform-controls::before { left: -6px; }
 .transform-controls::after { right: -6px; }
 
@@ -213,7 +204,7 @@
   }
 
   .group-label {
-    top: -18px; /* Adjust slightly */
+    top: 0px; /* Adjust slightly */
     font-size: 9px;
   }
 

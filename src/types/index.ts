@@ -90,7 +90,7 @@ export type WinRating = 'Perfect' | 'Great' | 'Good' | null;
 export type SnapSize = 1 | 5 | 10;
 
 // ===== 視覺回饋類型 =====
-export type FeedbackType = 'rotation' | 'scale' | null;
+export type FeedbackType = 'rotation' | 'scale' | 'positionX' | 'positionY' | null;
 
 // ===== 畫布縮放等級 =====
 export type ZoomLevel = 1 | 1.5 | 2 | 3;
@@ -120,6 +120,7 @@ export interface GameStoreState {
   // 視覺回饋
   activeFeedback: FeedbackType;
   feedbackPieceId: string | null;
+  feedbackTargetPos: { x: number; y: number } | null;
 
   // 動作方法
   loadLevel: (config: LevelConfig) => void;

@@ -25,6 +25,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
   snapSize: 1,        // 預設 1px（實際 5px）
   activeFeedback: null,
   feedbackPieceId: null,
+  feedbackTargetPos: null,
 
   // 載入關卡
   loadLevel: (config: LevelConfig) => {
@@ -47,6 +48,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       totalError: 0,
       activeFeedback: null,
       feedbackPieceId: null,
+      feedbackTargetPos: null,
     });
   },
 
@@ -57,18 +59,21 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   // 更新碎片變換
   updatePieceTransform: (id: string, transform: Partial<Transform>) => {
-    const { pieces } = get();
+    const { pieces, activeFeedback } = get();
     const piece = pieces.find(p => p.id === id);
     if (!piece) return;
 
     const ROTATION_THRESHOLD = 0.5; // 角度容差
     const SCALE_THRESHOLD = 0.02;   // 縮放容差
+    const POSITION_THRESHOLD = 2;   // 位置容差（像素）
 
     // 更新前的狀態
     const wasRotationCorrect = Math.abs(piece.current.rotation - piece.target.rotation) < ROTATION_THRESHOLD;
     const wasScaleCorrect =
       Math.abs(piece.current.scaleX - piece.target.scaleX) < SCALE_THRESHOLD &&
       Math.abs(piece.current.scaleY - piece.target.scaleY) < SCALE_THRESHOLD;
+    const wasXCorrect = Math.abs(piece.current.x - piece.target.x) < POSITION_THRESHOLD;
+    const wasYCorrect = Math.abs(piece.current.y - piece.target.y) < POSITION_THRESHOLD;
 
     // 計算新值
     const newCurrent = { ...piece.current };
@@ -89,28 +94,40 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     const isScaleCorrect =
       Math.abs(newCurrent.scaleX - piece.target.scaleX) < SCALE_THRESHOLD &&
       Math.abs(newCurrent.scaleY - piece.target.scaleY) < SCALE_THRESHOLD;
+    const isXCorrect = Math.abs(newCurrent.x - piece.target.x) < POSITION_THRESHOLD;
+    const isYCorrect = Math.abs(newCurrent.y - piece.target.y) < POSITION_THRESHOLD;
 
-    // 檢測是否剛達到正確值
+    // 檢測是否剛達到正確值（優先級：位置 > 旋轉 > 縮放）
     let feedback: FeedbackType = null;
-    if (!wasRotationCorrect && isRotationCorrect) {
-      feedback = 'rotation';
-    } else if (!wasScaleCorrect && isScaleCorrect) {
-      feedback = 'scale';
+    let targetPos = { x: piece.target.x, y: piece.target.y };
+
+    // 如果已有反饋在播放，不覆蓋
+    if (!activeFeedback) {
+      if (!wasXCorrect && isXCorrect) {
+        feedback = 'positionX';
+      } else if (!wasYCorrect && isYCorrect) {
+        feedback = 'positionY';
+      } else if (!wasRotationCorrect && isRotationCorrect) {
+        feedback = 'rotation';
+      } else if (!wasScaleCorrect && isScaleCorrect) {
+        feedback = 'scale';
+      }
     }
 
     set((state) => ({
       pieces: state.pieces.map((p) =>
         p.id === id ? { ...p, current: newCurrent } : p
       ),
-      activeFeedback: feedback,
+      activeFeedback: feedback || state.activeFeedback,
       feedbackPieceId: feedback ? id : state.feedbackPieceId,
+      feedbackTargetPos: feedback ? targetPos : state.feedbackTargetPos,
     }));
 
     // 自動清除回饋
     if (feedback) {
       setTimeout(() => {
-        set({ activeFeedback: null, feedbackPieceId: null });
-      }, 800);
+        set({ activeFeedback: null, feedbackPieceId: null, feedbackTargetPos: null });
+      }, 1500);
     }
   },
 

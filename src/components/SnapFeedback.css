@@ -10,7 +10,7 @@
   justify-content: center;
   z-index: 1000;
   pointer-events: none;
-  animation: feedbackAppear 0.8s ease-out forwards;
+  animation: feedbackAppear 2s ease-out forwards;
 }
 
 @keyframes feedbackAppear {
@@ -18,16 +18,20 @@
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.5);
   }
-  20% {
+  10% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
   }
-  40% {
+  20% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  80% {
+    opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
   100% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(1.5);
+    transform: translate(-50%, -50%) scale(1.2);
   }
 }
 
@@ -50,15 +54,18 @@
 .snap-feedback.rotation .feedback-icon {
   background: radial-gradient(circle, rgba(0, 243, 255, 0.3), transparent);
   color: #00f3ff;
-  animation: rotationSpin 0.8s ease-out;
+  animation: rotationSpin 1s ease-out;
 }
 
 @keyframes rotationSpin {
   0% {
-    transform: rotate(-180deg);
+    transform: rotate(-360deg);
   }
-  50% {
-    transform: rotate(20deg);
+  60% {
+    transform: rotate(15deg);
+  }
+  80% {
+    transform: rotate(-5deg);
   }
   100% {
     transform: rotate(0deg);
@@ -79,7 +86,7 @@
   border-top-color: #00f3ff;
   border-right-color: #00f3ff;
   border-radius: 50%;
-  animation: ringRotate 0.8s ease-out;
+  animation: ringRotate 1.5s ease-out;
 }
 
 @keyframes ringRotate {
@@ -87,8 +94,11 @@
     transform: rotate(0deg) scale(0.5);
     opacity: 1;
   }
+  70% {
+    opacity: 0.8;
+  }
   100% {
-    transform: rotate(360deg) scale(1.5);
+    transform: rotate(720deg) scale(2);
     opacity: 0;
   }
 }
@@ -97,21 +107,27 @@
 .snap-feedback.scale .feedback-icon {
   background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
   color: #ffd700;
-  animation: scaleBreath 0.8s ease-out;
+  animation: scaleBreath 1.2s ease-out;
 }
 
 @keyframes scaleBreath {
   0% {
     transform: scale(0.3);
   }
-  30% {
-    transform: scale(1.3);
+  20% {
+    transform: scale(1.4);
+  }
+  35% {
+    transform: scale(0.85);
   }
   50% {
-    transform: scale(0.9);
+    transform: scale(1.15);
   }
-  70% {
-    transform: scale(1.1);
+  65% {
+    transform: scale(0.95);
+  }
+  80% {
+    transform: scale(1.05);
   }
   100% {
     transform: scale(1);
@@ -130,7 +146,7 @@
   height: 100px;
   border: 4px solid #ffd700;
   border-radius: 50%;
-  animation: pulseExpand 0.8s ease-out;
+  animation: pulseExpand 1.5s ease-out;
 }
 
 @keyframes pulseExpand {
@@ -139,24 +155,27 @@
     opacity: 1;
     box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
   }
-  50% {
-    box-shadow: 0 0 30px 10px rgba(255, 215, 0, 0.5);
+  40% {
+    box-shadow: 0 0 40px 15px rgba(255, 215, 0, 0.6);
+  }
+  70% {
+    opacity: 0.6;
   }
   100% {
-    transform: scale(2);
+    transform: scale(2.5);
     opacity: 0;
-    box-shadow: 0 0 60px 20px rgba(255, 215, 0, 0);
+    box-shadow: 0 0 80px 30px rgba(255, 215, 0, 0);
   }
 }
 
 /* 文字樣式 */
 .feedback-text {
   margin-top: 12px;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  animation: textGlow 0.8s ease-out;
+  animation: textGlow 2s ease-out;
 }
 
 @keyframes textGlow {
@@ -164,12 +183,207 @@
     opacity: 0;
     transform: translateY(10px);
   }
-  30% {
+  15% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
     opacity: 1;
     transform: translateY(0);
   }
   100% {
     opacity: 0;
     transform: translateY(-10px);
+  }
+}
+
+/* ===== 位置對齊回饋 ===== */
+.position-feedback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  pointer-events: none;
+  animation: positionFeedbackFade 1.5s ease-out forwards;
+}
+
+@keyframes positionFeedbackFade {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* 軸線樣式 */
+.axis-line {
+  position: absolute;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--line-color) 50%,
+    transparent 100%
+  );
+  animation: lineFlash 1.5s ease-out;
+}
+
+.axis-line.vertical {
+  --line-color: #ff6b6b;
+  width: 3px;
+  top: 0;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    #ff6b6b 20%,
+    #ff6b6b 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff6b6b;
+}
+
+.axis-line.horizontal {
+  --line-color: #4ecdc4;
+  height: 3px;
+  left: 0;
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #4ecdc4 20%,
+    #4ecdc4 80%,
+    transparent 100%
+  );
+  box-shadow: 0 0 20px #4ecdc4, 0 0 40px #4ecdc4;
+}
+
+@keyframes lineFlash {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+  }
+  20% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    filter: blur(5px);
+  }
+}
+
+/* 粒子容器 */
+.particle-container {
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+/* 粒子樣式 */
+.particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: particleExplode 1s ease-out forwards;
+  animation-delay: var(--delay);
+}
+
+.positionX .particle {
+  background: radial-gradient(circle, #fff, #ff6b6b);
+  box-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff4757;
+}
+
+.positionY .particle {
+  background: radial-gradient(circle, #fff, #4ecdc4);
+  box-shadow: 0 0 10px #4ecdc4, 0 0 20px #26de81;
+}
+
+@keyframes particleExplode {
+  0% {
+    transform: rotate(var(--angle)) translateX(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(var(--distance)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* 位置標籤 */
+.feedback-label {
+  position: fixed;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  animation: labelAppear 1.5s ease-out forwards;
+}
+
+.feedback-label.x-label {
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  background: rgba(255, 107, 107, 0.2);
+  border: 2px solid #ff6b6b;
+  color: #ff6b6b;
+  text-shadow: 0 0 10px #ff6b6b;
+}
+
+.feedback-label.y-label {
+  bottom: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(78, 205, 196, 0.2);
+  border: 2px solid #4ecdc4;
+  color: #4ecdc4;
+  text-shadow: 0 0 10px #4ecdc4;
+}
+
+@keyframes labelAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.1);
+  }
+  25% {
+    transform: translateY(-50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.feedback-label.y-label {
+  animation: labelAppearY 1.5s ease-out forwards;
+}
+
+@keyframes labelAppearY {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+  25% {
+    transform: translateX(-50%) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

@@ -173,7 +173,7 @@ export class GameEngine {
       const height = piece.shape?.height ?? 80;
 
       graphics.beginFill(this.getColorForPiece(piece.id));
-      graphics.drawRoundedRect(-width / 2, -height / 2, width, height, 8);
+      graphics.drawRect(-width / 2, -height / 2, width, height);
       graphics.endFill();
 
       // 添加 ID 文字

@@ -39,9 +39,16 @@ export function TransformControls() {
       const piece = pieces.find((p) => p.id === selectedPieceId);
       if (!piece) return;
 
-      // 固定 0.1 縮放步長（確保像素對齊）
-      // 對於 100px 元素 = 10px 變化，對於 50px 元素 = 5px 變化
-      const scaleStep = 0.1;
+      // 等比縮放：固定 0.1 步長
+      const uniformScaleStep = 0.1;
+
+      // 單獨調整寬高：根據基礎尺寸計算步長，確保每邊增加 5px（一格）
+      // 100px → 10/100 = 0.1 → 每邊 +5px
+      // 50px → 10/50 = 0.2 → 每邊 +5px
+      const baseWidth = piece.shape?.width ?? 100;
+      const baseHeight = piece.shape?.height ?? 100;
+      const widthScaleStep = 10 / baseWidth;
+      const heightScaleStep = 10 / baseHeight;
 
       switch (action) {
         case 'rotate-left':
@@ -52,27 +59,27 @@ export function TransformControls() {
           break;
         case 'scale-up':
           updatePieceTransform(selectedPieceId, {
-            scaleX: piece.current.scaleX + scaleStep,
-            scaleY: piece.current.scaleY + scaleStep
+            scaleX: piece.current.scaleX + uniformScaleStep,
+            scaleY: piece.current.scaleY + uniformScaleStep
           });
           break;
         case 'scale-down':
           updatePieceTransform(selectedPieceId, {
-            scaleX: piece.current.scaleX - scaleStep,
-            scaleY: piece.current.scaleY - scaleStep
+            scaleX: piece.current.scaleX - uniformScaleStep,
+            scaleY: piece.current.scaleY - uniformScaleStep
           });
           break;
         case 'width-up':
-          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX + scaleStep });
+          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX + widthScaleStep });
           break;
         case 'width-down':
-          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX - scaleStep });
+          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX - widthScaleStep });
           break;
         case 'height-up':
-          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY + scaleStep });
+          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY + heightScaleStep });
           break;
         case 'height-down':
-          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY - scaleStep });
+          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY - heightScaleStep });
           break;
       }
       checkWinCondition();

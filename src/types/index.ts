@@ -16,10 +16,25 @@ export interface PieceState {
   target: Transform;
 }
 
+// ===== 形狀類型 =====
+export type ShapeType =
+  | 'rectangle'   // 矩形（預設）
+  | 'circle'      // 圓形
+  | 'triangle'    // 三角形
+  | 'diamond'     // 菱形
+  | 'pentagon'    // 五邊形
+  | 'hexagon'     // 六邊形
+  | 'octagon'     // 八邊形
+  | 'star'        // 五角星
+  | 'heart'       // 心形
+  | 'cross';      // 十字形
+
 // ===== 碎片形狀設定 =====
 export interface PieceShape {
-  width: number;   // 碎片寬度（像素）
-  height: number;  // 碎片高度（像素）
+  type?: ShapeType;  // 形狀類型，預設 rectangle
+  width: number;     // 碎片寬度（像素）
+  height: number;    // 碎片高度（像素）
+  color?: string;    // 填充顏色（可選，用於純色形狀）
 }
 
 // ===== 碎片設定 (來自 JSON) =====

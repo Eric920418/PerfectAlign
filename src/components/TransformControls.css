@@ -40,6 +40,70 @@
   position: relative;
 }
 
+/* D-Pad 方向鍵容器 */
+.dpad-container {
+  display: grid;
+  grid-template-columns: 36px 36px 36px;
+  grid-template-rows: 36px 36px 36px;
+  gap: 2px;
+}
+
+.dpad-btn {
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0;
+}
+
+.dpad-btn .btn-icon {
+  font-size: 14px;
+}
+
+.dpad-up {
+  grid-column: 2;
+  grid-row: 1;
+  border-radius: 4px 4px 0 0;
+}
+
+.dpad-left {
+  grid-column: 1;
+  grid-row: 2;
+  border-radius: 4px 0 0 4px;
+}
+
+.dpad-center {
+  grid-column: 2;
+  grid-row: 2;
+  background: #0a0a0f;
+  border: 1px solid #333;
+}
+
+.dpad-right {
+  grid-column: 3;
+  grid-row: 2;
+  border-radius: 0 4px 4px 0;
+}
+
+.dpad-down {
+  grid-column: 2;
+  grid-row: 3;
+  border-radius: 0 0 4px 4px;
+}
+
+/* Position Group (Cyan) */
+.position-group .transform-btn:hover { border-color: #00f3ff; }
+.position-group .transform-btn:active,
+.position-group .transform-btn.active {
+  background: rgba(0, 243, 255, 0.2);
+  border-color: #00f3ff;
+  box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+}
+.position-group .transform-btn.active .btn-icon { color: #00f3ff; }
+
+.position-group .group-label {
+  top: auto;
+  bottom: -20px;
+}
+
 .group-label {
   position: absolute;
   top: -24px;
@@ -134,28 +198,47 @@
   .transform-controls {
     bottom: 80px;
     width: 96%;
-    padding: 24px 12px 12px 12px; /* Increased top padding for labels */
+    padding: 12px 12px 24px 12px; /* Bottom padding for position label */
     gap: 12px;
     overflow-x: auto;
     justify-content: flex-start;
     background: rgba(15, 20, 30, 0.95);
     /* Hide scrollbar */
-    -ms-overflow-style: none; 
+    -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  
+
   .transform-controls::-webkit-scrollbar {
     display: none;
   }
-  
+
   .group-label {
     top: -18px; /* Adjust slightly */
     font-size: 9px;
   }
-  
+
   .transform-btn {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
+  }
+
+  /* D-Pad mobile size */
+  .dpad-container {
+    grid-template-columns: 32px 32px 32px;
+    grid-template-rows: 32px 32px 32px;
+  }
+
+  .dpad-btn {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .dpad-btn .btn-icon {
+    font-size: 12px;
+  }
+
+  .position-group .group-label {
+    bottom: -18px;
   }
 }

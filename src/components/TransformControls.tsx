@@ -6,7 +6,8 @@ type ControlAction =
   | 'rotate-left' | 'rotate-right'
   | 'scale-up' | 'scale-down'
   | 'width-up' | 'width-down'
-  | 'height-up' | 'height-down';
+  | 'height-up' | 'height-down'
+  | 'move-up' | 'move-down' | 'move-left' | 'move-right';
 
 export function TransformControls() {
   const {
@@ -17,10 +18,13 @@ export function TransformControls() {
     gameState,
     levelConfig,
     addActionLog,
+    snapSize,
   } = useGameStore();
 
   // 記錄操作開始時的值
   const startValuesRef = useRef<{
+    x: number;
+    y: number;
     rotation: number;
     scaleX: number;
     scaleY: number;
@@ -49,6 +53,10 @@ export function TransformControls() {
       const baseHeight = piece.shape?.height ?? 100;
       const widthScaleStep = 10 / baseWidth;
       const heightScaleStep = 10 / baseHeight;
+
+      // 位置微調步長（根據 snapSize）
+      // 1px 模式 → 實際 5px, 5px 模式 → 實際 10px, 10px 模式 → 實際 20px
+      const moveStep = snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20;
 
       switch (action) {
         case 'rotate-left':
@@ -81,10 +89,22 @@ export function TransformControls() {
         case 'height-down':
           updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY - heightScaleStep });
           break;
+        case 'move-up':
+          updatePieceTransform(selectedPieceId, { y: piece.current.y - moveStep });
+          break;
+        case 'move-down':
+          updatePieceTransform(selectedPieceId, { y: piece.current.y + moveStep });
+          break;
+        case 'move-left':
+          updatePieceTransform(selectedPieceId, { x: piece.current.x - moveStep });
+          break;
+        case 'move-right':
+          updatePieceTransform(selectedPieceId, { x: piece.current.x + moveStep });
+          break;
       }
       checkWinCondition();
     },
-    [selectedPieceId, pieces, updatePieceTransform, checkWinCondition]
+    [selectedPieceId, pieces, updatePieceTransform, checkWinCondition, snapSize]
   );
 
   const handleControlDown = useCallback(
@@ -97,6 +117,8 @@ export function TransformControls() {
         const piece = pieces.find((p) => p.id === selectedPieceId);
         if (piece) {
           startValuesRef.current = {
+            x: piece.current.x,
+            y: piece.current.y,
             rotation: piece.current.rotation,
             scaleX: piece.current.scaleX,
             scaleY: piece.current.scaleY,
@@ -124,6 +146,7 @@ export function TransformControls() {
         const isScaleAction = activeControl.includes('scale') ||
                               activeControl.includes('width') ||
                               activeControl.includes('height');
+        const isMoveAction = activeControl.startsWith('move');
 
         if (isRotateAction && startValuesRef.current.rotation !== piece.current.rotation) {
           addActionLog({
@@ -151,6 +174,22 @@ export function TransformControls() {
             },
           });
         }
+
+        if (isMoveAction && (
+          startValuesRef.current.x !== piece.current.x ||
+          startValuesRef.current.y !== piece.current.y
+        )) {
+          addActionLog({
+            pieceId: selectedPieceId,
+            type: 'fine_move',
+            payload: {
+              fromX: startValuesRef.current.x,
+              fromY: startValuesRef.current.y,
+              toX: piece.current.x,
+              toY: piece.current.y,
+            },
+          });
+        }
       }
     }
 
@@ -169,6 +208,50 @@ export function TransformControls() {
 
   return (
     <div className="transform-controls">
+      {/* 位置微調控制（方向鍵） */}
+      <div className="control-group position-group">
+        <div className="dpad-container">
+          <button
+            className={`transform-btn dpad-btn dpad-up ${activeControl === 'move-up' ? 'active' : ''}`}
+            onPointerDown={(e) => handleControlDown('move-up', e)}
+            onPointerUp={handleControlUp}
+            onPointerLeave={handleControlUp}
+            onPointerCancel={handleControlUp}
+          >
+            <span className="btn-icon">▲</span>
+          </button>
+          <button
+            className={`transform-btn dpad-btn dpad-left ${activeControl === 'move-left' ? 'active' : ''}`}
+            onPointerDown={(e) => handleControlDown('move-left', e)}
+            onPointerUp={handleControlUp}
+            onPointerLeave={handleControlUp}
+            onPointerCancel={handleControlUp}
+          >
+            <span className="btn-icon">◀</span>
+          </button>
+          <div className="dpad-center" />
+          <button
+            className={`transform-btn dpad-btn dpad-right ${activeControl === 'move-right' ? 'active' : ''}`}
+            onPointerDown={(e) => handleControlDown('move-right', e)}
+            onPointerUp={handleControlUp}
+            onPointerLeave={handleControlUp}
+            onPointerCancel={handleControlUp}
+          >
+            <span className="btn-icon">▶</span>
+          </button>
+          <button
+            className={`transform-btn dpad-btn dpad-down ${activeControl === 'move-down' ? 'active' : ''}`}
+            onPointerDown={(e) => handleControlDown('move-down', e)}
+            onPointerUp={handleControlUp}
+            onPointerLeave={handleControlUp}
+            onPointerCancel={handleControlUp}
+          >
+            <span className="btn-icon">▼</span>
+          </button>
+        </div>
+        <span className="group-label">位置</span>
+      </div>
+
       {/* 旋轉控制 */}
       <div className="control-group rotate-group">
         <button

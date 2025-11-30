@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import type { LevelConfig, PieceState } from '../types';
+import type { LevelConfig, PieceState, ShapeType } from '../types';
 import { degToRad, radToDeg, clampScale, normalizeAngle } from '../utils';
 
 export interface GameEngineOptions {
@@ -161,9 +161,176 @@ export class GameEngine {
     this.startRenderLoop();
   }
 
+  // 繪製形狀到 Graphics 對象
+  private drawShape(
+    graphics: PIXI.Graphics,
+    shapeType: ShapeType,
+    width: number,
+    height: number,
+    color: number
+  ) {
+    graphics.beginFill(color);
+
+    const halfW = width / 2;
+    const halfH = height / 2;
+
+    switch (shapeType) {
+      case 'circle':
+        // 圓形（使用較小的邊作為直徑）
+        const radius = Math.min(halfW, halfH);
+        graphics.drawCircle(0, 0, radius);
+        break;
+
+      case 'triangle':
+        // 等邊三角形（頂點朝上）
+        graphics.moveTo(0, -halfH);
+        graphics.lineTo(halfW, halfH);
+        graphics.lineTo(-halfW, halfH);
+        graphics.closePath();
+        break;
+
+      case 'diamond':
+        // 菱形
+        graphics.moveTo(0, -halfH);
+        graphics.lineTo(halfW, 0);
+        graphics.lineTo(0, halfH);
+        graphics.lineTo(-halfW, 0);
+        graphics.closePath();
+        break;
+
+      case 'pentagon':
+        // 五邊形
+        this.drawPolygon(graphics, 5, Math.min(halfW, halfH));
+        break;
+
+      case 'hexagon':
+        // 六邊形
+        this.drawPolygon(graphics, 6, Math.min(halfW, halfH));
+        break;
+
+      case 'octagon':
+        // 八邊形
+        this.drawPolygon(graphics, 8, Math.min(halfW, halfH));
+        break;
+
+      case 'star':
+        // 五角星
+        this.drawStar(graphics, 5, Math.min(halfW, halfH), Math.min(halfW, halfH) * 0.4);
+        break;
+
+      case 'heart':
+        // 心形
+        this.drawHeart(graphics, width, height);
+        break;
+
+      case 'cross':
+        // 十字形
+        this.drawCross(graphics, width, height);
+        break;
+
+      case 'rectangle':
+      default:
+        // 矩形（預設）
+        graphics.drawRect(-halfW, -halfH, width, height);
+        break;
+    }
+
+    graphics.endFill();
+  }
+
+  // 繪製正多邊形
+  private drawPolygon(graphics: PIXI.Graphics, sides: number, radius: number) {
+    const angleStep = (Math.PI * 2) / sides;
+    const startAngle = -Math.PI / 2; // 從頂部開始
+
+    for (let i = 0; i <= sides; i++) {
+      const angle = startAngle + i * angleStep;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+
+      if (i === 0) {
+        graphics.moveTo(x, y);
+      } else {
+        graphics.lineTo(x, y);
+      }
+    }
+    graphics.closePath();
+  }
+
+  // 繪製星形
+  private drawStar(graphics: PIXI.Graphics, points: number, outerRadius: number, innerRadius: number) {
+    const angleStep = Math.PI / points;
+    const startAngle = -Math.PI / 2;
+
+    for (let i = 0; i <= points * 2; i++) {
+      const angle = startAngle + i * angleStep;
+      const radius = i % 2 === 0 ? outerRadius : innerRadius;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+
+      if (i === 0) {
+        graphics.moveTo(x, y);
+      } else {
+        graphics.lineTo(x, y);
+      }
+    }
+    graphics.closePath();
+  }
+
+  // 繪製心形
+  private drawHeart(graphics: PIXI.Graphics, width: number, height: number) {
+    const scale = Math.min(width, height) / 100;
+
+    graphics.moveTo(0, -30 * scale);
+    // 左半邊
+    graphics.bezierCurveTo(
+      -50 * scale, -60 * scale,
+      -50 * scale, 0,
+      0, 40 * scale
+    );
+    // 右半邊
+    graphics.bezierCurveTo(
+      50 * scale, 0,
+      50 * scale, -60 * scale,
+      0, -30 * scale
+    );
+    graphics.closePath();
+  }
+
+  // 繪製十字形
+  private drawCross(graphics: PIXI.Graphics, width: number, height: number) {
+    const armWidth = width / 3;
+    const armHeight = height / 3;
+    const halfW = width / 2;
+    const halfH = height / 2;
+    const halfArmW = armWidth / 2;
+    const halfArmH = armHeight / 2;
+
+    // 從左上角順時針繪製
+    graphics.moveTo(-halfArmW, -halfH);
+    graphics.lineTo(halfArmW, -halfH);
+    graphics.lineTo(halfArmW, -halfArmH);
+    graphics.lineTo(halfW, -halfArmH);
+    graphics.lineTo(halfW, halfArmH);
+    graphics.lineTo(halfArmW, halfArmH);
+    graphics.lineTo(halfArmW, halfH);
+    graphics.lineTo(-halfArmW, halfH);
+    graphics.lineTo(-halfArmW, halfArmH);
+    graphics.lineTo(-halfW, halfArmH);
+    graphics.lineTo(-halfW, -halfArmH);
+    graphics.lineTo(-halfArmW, -halfArmH);
+    graphics.closePath();
+  }
+
   private async createPiece(piece: PieceState) {
     // 嘗試載入紋理，如果失敗則創建圖形
     let sprite: PIXI.Sprite;
+    const shapeType: ShapeType = piece.shape?.type ?? 'rectangle';
+    const width = piece.shape?.width ?? 100;
+    const height = piece.shape?.height ?? 100;
+    const color = piece.shape?.color
+      ? parseInt(piece.shape.color.replace('#', ''), 16)
+      : this.getColorForPiece(piece.id);
 
     try {
       const texture = await PIXI.Assets.load(piece.texture);
@@ -171,16 +338,18 @@ export class GameEngine {
     } catch {
       // 使用圖形作為占位符
       const graphics = new PIXI.Graphics();
-      const width = piece.shape?.width ?? 100;
-      const height = piece.shape?.height ?? 100;
 
-      graphics.beginFill(this.getColorForPiece(piece.id));
-      graphics.drawRect(-width / 2, -height / 2, width, height);
-      graphics.endFill();
+      // 繪製形狀
+      this.drawShape(graphics, shapeType, width, height, color);
 
-      // 添加 ID 文字
+      // 添加邊框
+      graphics.lineStyle(2, 0xffffff, 0.3);
+      this.drawShape(graphics, shapeType, width, height, color);
+
+      // 添加 ID 文字（非矩形時縮小字體）
+      const fontSize = shapeType === 'rectangle' ? 16 : 14;
       const text = new PIXI.Text(piece.id, {
-        fontSize: 16,
+        fontSize,
         fill: 0xffffff,
         fontWeight: 'bold',
       });

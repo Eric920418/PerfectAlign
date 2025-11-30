@@ -22,6 +22,7 @@ import level7Config from '../assets/levels/level7/config.json';
 import level8Config from '../assets/levels/level8/config.json';
 import level9Config from '../assets/levels/level9/config.json';
 import level10Config from '../assets/levels/level10/config.json';
+import level11Config from '../assets/levels/level11/config.json';
 import './Game.css';
 
 // 關卡列表
@@ -36,6 +37,7 @@ const levels: LevelConfig[] = [
   level8Config as LevelConfig,
   level9Config as LevelConfig,
   level10Config as LevelConfig,
+  level11Config as LevelConfig,
 ];
 
 export function Game() {

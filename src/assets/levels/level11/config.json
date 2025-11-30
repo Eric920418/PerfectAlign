@@ -1,0 +1,188 @@
+{
+  "level_id": 11,
+  "level_type": "image_match",
+  "title": "形狀大師",
+  "uniform_scale_only": true,
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level11/complete.png",
+  "text_hint": "各種形狀的對齊挑戰",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#1a1a2e"
+  },
+  "win_threshold": 12,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level11/piece_01.png",
+      "shape": { "type": "circle", "width": 80, "height": 80, "color": "#e94560" },
+      "start_transform": {
+        "x": 80,
+        "y": 100,
+        "rotation": 0,
+        "scaleX": 0.8,
+        "scaleY": 0.8
+      },
+      "target_transform": {
+        "x": 100,
+        "y": 120,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level11/piece_02.png",
+      "shape": { "type": "triangle", "width": 80, "height": 80, "color": "#0f3460" },
+      "start_transform": {
+        "x": 280,
+        "y": 80,
+        "rotation": 30,
+        "scaleX": 1.1,
+        "scaleY": 1.1
+      },
+      "target_transform": {
+        "x": 200,
+        "y": 120,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p3",
+      "texture": "/assets/levels/level11/piece_03.png",
+      "shape": { "type": "diamond", "width": 80, "height": 80, "color": "#16c79a" },
+      "start_transform": {
+        "x": 60,
+        "y": 280,
+        "rotation": -20,
+        "scaleX": 0.9,
+        "scaleY": 0.9
+      },
+      "target_transform": {
+        "x": 300,
+        "y": 120,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p4",
+      "texture": "/assets/levels/level11/piece_04.png",
+      "shape": { "type": "star", "width": 80, "height": 80, "color": "#f9a825" },
+      "start_transform": {
+        "x": 300,
+        "y": 250,
+        "rotation": 45,
+        "scaleX": 1.2,
+        "scaleY": 1.2
+      },
+      "target_transform": {
+        "x": 100,
+        "y": 250,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p5",
+      "texture": "/assets/levels/level11/piece_05.png",
+      "shape": { "type": "hexagon", "width": 80, "height": 80, "color": "#7b2cbf" },
+      "start_transform": {
+        "x": 180,
+        "y": 400,
+        "rotation": -30,
+        "scaleX": 0.8,
+        "scaleY": 0.8
+      },
+      "target_transform": {
+        "x": 200,
+        "y": 250,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p6",
+      "texture": "/assets/levels/level11/piece_06.png",
+      "shape": { "type": "heart", "width": 80, "height": 80, "color": "#ff0055" },
+      "start_transform": {
+        "x": 320,
+        "y": 380,
+        "rotation": 15,
+        "scaleX": 1.1,
+        "scaleY": 1.1
+      },
+      "target_transform": {
+        "x": 300,
+        "y": 250,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p7",
+      "texture": "/assets/levels/level11/piece_07.png",
+      "shape": { "type": "cross", "width": 80, "height": 80, "color": "#00bcd4" },
+      "start_transform": {
+        "x": 60,
+        "y": 420,
+        "rotation": -45,
+        "scaleX": 0.9,
+        "scaleY": 0.9
+      },
+      "target_transform": {
+        "x": 100,
+        "y": 380,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p8",
+      "texture": "/assets/levels/level11/piece_08.png",
+      "shape": { "type": "pentagon", "width": 80, "height": 80, "color": "#ff9800" },
+      "start_transform": {
+        "x": 200,
+        "y": 180,
+        "rotation": 25,
+        "scaleX": 1.2,
+        "scaleY": 1.2
+      },
+      "target_transform": {
+        "x": 200,
+        "y": 380,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p9",
+      "texture": "/assets/levels/level11/piece_09.png",
+      "shape": { "type": "octagon", "width": 80, "height": 80, "color": "#4caf50" },
+      "start_transform": {
+        "x": 300,
+        "y": 450,
+        "rotation": -15,
+        "scaleX": 0.8,
+        "scaleY": 0.8
+      },
+      "target_transform": {
+        "x": 300,
+        "y": 380,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

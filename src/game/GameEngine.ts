@@ -628,9 +628,17 @@ export class GameEngine {
 
   // 銷毀引擎
   destroy() {
+    // 重置所有狀態
+    this.isDragging = false;
+    this.draggingPieceId = null;
+    this.selectedPieceId = null;
+    this.lastTapTime = 0;
+
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
+      this.animationFrameId = null;
     }
+
     this.pieceSprites.clear();
     this.pieceGraphics.clear();
     this.activeTouches.clear();

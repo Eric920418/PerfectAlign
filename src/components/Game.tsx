@@ -48,6 +48,7 @@ export function Game() {
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [gameKey, setGameKey] = useState(0); // 用於強制重新掛載 GameCanvas
   const viewportRef = useRef<HTMLDivElement>(null);
   const { snapSize, setSnapSize, resetLevel, isPreviewActive, gameState, activeFeedback } = useGameStore();
 
@@ -114,6 +115,7 @@ export function Game() {
     setLevelConfig(null);
     setShowTargetPreview(true);
     setGameReady(false);
+    setGameKey(k => k + 1); // 強制重新掛載 GameCanvas
     setTimeout(() => {
       setLevelConfig(levels[currentLevelIndex]);
     }, 100);
@@ -126,6 +128,7 @@ export function Game() {
       setLevelConfig(null);
       setShowTargetPreview(true);
       setGameReady(false);
+      setGameKey(k => k + 1); // 強制重新掛載 GameCanvas
       setCurrentLevelIndex(currentLevelIndex + 1);
     } else {
       // 已經是最後一關
@@ -139,6 +142,7 @@ export function Game() {
     setShowTargetPreview(true);
     setGameReady(false);
     setShowLevelSelect(false);
+    setGameKey(k => k + 1); // 強制重新掛載 GameCanvas
     setCurrentLevelIndex(index);
   };
 
@@ -226,7 +230,7 @@ export function Game() {
         />
 
         {/* 遊戲畫布 */}
-        <GameCanvas levelConfig={levelConfig} />
+        <GameCanvas key={gameKey} levelConfig={levelConfig} />
 
         {/* 目標位置預覽（遊戲開始時） */}
         {showTargetPreview && (

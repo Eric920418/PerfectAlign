@@ -169,8 +169,8 @@ export class GameEngine {
     } catch {
       // 使用圖形作為占位符
       const graphics = new PIXI.Graphics();
-      const width = piece.shape?.width ?? 80;
-      const height = piece.shape?.height ?? 80;
+      const width = piece.shape?.width ?? 100;
+      const height = piece.shape?.height ?? 100;
 
       graphics.beginFill(this.getColorForPiece(piece.id));
       graphics.drawRect(-width / 2, -height / 2, width, height);

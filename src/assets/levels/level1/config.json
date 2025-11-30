@@ -16,7 +16,7 @@
     {
       "id": "p1",
       "texture": "/assets/levels/level1/piece_01.png",
-      "shape": { "width": 80, "height": 80 },
+      "shape": { "width": 100, "height": 100 },
       "start_transform": {
         "x": 100,
         "y": 140,

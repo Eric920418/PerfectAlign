@@ -9,7 +9,6 @@ interface PinchZoomState {
 interface UsePinchZoomOptions {
   minScale?: number;
   maxScale?: number;
-  baseScale?: number; // 响应式基础缩放
 }
 
 interface UsePinchZoomResult extends PinchZoomState {
@@ -21,7 +20,7 @@ interface UsePinchZoomResult extends PinchZoomState {
 }
 
 export function usePinchZoom(options: UsePinchZoomOptions = {}): UsePinchZoomResult {
-  const { minScale = 1, maxScale = 4, baseScale = 1 } = options;
+  const { minScale = 1, maxScale = 4 } = options;
 
   const [state, setState] = useState<PinchZoomState>({
     scale: 1,

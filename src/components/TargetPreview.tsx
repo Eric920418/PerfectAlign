@@ -53,6 +53,28 @@ export function TargetPreview({ levelConfig, onComplete }: TargetPreviewProps) {
         height: canvasH,
       }}
     >
+      {/* 螢光燈條邊框 */}
+      <svg className="border-light-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <rect
+          className="border-light-path light-1"
+          x="0.5"
+          y="0.5"
+          width="99"
+          height="99"
+          rx="2"
+          ry="2"
+        />
+        <rect
+          className="border-light-path light-2"
+          x="0.5"
+          y="0.5"
+          width="99"
+          height="99"
+          rx="2"
+          ry="2"
+        />
+      </svg>
+
       {/* 頂部標籤 */}
       <div className="preview-badge">
         <span className="badge-dot" />

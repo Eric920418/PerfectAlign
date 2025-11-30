@@ -6,6 +6,7 @@ import { ReplayPlayer } from './ReplayPlayer';
 import { TargetPreview } from './TargetPreview';
 import { PixelGrid } from './PixelGrid';
 import { TransformControls } from './TransformControls';
+import { SnapFeedback } from './SnapFeedback';
 import { useGameStore } from '../stores/gameStore';
 import { useResponsiveScale } from '../hooks/useResponsiveScale';
 import { usePinchZoom } from '../hooks/usePinchZoom';
@@ -246,6 +247,9 @@ export function Game() {
 
       {/* 旋轉/縮放控制（選取方塊後顯示） */}
       {gameReady && <TransformControls />}
+
+      {/* 視覺回饋效果 */}
+      <SnapFeedback />
     </div>
   );
 }

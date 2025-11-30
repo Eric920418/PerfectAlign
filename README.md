@@ -27,7 +27,8 @@ src/
 │   ├── DebugPanel.tsx       # 除錯面板
 │   ├── ReplayPlayer.tsx     # 回放播放器
 │   ├── TargetPreview.tsx    # 目標位置預覽（倒數計時）
-│   └── PixelGrid.tsx        # 像素網格線
+│   ├── PixelGrid.tsx        # 像素網格線
+│   └── SnapFeedback.tsx     # 正確值視覺回饋
 ├── game/             # 遊戲引擎
 │   └── GameEngine.ts     # Pixi.js 遊戲引擎
 ├── hooks/            # React Hooks

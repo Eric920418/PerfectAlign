@@ -39,6 +39,10 @@ export function TransformControls() {
       const piece = pieces.find((p) => p.id === selectedPieceId);
       if (!piece) return;
 
+      // 固定 0.1 縮放步長（確保像素對齊）
+      // 對於 100px 元素 = 10px 變化，對於 50px 元素 = 5px 變化
+      const scaleStep = 0.1;
+
       switch (action) {
         case 'rotate-left':
           updatePieceTransform(selectedPieceId, { rotation: piece.current.rotation - 5 });
@@ -48,27 +52,27 @@ export function TransformControls() {
           break;
         case 'scale-up':
           updatePieceTransform(selectedPieceId, {
-            scaleX: piece.current.scaleX + 0.05,
-            scaleY: piece.current.scaleY + 0.05
+            scaleX: piece.current.scaleX + scaleStep,
+            scaleY: piece.current.scaleY + scaleStep
           });
           break;
         case 'scale-down':
           updatePieceTransform(selectedPieceId, {
-            scaleX: piece.current.scaleX - 0.05,
-            scaleY: piece.current.scaleY - 0.05
+            scaleX: piece.current.scaleX - scaleStep,
+            scaleY: piece.current.scaleY - scaleStep
           });
           break;
         case 'width-up':
-          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX + 0.05 });
+          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX + scaleStep });
           break;
         case 'width-down':
-          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX - 0.05 });
+          updatePieceTransform(selectedPieceId, { scaleX: piece.current.scaleX - scaleStep });
           break;
         case 'height-up':
-          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY + 0.05 });
+          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY + scaleStep });
           break;
         case 'height-down':
-          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY - 0.05 });
+          updatePieceTransform(selectedPieceId, { scaleY: piece.current.scaleY - scaleStep });
           break;
       }
       checkWinCondition();

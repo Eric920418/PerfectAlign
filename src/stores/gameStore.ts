@@ -32,6 +32,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     const pieces: PieceState[] = config.pieces.map((p) => ({
       id: p.id,
       texture: p.texture,
+      shape: p.shape,
       current: { ...p.start_transform },
       target: { ...p.target_transform },
     }));

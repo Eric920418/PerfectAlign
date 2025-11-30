@@ -101,6 +101,8 @@ export class GameEngine {
       const sprite = this.pieceSprites.get(this.selectedPieceId);
       if (!sprite) return;
 
+      // 固定 0.1 縮放步長（確保像素對齊）
+      const scaleStep = 0.1;
       const delta = e.deltaY > 0 ? -1 : 1;
 
       if (e.shiftKey) {
@@ -111,9 +113,9 @@ export class GameEngine {
         this.onRotate(this.selectedPieceId, newRotation);
         this.updateSelectionBox(this.selectedPieceId);
       } else if (e.ctrlKey || e.metaKey) {
-        // Ctrl/Cmd + 滾輪：等比例縮放 ±0.05
-        const newScaleX = clampScale(sprite.scale.x + delta * 0.05);
-        const newScaleY = clampScale(sprite.scale.y + delta * 0.05);
+        // Ctrl/Cmd + 滾輪：等比例縮放（像素對齊）
+        const newScaleX = clampScale(sprite.scale.x + delta * scaleStep);
+        const newScaleY = clampScale(sprite.scale.y + delta * scaleStep);
         sprite.scale.set(newScaleX, newScaleY);
         this.onScale(this.selectedPieceId, newScaleX, newScaleY);
         this.updateSelectionBox(this.selectedPieceId);

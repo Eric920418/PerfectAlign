@@ -16,58 +16,58 @@
     {
       "id": "p1",
       "texture": "/assets/levels/level5/piece_01.png",
-      "shape": { "width": 80, "height": 80 },
+      "shape": { "width": 100, "height": 100 },
       "start_transform": {
         "x": 80,
         "y": 100,
         "rotation": 25,
-        "scaleX": 1.0,
-        "scaleY": 1.0
+        "scaleX": 0.8,
+        "scaleY": 0.8
       },
       "target_transform": {
         "x": 200,
         "y": 150,
         "rotation": 0,
-        "scaleX": 1.0,
-        "scaleY": 1.0
+        "scaleX": 0.8,
+        "scaleY": 0.8
       }
     },
     {
       "id": "p2",
       "texture": "/assets/levels/level5/piece_02.png",
-      "shape": { "width": 80, "height": 80 },
+      "shape": { "width": 100, "height": 100 },
       "start_transform": {
         "x": 300,
         "y": 250,
         "rotation": -30,
-        "scaleX": 1.0,
-        "scaleY": 1.0
+        "scaleX": 0.8,
+        "scaleY": 0.8
       },
       "target_transform": {
         "x": 200,
         "y": 250,
         "rotation": 0,
-        "scaleX": 1.0,
-        "scaleY": 1.0
+        "scaleX": 0.8,
+        "scaleY": 0.8
       }
     },
     {
       "id": "p3",
       "texture": "/assets/levels/level5/piece_03.png",
-      "shape": { "width": 80, "height": 80 },
+      "shape": { "width": 100, "height": 100 },
       "start_transform": {
         "x": 100,
         "y": 400,
         "rotation": 45,
-        "scaleX": 1.0,
-        "scaleY": 1.0
+        "scaleX": 0.8,
+        "scaleY": 0.8
       },
       "target_transform": {
         "x": 200,
         "y": 350,
         "rotation": 0,
-        "scaleX": 1.0,
-        "scaleY": 1.0
+        "scaleX": 0.8,
+        "scaleY": 0.8
       }
     }
   ]

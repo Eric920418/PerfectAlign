@@ -164,12 +164,12 @@ export function Game() {
         </div>
       )}
 
-      {/* 縮放容器 - 處理雙指縮放 */}
+      {/* 縮放容器 - 處理雙指縮放（只有遊戲開始後才能縮放） */}
       <div
         className="zoom-container"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={gameReady ? handleTouchStart : undefined}
+        onTouchMove={gameReady ? handleTouchMove : undefined}
+        onTouchEnd={gameReady ? handleTouchEnd : undefined}
         style={{
           transform: `scale(${userScale}) translate(${translateX / userScale}px, ${translateY / userScale}px)`,
           transformOrigin: 'center center',

@@ -16,7 +16,15 @@ export function TransformControls() {
     checkWinCondition,
     gameState,
     levelConfig,
+    addActionLog,
   } = useGameStore();
+
+  // 記錄操作開始時的值
+  const startValuesRef = useRef<{
+    rotation: number;
+    scaleX: number;
+    scaleY: number;
+  } | null>(null);
 
   // 是否只允許等比例縮放
   const uniformScaleOnly = levelConfig?.uniform_scale_only ?? false;
@@ -72,6 +80,19 @@ export function TransformControls() {
     (action: ControlAction, e: React.PointerEvent) => {
       e.stopPropagation();
       e.preventDefault();
+
+      // 記錄操作開始時的值
+      if (selectedPieceId) {
+        const piece = pieces.find((p) => p.id === selectedPieceId);
+        if (piece) {
+          startValuesRef.current = {
+            rotation: piece.current.rotation,
+            scaleX: piece.current.scaleX,
+            scaleY: piece.current.scaleY,
+          };
+        }
+      }
+
       setActiveControl(action);
       handleControlAction(action);
 
@@ -80,16 +101,55 @@ export function TransformControls() {
         handleControlAction(action);
       }, 100);
     },
-    [handleControlAction]
+    [handleControlAction, selectedPieceId, pieces]
   );
 
   const handleControlUp = useCallback(() => {
+    // 記錄操作到 actionLogs
+    if (selectedPieceId && startValuesRef.current && activeControl) {
+      const piece = pieces.find((p) => p.id === selectedPieceId);
+      if (piece) {
+        const isRotateAction = activeControl.startsWith('rotate');
+        const isScaleAction = activeControl.includes('scale') ||
+                              activeControl.includes('width') ||
+                              activeControl.includes('height');
+
+        if (isRotateAction && startValuesRef.current.rotation !== piece.current.rotation) {
+          addActionLog({
+            pieceId: selectedPieceId,
+            type: 'rotate',
+            payload: {
+              fromRotation: startValuesRef.current.rotation,
+              toRotation: piece.current.rotation,
+            },
+          });
+        }
+
+        if (isScaleAction && (
+          startValuesRef.current.scaleX !== piece.current.scaleX ||
+          startValuesRef.current.scaleY !== piece.current.scaleY
+        )) {
+          addActionLog({
+            pieceId: selectedPieceId,
+            type: 'scale',
+            payload: {
+              fromScaleX: startValuesRef.current.scaleX,
+              fromScaleY: startValuesRef.current.scaleY,
+              toScaleX: piece.current.scaleX,
+              toScaleY: piece.current.scaleY,
+            },
+          });
+        }
+      }
+    }
+
+    startValuesRef.current = null;
     setActiveControl(null);
     if (controlIntervalRef.current) {
       clearInterval(controlIntervalRef.current);
       controlIntervalRef.current = null;
     }
-  }, []);
+  }, [selectedPieceId, pieces, activeControl, addActionLog]);
 
   // 只在選取方塊且不在勝利狀態時顯示
   if (!selectedPieceId || gameState === 'WIN') {

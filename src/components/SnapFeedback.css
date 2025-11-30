@@ -372,13 +372,14 @@
 }
 
 .feedback-label.y-label {
-  bottom: 180px;
+  bottom: 170px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(78, 205, 196, 0.2);
   border: 2px solid #4ecdc4;
   color: #4ecdc4;
   text-shadow: 0 0 10px #4ecdc4;
+  z-index: 1000;
 }
 
 @keyframes labelAppear {

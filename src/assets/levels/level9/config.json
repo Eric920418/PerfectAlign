@@ -24,7 +24,7 @@
         "scaleY": 1.2
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 120,
         "rotation": 0,
         "scaleX": 1.0,
@@ -39,11 +39,11 @@
         "x": 300,
         "y": 180,
         "rotation": -25,
-        "scaleX": 1.15,
-        "scaleY": 0.85
+        "scaleX": 1.2,
+        "scaleY": 0.8
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 220,
         "rotation": 0,
         "scaleX": 1.0,
@@ -77,11 +77,11 @@
         "x": 300,
         "y": 400,
         "rotation": -50,
-        "scaleX": 0.85,
+        "scaleX": 0.8,
         "scaleY": 1.1
       },
       "target_transform": {
-        "x": 240,
+        "x": 260,
         "y": 350,
         "rotation": -10,
         "scaleX": 1.0,

@@ -20,12 +20,12 @@
       "start_transform": {
         "x": 120,
         "y": 180,
-        "rotation": 47,
+        "rotation": 50,
         "scaleX": 0.9,
         "scaleY": 0.9
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 180,
         "rotation": 15,
         "scaleX": 1.0,
@@ -39,12 +39,12 @@
       "start_transform": {
         "x": 260,
         "y": 340,
-        "rotation": -53,
-        "scaleX": 1.15,
-        "scaleY": 1.15
+        "rotation": -55,
+        "scaleX": 1.2,
+        "scaleY": 1.2
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 320,
         "rotation": -20,
         "scaleX": 1.0,

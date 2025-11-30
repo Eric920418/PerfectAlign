@@ -15,16 +15,16 @@
     {
       "id": "p1",
       "texture": "/assets/levels/level10/piece_01.png",
-      "shape": { "width": 70, "height": 70 },
+      "shape": { "width": 60, "height": 60 },
       "start_transform": {
         "x": 60,
         "y": 80,
         "rotation": 35,
-        "scaleX": 1.15,
+        "scaleX": 1.2,
         "scaleY": 0.9
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 100,
         "rotation": 0,
         "scaleX": 1.0,
@@ -34,16 +34,16 @@
     {
       "id": "p2",
       "texture": "/assets/levels/level10/piece_02.png",
-      "shape": { "width": 70, "height": 70 },
+      "shape": { "width": 60, "height": 60 },
       "start_transform": {
         "x": 310,
         "y": 120,
         "rotation": -40,
-        "scaleX": 0.85,
+        "scaleX": 0.8,
         "scaleY": 1.1
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 180,
         "rotation": 0,
         "scaleX": 1.0,
@@ -53,7 +53,7 @@
     {
       "id": "p3",
       "texture": "/assets/levels/level10/piece_03.png",
-      "shape": { "width": 70, "height": 70 },
+      "shape": { "width": 60, "height": 60 },
       "start_transform": {
         "x": 80,
         "y": 280,
@@ -62,7 +62,7 @@
         "scaleY": 1.2
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 260,
         "rotation": 0,
         "scaleX": 1.0,
@@ -72,16 +72,16 @@
     {
       "id": "p4",
       "texture": "/assets/levels/level10/piece_04.png",
-      "shape": { "width": 70, "height": 70 },
+      "shape": { "width": 60, "height": 60 },
       "start_transform": {
         "x": 290,
         "y": 320,
         "rotation": -55,
         "scaleX": 1.2,
-        "scaleY": 0.85
+        "scaleY": 0.8
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 340,
         "rotation": 0,
         "scaleX": 1.0,
@@ -91,16 +91,16 @@
     {
       "id": "p5",
       "texture": "/assets/levels/level10/piece_05.png",
-      "shape": { "width": 70, "height": 70 },
+      "shape": { "width": 60, "height": 60 },
       "start_transform": {
         "x": 150,
         "y": 430,
         "rotation": 25,
         "scaleX": 1.1,
-        "scaleY": 1.15
+        "scaleY": 1.2
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 420,
         "rotation": 0,
         "scaleX": 1.0,

@@ -18,14 +18,14 @@
       "texture": "/assets/levels/level4/piece_01.png",
       "shape": { "width": 100, "height": 100 },
       "start_transform": {
-        "x": 175,
-        "y": 235,
-        "rotation": 8,
+        "x": 170,
+        "y": 230,
+        "rotation": 10,
         "scaleX": 1.0,
         "scaleY": 1.0
       },
       "target_transform": {
-        "x": 190,
+        "x": 200,
         "y": 250,
         "rotation": 0,
         "scaleX": 1.0,

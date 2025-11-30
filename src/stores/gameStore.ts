@@ -158,8 +158,10 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   // 檢查勝利條件
   checkWinCondition: () => {
-    const { pieces, levelConfig } = get();
+    const { pieces, levelConfig, gameState } = get();
     if (!levelConfig) return;
+    // 如果已經在過關流程中，不重複觸發
+    if (gameState === 'WINNING' || gameState === 'WIN') return;
 
     const totalError = calculateError(pieces);
     const rating = getWinRating(totalError);
@@ -167,14 +169,20 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     set({ totalError });
 
     if (rating) {
-      // 勝利時清除所有反饋，避免與勝利畫面重疊
+      // 先進入過渡狀態，播放慶祝動畫
       set({
         winRating: rating,
-        gameState: 'WIN',
+        gameState: 'WINNING',
         activeFeedback: null,
         feedbackPieceId: null,
         feedbackTargetPos: null,
+        selectedPieceId: null, // 取消選取
       });
+
+      // 過渡動畫結束後進入正式勝利狀態（2秒後）
+      setTimeout(() => {
+        set({ gameState: 'WIN' });
+      }, 2000);
     }
   },
 

@@ -1,0 +1,174 @@
+.win-transition {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 400;
+  overflow: hidden;
+}
+
+/* 閃白效果 */
+.flash-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  animation: flashPulse 0.6s ease-out forwards;
+}
+
+@keyframes flashPulse {
+  0% { opacity: 0; }
+  15% { opacity: 1; }
+  30% { opacity: 0.8; }
+  50% { opacity: 0.3; }
+  100% { opacity: 0; }
+}
+
+/* 粒子容器 */
+.particles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* 單個粒子 */
+.particle {
+  position: absolute;
+  left: var(--start-x);
+  top: var(--start-y);
+  width: var(--size);
+  height: var(--size);
+  background: var(--color);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color), 0 0 20px var(--color);
+  animation: particleFly 1.2s ease-out forwards;
+  animation-delay: var(--delay);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes particleFly {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--speed));
+  }
+}
+
+/* 光環效果 */
+.glow-rings {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.glow-ring {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--color);
+  border-radius: 50%;
+  animation: ringExpand 1s ease-out forwards;
+  box-shadow: 0 0 20px var(--color), inset 0 0 20px var(--color);
+}
+
+@keyframes ringExpand {
+  0% {
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    border-width: 3px;
+  }
+  100% {
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+/* 評級預覽 */
+.rating-preview {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ratingBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.rating-text {
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--color);
+  text-shadow:
+    0 0 20px var(--color),
+    0 0 40px var(--color),
+    0 0 60px var(--color),
+    4px 4px 0 rgba(0, 0, 0, 0.8);
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  animation: ratingPulse 0.3s ease-in-out infinite alternate;
+}
+
+@keyframes ratingBounce {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes ratingPulse {
+  0% {
+    text-shadow:
+      0 0 20px var(--color),
+      0 0 40px var(--color),
+      4px 4px 0 rgba(0, 0, 0, 0.8);
+  }
+  100% {
+    text-shadow:
+      0 0 30px var(--color),
+      0 0 60px var(--color),
+      0 0 80px var(--color),
+      4px 4px 0 rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* 屏幕震動效果（應用到父容器） */
+@keyframes screenShake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-8px) rotate(-0.5deg); }
+  20% { transform: translateX(8px) rotate(0.5deg); }
+  30% { transform: translateX(-6px) rotate(-0.3deg); }
+  40% { transform: translateX(6px) rotate(0.3deg); }
+  50% { transform: translateX(-4px); }
+  60% { transform: translateX(4px); }
+  70% { transform: translateX(-2px); }
+  80% { transform: translateX(2px); }
+  90% { transform: translateX(-1px); }
+}

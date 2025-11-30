@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { GameCanvas } from './GameCanvas';
 import { PreviewButton, PreviewOverlay } from './PreviewButton';
 import { WinScreen } from './WinScreen';
+import { WinTransition } from './WinTransition';
 import { ReplayPlayer } from './ReplayPlayer';
 import { TargetPreview } from './TargetPreview';
 import { PixelGrid } from './PixelGrid';
@@ -71,14 +72,14 @@ export function Game() {
     setLevelConfig(levels[currentLevelIndex]);
   }, [currentLevelIndex]);
 
-  // 過關時自動重置視圖
+  // 過關時自動重置視圖（在過渡動畫開始時就重置）
   useEffect(() => {
-    if (gameState === 'WIN') {
+    if (gameState === 'WINNING' || gameState === 'WIN') {
       resetView();
     }
   }, [gameState, resetView]);
 
-  // 位置對齊時觸發螢幕震動
+  // 位置對齊或過關時觸發螢幕震動
   useEffect(() => {
     if (activeFeedback === 'positionX' || activeFeedback === 'positionY') {
       setIsShaking(true);
@@ -88,6 +89,17 @@ export function Game() {
       return () => clearTimeout(timer);
     }
   }, [activeFeedback]);
+
+  // 過關過渡時強烈震動
+  useEffect(() => {
+    if (gameState === 'WINNING') {
+      setIsShaking(true);
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [gameState]);
 
   const handleTargetPreviewComplete = useCallback(() => {
     setShowTargetPreview(false);
@@ -230,6 +242,9 @@ export function Game() {
             canvasHeight={levelConfig.canvas.height}
           />
         )}
+
+        {/* 過關過渡動畫 */}
+        <WinTransition />
 
         {/* 勝利畫面 */}
         <WinScreen

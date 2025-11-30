@@ -9,14 +9,18 @@
   justify-content: center;
   background: rgba(5, 5, 10, 0.95);
   z-index: 500;
-  animation: flashIn 0.5s cubic-bezier(0, 0.9, 0.6, 1);
+  animation: screenFadeIn 0.5s ease-out;
 }
 
-@keyframes flashIn {
-  0% { opacity: 0; }
-  20% { opacity: 1; background: #fff; }
-  40% { background: rgba(5, 5, 10, 0.95); }
-  100% { opacity: 1; }
+@keyframes screenFadeIn {
+  0% {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
 }
 
 .win-content {
@@ -26,15 +30,28 @@
   max-width: 480px;
   background: #000;
   border: 4px solid var(--neon-primary);
-  box-shadow: 
+  box-shadow:
     0 0 20px var(--neon-primary),
     inset 0 0 40px rgba(0, 243, 255, 0.2);
   position: relative;
   /* Angled corners */
   clip-path: polygon(
-    20px 0, 100% 0, 100% calc(100% - 20px), 
+    20px 0, 100% 0, 100% calc(100% - 20px),
     calc(100% - 20px) 100%, 0 100%, 0 20px
   );
+  /* 入場動畫 */
+  animation: contentSlideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes contentSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Decorative corner accents */
@@ -55,7 +72,23 @@
   color: #fff;
   text-shadow: 4px 4px 0px rgba(0,0,0,1);
   font-family: 'Courier New', monospace;
-  animation: pulseRating 1s infinite alternate;
+  animation:
+    ratingEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+    pulseRating 1s 0.5s infinite alternate;
+  opacity: 0;
+}
+
+@keyframes ratingEnter {
+  0% {
+    opacity: 0;
+    transform: scale(2);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
 }
 
 @keyframes pulseRating {
@@ -73,6 +106,19 @@
   margin-bottom: 24px;
   font-family: monospace;
   text-transform: uppercase;
+  animation: errorEnter 0.4s 0.2s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes errorEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .win-error::before { content: "[ ERROR_MARGIN: "; color: #444; }
@@ -84,6 +130,19 @@
   letter-spacing: 12px;
   line-height: 1;
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+  animation: starsEnter 0.6s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
+}
+
+@keyframes starsEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) rotateY(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateY(0deg);
+  }
 }
 
 .win-stats {
@@ -96,6 +155,19 @@
   gap: 16px;
   width: 100%;
   margin-top: 20px;
+  animation: buttonsEnter 0.5s 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes buttonsEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .btn {

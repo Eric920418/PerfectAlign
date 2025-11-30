@@ -29,7 +29,7 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { snapSize, setSnapSize, resetLevel, isPreviewActive } = useGameStore();
+  const { snapSize, setSnapSize, resetLevel, isPreviewActive, gameState } = useGameStore();
 
   // 響應式縮放
   const { scale: baseScale } = useResponsiveScale(
@@ -53,6 +53,13 @@ export function Game() {
     // 載入關卡設定
     setLevelConfig(levels[currentLevelIndex]);
   }, [currentLevelIndex]);
+
+  // 過關時自動重置視圖
+  useEffect(() => {
+    if (gameState === 'WIN') {
+      resetView();
+    }
+  }, [gameState, resetView]);
 
   const handleTargetPreviewComplete = useCallback(() => {
     setShowTargetPreview(false);

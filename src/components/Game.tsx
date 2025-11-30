@@ -8,6 +8,7 @@ import { PixelGrid } from './PixelGrid';
 import { TransformControls } from './TransformControls';
 import { useGameStore } from '../stores/gameStore';
 import { useResponsiveScale } from '../hooks/useResponsiveScale';
+import { usePinchZoom } from '../hooks/usePinchZoom';
 import type { LevelConfig, SnapSize } from '../types';
 import level1Config from '../assets/levels/level1/config.json';
 import level2Config from '../assets/levels/level2/config.json';
@@ -28,13 +29,25 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { snapSize, setSnapSize, resetLevel } = useGameStore();
+  const { snapSize, setSnapSize, resetLevel, isPreviewActive } = useGameStore();
 
   // 響應式縮放
-  const { scale } = useResponsiveScale(
+  const { scale: baseScale } = useResponsiveScale(
     levelConfig?.canvas.width || 375,
     levelConfig?.canvas.height || 500
   );
+
+  // 雙指縮放
+  const {
+    scale: userScale,
+    translateX,
+    translateY,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
+    resetView,
+    isZoomed,
+  } = usePinchZoom({ minScale: 1, maxScale: 5 });
 
   useEffect(() => {
     // 載入關卡設定
@@ -130,25 +143,36 @@ export function Game() {
         </div>
       )}
 
+      {/* 縮放容器 - 處理雙指縮放 */}
       <div
-        className="game-viewport"
+        className="zoom-container"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         style={{
-          width: levelConfig.canvas.width,
-          height: levelConfig.canvas.height,
-          transform: `scale(${scale})`,
+          transform: `scale(${userScale}) translate(${translateX / userScale}px, ${translateY / userScale}px)`,
           transformOrigin: 'center center',
         }}
       >
+        <div
+          className="game-viewport"
+          style={{
+            width: levelConfig.canvas.width,
+            height: levelConfig.canvas.height,
+            transform: `scale(${baseScale})`,
+            transformOrigin: 'center center',
+          }}
+        >
         {/* 像素網格 */}
         <PixelGrid
           width={levelConfig.canvas.width}
           height={levelConfig.canvas.height}
           visible={true}
           gridSize={snapSize === 1 ? 5 : snapSize === 5 ? 10 : 20}
-          targetPositions={levelConfig.pieces.map(p => ({
+          targetPositions={isPreviewActive ? levelConfig.pieces.map(p => ({
             x: p.target_transform.x,
             y: p.target_transform.y,
-          }))}
+          })) : []}
         />
 
         {/* 遊戲畫布 */}
@@ -177,8 +201,15 @@ export function Game() {
           onNextLevel={handleNextLevel}
           onWatchReplay={handleWatchReplay}
         />
+        </div>
       </div>
 
+      {/* 縮放指示器 */}
+      {isZoomed && (
+        <div className="zoom-indicator">
+          {Math.round(userScale * 100)}%
+        </div>
+      )}
 
       {/* 工具列 */}
       <div className="game-toolbar">
@@ -195,6 +226,12 @@ export function Game() {
         </div>
         {/* 預覽按鈕 */}
         {gameReady && <PreviewButton />}
+        {/* 重置視圖按鈕 */}
+        {isZoomed && (
+          <button className="reset-view-btn" onClick={resetView}>
+            重置
+          </button>
+        )}
       </div>
 
       {/* 回放播放器 */}

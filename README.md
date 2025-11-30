@@ -31,7 +31,8 @@ src/
 ├── game/             # 遊戲引擎
 │   └── GameEngine.ts     # Pixi.js 遊戲引擎
 ├── hooks/            # React Hooks
-│   └── useResponsiveScale.ts  # 響應式縮放
+│   ├── useResponsiveScale.ts  # 響應式縮放
+│   └── usePinchZoom.ts        # 雙指縮放手勢
 ├── stores/           # Zustand 狀態管理
 │   └── gameStore.ts      # 遊戲狀態
 ├── types/            # TypeScript 型別定義

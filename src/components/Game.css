@@ -410,3 +410,28 @@
     padding: 6px 16px;
   }
 }
+
+/* === 雙指縮放相關 === */
+.zoom-container {
+  touch-action: none;
+  will-change: transform;
+  transition: transform 0.05s ease-out;
+}
+
+/* 縮放指示器 */
+.zoom-indicator {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  padding: 6px 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--neon-primary);
+  border-radius: 4px;
+  color: var(--neon-primary);
+  font-size: 14px;
+  font-family: monospace;
+  font-weight: 600;
+  z-index: 150;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+}

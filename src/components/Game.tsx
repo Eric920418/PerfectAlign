@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { GameCanvas } from './GameCanvas';
-import { PreviewButton } from './PreviewButton';
+import { PreviewButton, PreviewOverlay } from './PreviewButton';
 import { WinScreen } from './WinScreen';
 import { ReplayPlayer } from './ReplayPlayer';
 import { TargetPreview } from './TargetPreview';
@@ -162,9 +162,9 @@ export function Game() {
           />
         )}
 
-        {/* 預覽按鈕 */}
+        {/* 預覽覆蓋層 - 疊加在遊戲畫面上 */}
         {gameReady && (
-          <PreviewButton
+          <PreviewOverlay
             previewImage={levelConfig.preview_image}
             canvasWidth={levelConfig.canvas.width}
             canvasHeight={levelConfig.canvas.height}
@@ -193,6 +193,8 @@ export function Game() {
             </button>
           ))}
         </div>
+        {/* 預覽按鈕 */}
+        {gameReady && <PreviewButton />}
       </div>
 
       {/* 回放播放器 */}

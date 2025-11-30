@@ -418,6 +418,54 @@
   transition: transform 0.05s ease-out;
 }
 
+/* 螢幕震動效果 - 使用 margin 避免覆蓋 inline transform */
+.game-viewport.shake {
+  animation: screenShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes screenShake {
+  0%, 100% {
+    margin-left: 0;
+    margin-top: 0;
+  }
+  10% {
+    margin-left: -10px;
+    margin-top: -5px;
+  }
+  20% {
+    margin-left: 8px;
+    margin-top: 4px;
+  }
+  30% {
+    margin-left: -8px;
+    margin-top: -3px;
+  }
+  40% {
+    margin-left: 6px;
+    margin-top: 3px;
+  }
+  50% {
+    margin-left: -5px;
+    margin-top: -2px;
+  }
+  60% {
+    margin-left: 4px;
+    margin-top: 2px;
+  }
+  70% {
+    margin-left: -3px;
+    margin-top: -1px;
+  }
+  80% {
+    margin-left: 2px;
+    margin-top: 1px;
+  }
+  90% {
+    margin-left: -1px;
+    margin-top: 0;
+  }
+}
+
 /* 縮放指示器 */
 .zoom-indicator {
   position: fixed;

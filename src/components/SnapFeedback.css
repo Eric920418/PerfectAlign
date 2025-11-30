@@ -10,7 +10,7 @@
   justify-content: center;
   z-index: 1000;
   pointer-events: none;
-  animation: feedbackAppear 2s ease-out forwards;
+  animation: feedbackAppear 1s ease-out forwards;
 }
 
 @keyframes feedbackAppear {
@@ -18,14 +18,14 @@
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.5);
   }
-  10% {
+  20% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
   }
-  20% {
+  35% {
     transform: translate(-50%, -50%) scale(1);
   }
-  80% {
+  70% {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
@@ -54,17 +54,17 @@
 .snap-feedback.rotation .feedback-icon {
   background: radial-gradient(circle, rgba(0, 243, 255, 0.3), transparent);
   color: #00f3ff;
-  animation: rotationSpin 1s ease-out;
+  animation: rotationSpin 0.6s ease-out;
 }
 
 @keyframes rotationSpin {
   0% {
     transform: rotate(-360deg);
   }
-  60% {
+  50% {
     transform: rotate(15deg);
   }
-  80% {
+  75% {
     transform: rotate(-5deg);
   }
   100% {
@@ -86,7 +86,7 @@
   border-top-color: #00f3ff;
   border-right-color: #00f3ff;
   border-radius: 50%;
-  animation: ringRotate 1.5s ease-out;
+  animation: ringRotate 0.8s ease-out;
 }
 
 @keyframes ringRotate {
@@ -94,7 +94,7 @@
     transform: rotate(0deg) scale(0.5);
     opacity: 1;
   }
-  70% {
+  60% {
     opacity: 0.8;
   }
   100% {
@@ -107,26 +107,26 @@
 .snap-feedback.scale .feedback-icon {
   background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
   color: #ffd700;
-  animation: scaleBreath 1.2s ease-out;
+  animation: scaleBreath 0.7s ease-out;
 }
 
 @keyframes scaleBreath {
   0% {
     transform: scale(0.3);
   }
-  20% {
+  25% {
     transform: scale(1.4);
   }
-  35% {
+  45% {
     transform: scale(0.85);
   }
-  50% {
+  60% {
     transform: scale(1.15);
   }
-  65% {
+  75% {
     transform: scale(0.95);
   }
-  80% {
+  90% {
     transform: scale(1.05);
   }
   100% {
@@ -146,7 +146,7 @@
   height: 100px;
   border: 4px solid #ffd700;
   border-radius: 50%;
-  animation: pulseExpand 1.5s ease-out;
+  animation: pulseExpand 0.8s ease-out;
 }
 
 @keyframes pulseExpand {
@@ -155,10 +155,10 @@
     opacity: 1;
     box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7);
   }
-  40% {
+  35% {
     box-shadow: 0 0 40px 15px rgba(255, 215, 0, 0.6);
   }
-  70% {
+  60% {
     opacity: 0.6;
   }
   100% {
@@ -175,7 +175,7 @@
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
-  animation: textGlow 2s ease-out;
+  animation: textGlow 1s ease-out;
 }
 
 @keyframes textGlow {
@@ -183,11 +183,11 @@
     opacity: 0;
     transform: translateY(10px);
   }
-  15% {
+  25% {
     opacity: 1;
     transform: translateY(0);
   }
-  80% {
+  70% {
     opacity: 1;
     transform: translateY(0);
   }
@@ -285,23 +285,60 @@
 /* 粒子樣式 */
 .particle {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: var(--size, 8px);
+  height: var(--size, 8px);
   border-radius: 50%;
-  animation: particleExplode 1s ease-out forwards;
+  animation: particleExplode 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   animation-delay: var(--delay);
 }
 
+.particle.large {
+  animation: particleExplodeLarge 1s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.particle.secondary {
+  animation: particleExplodeSecondary 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 .positionX .particle {
-  background: radial-gradient(circle, #fff, #ff6b6b);
-  box-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff4757;
+  background: radial-gradient(circle, #fff 20%, #ff6b6b 60%, #ff4757);
+  box-shadow: 0 0 15px #ff6b6b, 0 0 30px #ff4757, 0 0 45px #ff6b6b;
 }
 
 .positionY .particle {
-  background: radial-gradient(circle, #fff, #4ecdc4);
-  box-shadow: 0 0 10px #4ecdc4, 0 0 20px #26de81;
+  background: radial-gradient(circle, #fff 20%, #4ecdc4 60%, #26de81);
+  box-shadow: 0 0 15px #4ecdc4, 0 0 30px #26de81, 0 0 45px #4ecdc4;
 }
 
+/* 主要粒子爆炸 - 更大更誇張 */
+@keyframes particleExplodeLarge {
+  0% {
+    transform: rotate(var(--angle)) translateX(0) scale(0.5);
+    opacity: 1;
+  }
+  20% {
+    transform: rotate(var(--angle)) translateX(calc(var(--distance) * 0.3)) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(var(--distance)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* 次要粒子 - 較小較快 */
+@keyframes particleExplodeSecondary {
+  0% {
+    transform: rotate(var(--angle)) translateX(10px) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: rotate(var(--angle)) translateX(var(--distance)) scale(0);
+    opacity: 0;
+  }
+}
+
+/* 原始粒子動畫保留 */
 @keyframes particleExplode {
   0% {
     transform: rotate(var(--angle)) translateX(0) scale(1);
@@ -335,7 +372,7 @@
 }
 
 .feedback-label.y-label {
-  bottom: 120px;
+  bottom: 180px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(78, 205, 196, 0.2);

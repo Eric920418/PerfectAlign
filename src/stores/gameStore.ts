@@ -59,9 +59,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
 
   // 更新碎片變換
   updatePieceTransform: (id: string, transform: Partial<Transform>) => {
-    const { pieces, activeFeedback } = get();
+    const { pieces, activeFeedback, gameState } = get();
     const piece = pieces.find(p => p.id === id);
     if (!piece) return;
+
+    // 勝利後不再觸發反饋
+    const shouldShowFeedback = gameState === 'PLAYING';
 
     const ROTATION_THRESHOLD = 0.5; // 角度容差
     const SCALE_THRESHOLD = 0.02;   // 縮放容差
@@ -101,8 +104,8 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     let feedback: FeedbackType = null;
     let targetPos = { x: piece.target.x, y: piece.target.y };
 
-    // 如果已有反饋在播放，不覆蓋
-    if (!activeFeedback) {
+    // 如果已有反饋在播放或遊戲已結束，不觸發新反饋
+    if (!activeFeedback && shouldShowFeedback) {
       if (!wasXCorrect && isXCorrect) {
         feedback = 'positionX';
       } else if (!wasYCorrect && isYCorrect) {
@@ -123,11 +126,12 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
       feedbackTargetPos: feedback ? targetPos : state.feedbackTargetPos,
     }));
 
-    // 自動清除回饋
+    // 自動清除回饋（旋轉/縮放 1 秒，位置 1.5 秒）
     if (feedback) {
+      const duration = (feedback === 'rotation' || feedback === 'scale') ? 1000 : 1500;
       setTimeout(() => {
         set({ activeFeedback: null, feedbackPieceId: null, feedbackTargetPos: null });
-      }, 1500);
+      }, duration);
     }
   },
 
@@ -162,9 +166,13 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     set({ totalError });
 
     if (rating) {
+      // 勝利時清除所有反饋，避免與勝利畫面重疊
       set({
         winRating: rating,
         gameState: 'WIN',
+        activeFeedback: null,
+        feedbackPieceId: null,
+        feedbackTargetPos: null,
       });
     }
   },

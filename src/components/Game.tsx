@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { GameCanvas } from './GameCanvas';
 import { PreviewButton, PreviewOverlay } from './PreviewButton';
 import { WinScreen } from './WinScreen';
@@ -30,7 +30,9 @@ export function Game() {
   const [showTargetPreview, setShowTargetPreview] = useState(true);
   const [gameReady, setGameReady] = useState(false);
   const [showLevelSelect, setShowLevelSelect] = useState(false);
-  const { snapSize, setSnapSize, resetLevel, isPreviewActive, gameState } = useGameStore();
+  const [isShaking, setIsShaking] = useState(false);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const { snapSize, setSnapSize, resetLevel, isPreviewActive, gameState, activeFeedback } = useGameStore();
 
   // 響應式縮放
   const { scale: baseScale } = useResponsiveScale(
@@ -61,6 +63,17 @@ export function Game() {
       resetView();
     }
   }, [gameState, resetView]);
+
+  // 位置對齊時觸發螢幕震動
+  useEffect(() => {
+    if (activeFeedback === 'positionX' || activeFeedback === 'positionY') {
+      setIsShaking(true);
+      const timer = setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [activeFeedback]);
 
   const handleTargetPreviewComplete = useCallback(() => {
     setShowTargetPreview(false);
@@ -163,7 +176,8 @@ export function Game() {
         }}
       >
         <div
-          className="game-viewport"
+          ref={viewportRef}
+          className={`game-viewport ${isShaking ? 'shake' : ''}`}
           style={{
             width: levelConfig.canvas.width,
             height: levelConfig.canvas.height,

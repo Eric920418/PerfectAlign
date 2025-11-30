@@ -14,6 +14,13 @@ import type { LevelConfig, SnapSize } from '../types';
 import level1Config from '../assets/levels/level1/config.json';
 import level2Config from '../assets/levels/level2/config.json';
 import level3Config from '../assets/levels/level3/config.json';
+import level4Config from '../assets/levels/level4/config.json';
+import level5Config from '../assets/levels/level5/config.json';
+import level6Config from '../assets/levels/level6/config.json';
+import level7Config from '../assets/levels/level7/config.json';
+import level8Config from '../assets/levels/level8/config.json';
+import level9Config from '../assets/levels/level9/config.json';
+import level10Config from '../assets/levels/level10/config.json';
 import './Game.css';
 
 // 關卡列表
@@ -21,6 +28,13 @@ const levels: LevelConfig[] = [
   level1Config as LevelConfig,
   level2Config as LevelConfig,
   level3Config as LevelConfig,
+  level4Config as LevelConfig,
+  level5Config as LevelConfig,
+  level6Config as LevelConfig,
+  level7Config as LevelConfig,
+  level8Config as LevelConfig,
+  level9Config as LevelConfig,
+  level10Config as LevelConfig,
 ];
 
 export function Game() {

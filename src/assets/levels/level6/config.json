@@ -1,0 +1,55 @@
+{
+  "level_id": 6,
+  "level_type": "image_match",
+  "title": "角度大師",
+  "uniform_scale_only": true,
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level6/complete.png",
+  "text_hint": "精確的旋轉角度是關鍵",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#1a3a2e"
+  },
+  "win_threshold": 10,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level6/piece_01.png",
+      "shape": { "width": 100, "height": 100 },
+      "start_transform": {
+        "x": 120,
+        "y": 180,
+        "rotation": 47,
+        "scaleX": 0.9,
+        "scaleY": 0.9
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 180,
+        "rotation": 15,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level6/piece_02.png",
+      "shape": { "width": 100, "height": 100 },
+      "start_transform": {
+        "x": 260,
+        "y": 340,
+        "rotation": -53,
+        "scaleX": 1.15,
+        "scaleY": 1.15
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 320,
+        "rotation": -20,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

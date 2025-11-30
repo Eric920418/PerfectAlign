@@ -1,0 +1,93 @@
+{
+  "level_id": 8,
+  "level_type": "image_match",
+  "title": "四方陣列",
+  "uniform_scale_only": true,
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level8/complete.png",
+  "text_hint": "四個方塊排成 2x2 網格",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#2e2e3a"
+  },
+  "win_threshold": 12,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level8/piece_01.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 60,
+        "y": 80,
+        "rotation": 20,
+        "scaleX": 1.1,
+        "scaleY": 1.1
+      },
+      "target_transform": {
+        "x": 145,
+        "y": 200,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level8/piece_02.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 300,
+        "y": 100,
+        "rotation": -15,
+        "scaleX": 0.9,
+        "scaleY": 0.9
+      },
+      "target_transform": {
+        "x": 235,
+        "y": 200,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p3",
+      "texture": "/assets/levels/level8/piece_03.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 80,
+        "y": 400,
+        "rotation": 35,
+        "scaleX": 1.15,
+        "scaleY": 1.15
+      },
+      "target_transform": {
+        "x": 145,
+        "y": 290,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p4",
+      "texture": "/assets/levels/level8/piece_04.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 290,
+        "y": 380,
+        "rotation": -40,
+        "scaleX": 0.85,
+        "scaleY": 0.85
+      },
+      "target_transform": {
+        "x": 235,
+        "y": 290,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

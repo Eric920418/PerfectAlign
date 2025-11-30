@@ -1,0 +1,36 @@
+{
+  "level_id": 4,
+  "level_type": "image_match",
+  "title": "精準定位",
+  "uniform_scale_only": true,
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level4/complete.png",
+  "text_hint": "微小偏移，考驗你的精準度",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#1e2a3a"
+  },
+  "win_threshold": 8,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level4/piece_01.png",
+      "shape": { "width": 100, "height": 100 },
+      "start_transform": {
+        "x": 175,
+        "y": 235,
+        "rotation": 8,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 250,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

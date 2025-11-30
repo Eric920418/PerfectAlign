@@ -1,0 +1,111 @@
+{
+  "level_id": 10,
+  "level_type": "image_match",
+  "title": "完美主義者",
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level10/complete.png",
+  "text_hint": "最高難度：五個方塊的完美對齊",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#0a0a0f"
+  },
+  "win_threshold": 8,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level10/piece_01.png",
+      "shape": { "width": 70, "height": 70 },
+      "start_transform": {
+        "x": 60,
+        "y": 80,
+        "rotation": 35,
+        "scaleX": 1.15,
+        "scaleY": 0.9
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 100,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level10/piece_02.png",
+      "shape": { "width": 70, "height": 70 },
+      "start_transform": {
+        "x": 310,
+        "y": 120,
+        "rotation": -40,
+        "scaleX": 0.85,
+        "scaleY": 1.1
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 180,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p3",
+      "texture": "/assets/levels/level10/piece_03.png",
+      "shape": { "width": 70, "height": 70 },
+      "start_transform": {
+        "x": 80,
+        "y": 280,
+        "rotation": 50,
+        "scaleX": 0.9,
+        "scaleY": 1.2
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 260,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p4",
+      "texture": "/assets/levels/level10/piece_04.png",
+      "shape": { "width": 70, "height": 70 },
+      "start_transform": {
+        "x": 290,
+        "y": 320,
+        "rotation": -55,
+        "scaleX": 1.2,
+        "scaleY": 0.85
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 340,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p5",
+      "texture": "/assets/levels/level10/piece_05.png",
+      "shape": { "width": 70, "height": 70 },
+      "start_transform": {
+        "x": 150,
+        "y": 430,
+        "rotation": 25,
+        "scaleX": 1.1,
+        "scaleY": 1.15
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 420,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

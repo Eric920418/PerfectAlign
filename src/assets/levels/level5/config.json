@@ -1,0 +1,74 @@
+{
+  "level_id": 5,
+  "level_type": "image_match",
+  "title": "三元素挑戰",
+  "uniform_scale_only": true,
+  "allow_preview": true,
+  "preview_image": "/assets/levels/level5/complete.png",
+  "text_hint": "三個方塊需要精確排列",
+  "canvas": {
+    "width": 375,
+    "height": 500,
+    "background": "#2a1e3a"
+  },
+  "win_threshold": 12,
+  "pieces": [
+    {
+      "id": "p1",
+      "texture": "/assets/levels/level5/piece_01.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 80,
+        "y": 100,
+        "rotation": 25,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 150,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p2",
+      "texture": "/assets/levels/level5/piece_02.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 300,
+        "y": 250,
+        "rotation": -30,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 250,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    },
+    {
+      "id": "p3",
+      "texture": "/assets/levels/level5/piece_03.png",
+      "shape": { "width": 80, "height": 80 },
+      "start_transform": {
+        "x": 100,
+        "y": 400,
+        "rotation": 45,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      },
+      "target_transform": {
+        "x": 190,
+        "y": 350,
+        "rotation": 0,
+        "scaleX": 1.0,
+        "scaleY": 1.0
+      }
+    }
+  ]
+}

@@ -2,14 +2,92 @@
 
 .target-preview {
   position: absolute;
-  top: -1px;
+  top: 0;
   left: 0;
   z-index: 600;
   background: linear-gradient(180deg, #0a0a0f 0%, #000 100%);
   display: flex;
   flex-direction: column;
   transition: opacity 0.5s ease;
-  overflow: hidden;
+  overflow: visible;
+  border: 1px solid rgba(0, 243, 255, 0.2);
+  border-radius: 8px;
+}
+
+/* ===== 螢光燈邊框動畫 ===== */
+.target-preview::before,
+.target-preview::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* 第一個螢光燈 - 順時針 */
+.target-preview::before {
+  background: radial-gradient(circle, rgba(0, 243, 255, 0.9) 0%, rgba(0, 243, 255, 0.4) 30%, transparent 70%);
+  box-shadow: 0 0 30px 10px rgba(0, 243, 255, 0.6), 0 0 60px 20px rgba(0, 243, 255, 0.3);
+  animation: orbit-clockwise 4s linear infinite;
+}
+
+/* 第二個螢光燈 - 順時針，但起點相差 180 度 */
+.target-preview::after {
+  background: radial-gradient(circle, rgba(0, 243, 255, 0.9) 0%, rgba(0, 243, 255, 0.4) 30%, transparent 70%);
+  box-shadow: 0 0 30px 10px rgba(0, 243, 255, 0.6), 0 0 60px 20px rgba(0, 243, 255, 0.3);
+  animation: orbit-clockwise 4s linear infinite;
+  animation-delay: -2s; /* 相差半個週期 */
+}
+
+/* 沿著邊框移動的動畫 - 使用 offset-path 會更精確，但這裡用傳統方式 */
+@keyframes orbit-clockwise {
+  /* 左上角 */
+  0% {
+    top: -40px;
+    left: -40px;
+  }
+  /* 上邊中點 */
+  12.5% {
+    top: -40px;
+    left: calc(50% - 40px);
+  }
+  /* 右上角 */
+  25% {
+    top: -40px;
+    left: calc(100% - 40px);
+  }
+  /* 右邊中點 */
+  37.5% {
+    top: calc(50% - 40px);
+    left: calc(100% - 40px);
+  }
+  /* 右下角 */
+  50% {
+    top: calc(100% - 40px);
+    left: calc(100% - 40px);
+  }
+  /* 下邊中點 */
+  62.5% {
+    top: calc(100% - 40px);
+    left: calc(50% - 40px);
+  }
+  /* 左下角 */
+  75% {
+    top: calc(100% - 40px);
+    left: -40px;
+  }
+  /* 左邊中點 */
+  87.5% {
+    top: calc(50% - 40px);
+    left: -40px;
+  }
+  /* 回到左上角 */
+  100% {
+    top: -40px;
+    left: -40px;
+  }
 }
 
 .target-preview.fading {
